@@ -16,6 +16,9 @@ const IndexPage: NextPageWithLayout = () => {
         <button className="btn btn-primary">
           <Link href="cv">Déposer un CV</Link>
         </button>
+        <button className="btn btn-primary">
+          <Link href="list">Liste des CV</Link>
+        </button>
       </div>
     </>
   )

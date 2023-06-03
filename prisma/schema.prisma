@@ -18,10 +18,18 @@ model User {
   updatedAt DateTime @default(now()) @updatedAt
 }
 
+enum CandidatureKind {
+  STAGE
+  CDI
+  ALTERNANCE
+}
+
 model Candidature {
-  id          String        @id @default(uuid())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
+  id          String          @id @default(uuid())
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @default(now()) @updatedAt
+  title       String
+  kind        CandidatureKind
   info        String?
   firstName   String
   lastName    String
@@ -54,10 +62,29 @@ model School {
   candidatureId  String?
 }
 
+enum CompetenceType {
+  FRONTEND
+  BACKEND
+  DEVOPS
+  MOBILE
+  DESIGN
+  MANAGEMENT
+  MARKETING
+  COMMUNICATION
+  SALES
+  BUSINESS
+  SOFTSKILLS
+  AGILE
+  PROJECT_MANAGEMENT
+  BUSINESS_INTELLIGENCE
+  NETWORK
+  OTHER
+}
+
 model Competences {
-  id            String       @id @default(uuid())
+  id            String         @id @default(uuid())
   description   String
-  type          String
-  Candidature   Candidature? @relation(fields: [candidatureId], references: [id])
+  type          CompetenceType
+  Candidature   Candidature?   @relation(fields: [candidatureId], references: [id])
   candidatureId String?
 }

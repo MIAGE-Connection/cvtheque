@@ -1,6 +1,8 @@
+import { CompetenceType } from '@prisma/client'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { RouterInput, trpc } from 'utils/trpc'
+import { getSelectValue } from 'utils/utils'
 
 /* import { useSession } from 'next-auth/react'
 import { trpc } from 'utils/trpc'
@@ -11,6 +13,8 @@ type AddCandidatureInput = RouterInput['candidature']['add']
 type Experiences = Pick<AddCandidatureInput, 'experiences'>['experiences'][number][]
 
 type Schools = Pick<AddCandidatureInput, 'schools'>['schools'][number][]
+
+type Competences = Pick<AddCandidatureInput, 'competences'>['competences'][number][]
 
 const AddCandidature: React.FC = () => {
   /* const { data: profile } = trpc.user.profile.useQuery()
@@ -34,6 +38,13 @@ const AddCandidature: React.FC = () => {
     },
   ])
 
+  const [competences, setCompetences] = useState<Competences>([
+    {
+      description: 'Université 1',
+      type: 'PROJECT_MANAGEMENT',
+    },
+  ])
+
   const { mutate } = trpc.candidature.add.useMutation()
 
   const {
@@ -44,8 +55,6 @@ const AddCandidature: React.FC = () => {
   } = useForm<AddCandidatureInput>()
 
   const onSubmit: SubmitHandler<AddCandidatureInput> = (data: AddCandidatureInput) => {
-    console.log('#### ~ data:', data)
-
     const experiences = data.experiences.map((experience) => {
       return {
         startAt: new Date(experience.startAt),
@@ -81,6 +90,20 @@ const AddCandidature: React.FC = () => {
       </div>
       <div className="sm:p-2">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+          <div id="title" className="justify-center flex">
+            <div className="form-control w-4/6 ">
+              <label className="label">
+                <span className="label-text text-xl font-bold">Titre</span>
+              </label>
+              <input
+                className="input input-bordered w-full "
+                placeholder="..."
+                type="text"
+                {...register('title')}
+                key="firstName"
+              />
+            </div>
+          </div>
           <div id="profile">
             <h1 className="sm:text-xl text-center font-semibold">Profil</h1>
             <div className="table mx-auto my-0 w-11/12 sm:w-4/6 border rounded-xl p-4">
@@ -131,6 +154,21 @@ const AddCandidature: React.FC = () => {
                     className="input input-bordered w-full max-w-xs"
                     type="text"
                   />
+                </div>
+              </div>
+              <div className="sm:flex sm:space-x-16 justify-center">
+                <div className="form-control w-full sm:w-4/6">
+                  <label className="label">
+                    <span className="label-text">Type de contract recherché</span>
+                  </label>
+
+                  <select className="select select-bordered w-full" {...register('kind')}>
+                    <option value="ALTERNANCE">Alternance</option>
+                    <option value="CDI" selected>
+                      CDI
+                    </option>
+                    <option value="STAGE">Stage</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -377,6 +415,86 @@ const AddCandidature: React.FC = () => {
                 type="button"
               >
                 Ajouter un parcours scolaire
+              </button>
+            </div>
+          </div>
+          <div id="skills" className="space-y-4">
+            <h1 className="text-xl text-center font-semibold">Compétences</h1>
+            {competences.map((competence, index) => {
+              return (
+                <div
+                  className="table mx-auto my-0 w-11/12 sm:w-4/6 border rounded-xl p-2"
+                  key={index}
+                >
+                  {index !== 0 && (
+                    <div className="absolute right-2">
+                      <button
+                        className="btn btn-sm btn-circle btn-outline"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setCompetences((prev) => {
+                            const actual = [...prev]
+                            actual.splice(index, 1)
+                            return actual
+                          })
+                          unregister(`competences.${index}`)
+                        }}
+                      >
+                        X
+                      </button>
+                    </div>
+                  )}
+                  <div className="sm:flex sm:space-x-16 justify-center">
+                    <div className="form-control w-full sm:w-4/6">
+                      <label className="label">
+                        <span className="label-text">Type</span>
+                      </label>
+
+                      <select
+                        className="select select-bordered w-full"
+                        {...register(`competences.${index}.type`)}
+                      >
+                        {Object.keys(CompetenceType).map((key) => (
+                          <option key={key} value={key}>
+                            {getSelectValue(key as CompetenceType)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-center">
+                    <div className="w-full md:w-4/6">
+                      <label className="label">
+                        <span className="label-text">Description</span>
+                      </label>
+                      <textarea
+                        className="textarea h-24 textarea-bordered w-full"
+                        placeholder="Description"
+                        {...register(`competences.${index}.description`)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+            <div className="flex justify-center mt-2">
+              <button
+                className="btn btn-outline"
+                onClick={() => {
+                  setCompetences((prev) => {
+                    return [
+                      ...prev,
+                      {
+                        description: '',
+                        type: CompetenceType.PROJECT_MANAGEMENT,
+                      },
+                    ]
+                  })
+                }}
+                type="button"
+              >
+                Ajouter une compétence
               </button>
             </div>
           </div>
