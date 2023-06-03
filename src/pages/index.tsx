@@ -1,4 +1,4 @@
-import { signIn, useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { NextPageWithLayout } from './_app'
 const IndexPage: NextPageWithLayout = () => {
   // prefetch all posts for instant navigation
@@ -8,38 +8,15 @@ const IndexPage: NextPageWithLayout = () => {
   //     void utils.post.byId.prefetch({ id });
   //   }
   // }, [postsQuery.data, utils]);
-  const { data: session } = useSession()
-
-  const isLoggedIn = !!session?.user
 
   return (
     <>
       <div className="p-2" id="content">
-        <h1 className="font-semibold text-4xl">
-          Enregistrez vos Whiskys favoris et découvrez les prochains
-        </h1>
+        <h1 className="font-semibold text-4xl">CVTHEQUE</h1>
+        <button className="btn btn-primary">
+          <Link href="cv">Déposer un CV</Link>
+        </button>
       </div>
-      {!isLoggedIn ? (
-        <div className="card bg-base-200 shadow-xl m-2">
-          <div className="card-body items-center text-center">
-            <h2 className="card-title">Connectez-vous</h2>
-            <p>Enregistrer, notez et jugez vos whiskys préférés!</p>
-            <div className="card-actions">
-              <button
-                className="btn btn-primary"
-                onClick={(e) => {
-                  e.preventDefault()
-                  signIn()
-                }}
-              >
-                S&apos;inscrire ou se connecter
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
     </>
   )
 }

@@ -19,7 +19,6 @@ export const userRouter = router({
         email: ctx.user.email,
       },
     })
-
     if (!user) {
       throw new TRPCError({
         code: 'UNAUTHORIZED',

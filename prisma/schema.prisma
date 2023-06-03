@@ -17,3 +17,47 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
+
+model Candidature {
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  info        String?
+  firstName   String
+  lastName    String
+  city        String
+  cityInfo    String?
+  remote      Boolean
+  email       String?
+  experiences Experience[]
+  schools     School[]
+  Competences Competences[]
+}
+
+model Experience {
+  id            String       @id @default(uuid())
+  startAt       DateTime?
+  endAt         DateTime?
+  companyName   String
+  missions      String[]
+  Candidature   Candidature? @relation(fields: [candidatureId], references: [id])
+  candidatureId String?
+}
+
+model School {
+  id             String       @id @default(uuid())
+  startAt        DateTime?
+  endAt          DateTime?
+  universityName String
+  description    String
+  Candidature    Candidature? @relation(fields: [candidatureId], references: [id])
+  candidatureId  String?
+}
+
+model Competences {
+  id            String       @id @default(uuid())
+  description   String
+  type          String
+  Candidature   Candidature? @relation(fields: [candidatureId], references: [id])
+  candidatureId String?
+}

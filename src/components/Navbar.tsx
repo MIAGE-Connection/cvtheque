@@ -93,7 +93,7 @@ const Navbar: React.FC<{ children: ReactElement }> = ({ children }) => {
                 </svg>
               </label>
             </div>
-            <div className="flex-1 px-2 mx-2 font-bold">Wisk-list</div>
+            <div className="flex-1 px-2 mx-2 font-bold">CVTHEQUE</div>
             <div className="flex-none hidden lg:block">
               <ul className="menu menu-horizontal">
                 {routeItems}
