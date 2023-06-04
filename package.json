@@ -5,6 +5,7 @@
   "packageManager": "pnpm@7.27.1",
   "scripts": {
     "prebuild": "prisma generate && prisma migrate deploy",
+    "build:0-install": "pnpm install",
     "build:1-next": "cross-env NODE_ENV=production next build",
     "build:2-server": "tsc --project tsconfig.server.json",
     "build": "run-s build:*",
@@ -38,7 +39,6 @@
     "semi": false
   },
   "dependencies": {
-    "@fseehawer/react-circular-slider": "^2.5.16",
     "@prisma/client": "^4.12.0",
     "@tanstack/react-query": "^4.18.0",
     "@trpc/client": "^10.18.0",
@@ -53,6 +53,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
+    "styled-jsx": "^5.1.2",
     "superjson": "^1.7.4",
     "tsx": "^3.12.3",
     "ws": "^8.0.0",
