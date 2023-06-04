@@ -18,6 +18,7 @@ export const candidatureRouter = router({
         info: z.string().nullish(),
         title: z.string(),
         email: z.string(),
+        remote: z.boolean(),
         kind: z.enum([
           CandidatureKind.ALTERNANCE,
           CandidatureKind.CDI,
@@ -74,6 +75,7 @@ export const candidatureRouter = router({
         title,
         competences,
         email,
+        remote,
       } = input
       const candidature = await prisma.candidature.create({
         data: {
@@ -84,7 +86,7 @@ export const candidatureRouter = router({
           kind,
           title,
           email,
-          remote: false,
+          remote,
           schools: { createMany: { data: schools } },
           experiences: { createMany: { data: experiences } },
           Competences: { createMany: { data: competences } },

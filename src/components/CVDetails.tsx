@@ -102,7 +102,6 @@ export const CVDetails = (props: { candidature: Candidature }) => {
                   </div>
                 )
               })}
-              x
             </div>
           </div>
         </div>

@@ -3,7 +3,38 @@ import type { Config } from 'tailwindcss'
 const config: Config = {
   content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        mc: '#2b309b',
+      },
+    },
+  },
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: '#2b309b',
+
+          secondary: '#3ABFF8',
+
+          'primary-content': '#FFFFFF',
+
+          accent: '#37CDBE',
+
+          neutral: '#3D4451',
+
+          'base-100': '#FFFFFF',
+
+          info: '#3ABFF8',
+
+          success: '#36D399',
+
+          warning: '#FBBD23',
+
+          error: '#F87272',
+        },
+      },
+    ],
   },
   plugins: [require('daisyui')],
 }

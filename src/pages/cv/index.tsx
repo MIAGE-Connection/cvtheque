@@ -95,18 +95,18 @@ const AddCandidature: React.FC = () => {
     <>
       <div className="sm:m-4 space-y-2">
         <div>
-          <h1 className="text-xl font-semibold">
+          <h1 className="text-xl font-semibold text-mc">
             Bienvenue sur le site de dépôt de CV de l&apos;association Miage Connection.
             Nous vous invitons à compléter le formulaire ci-dessous afin que le bureau
             puisse éventuellement vous faire un retour avant publication.
           </h1>
         </div>
         <div className="sm:p-2">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div id="title" className="justify-center flex">
               <div className="form-control w-4/6 ">
                 <label className="label">
-                  <span className="label-text text-xl font-bold">Titre</span>
+                  <span className="label-text text-xl font-bold text-mc">Titre</span>
                 </label>
                 <input
                   className="input input-bordered w-full "
@@ -117,8 +117,8 @@ const AddCandidature: React.FC = () => {
                 />
               </div>
             </div>
-            <div id="profile">
-              <h1 className="sm:text-xl text-center font-semibold">Profil</h1>
+            <div id="profile" className="space-y-4">
+              <h1 className="sm:text-xl text-center font-semibold text-mc">Profil</h1>
               <div className="table mx-auto my-0 w-11/12 sm:w-4/6 border rounded-xl p-4">
                 <div className="sm:flex sm:space-x-16 justify-center">
                   <div className="form-control w-full max-w-xs">
@@ -200,20 +200,26 @@ const AddCandidature: React.FC = () => {
                   </div>
                   <div className="form-control w-full max-w-xs">
                     <label className="label">
-                      <span className="label-text">Informations complémentaires</span>
+                      <span className="label-text">Télétravail</span>
                     </label>
-                    <input
-                      {...register('info')}
-                      placeholder="Disponible dans toute la france..."
-                      className="input input-bordered w-full max-w-xs"
-                      type="text"
-                    />
+                    <label className="cursor-pointer label">
+                      <span className="label-text text-lg">
+                        Je suis ouvert au télétravail
+                      </span>
+                      <input
+                        {...register('remote')}
+                        placeholder="Disponible dans toute la france..."
+                        className="checkbox checkbox-primary"
+                        type="checkbox"
+                        defaultChecked={false}
+                      />
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
             <div id="experiences" className="space-y-4">
-              <h1 className="text-xl text-center font-semibold">Expériences</h1>
+              <h1 className="text-xl text-center font-semibold text-mc">Expériences</h1>
               {experiences.map((experience, index) => {
                 return (
                   <div
@@ -223,7 +229,7 @@ const AddCandidature: React.FC = () => {
                     {index !== 0 && (
                       <div className="absolute right-2">
                         <button
-                          className="btn btn-sm btn-circle btn-outline"
+                          className="btn btn-sm btn-circle btn-outline btn-primary"
                           onClick={(e) => {
                             e.preventDefault()
                             setExperiences((prev) => {
@@ -296,7 +302,7 @@ const AddCandidature: React.FC = () => {
                                   )}
                                 />
                                 <button
-                                  className="btn btn-sm btn-circle btn-outline"
+                                  className="btn btn-sm btn-circle btn-outline btn-primary"
                                   onClick={(e) => {
                                     e.preventDefault()
                                     setExperiences((prev) => {
@@ -316,7 +322,7 @@ const AddCandidature: React.FC = () => {
                             )
                           })}
                           <button
-                            className="btn btn-sm flex m-auto"
+                            className="btn btn-sm btn-primary text-opacity-100 flex m-auto"
                             onClick={(e) => {
                               e.preventDefault()
                               setExperiences((prev) => {
@@ -342,7 +348,7 @@ const AddCandidature: React.FC = () => {
               })}
               <div className="flex justify-center mt-2">
                 <button
-                  className="btn btn-outline"
+                  className="btn btn-outline btn-primary"
                   onClick={() => {
                     setExperiences((prev) => {
                       return [
@@ -363,7 +369,9 @@ const AddCandidature: React.FC = () => {
               </div>
             </div>
             <div id="school" className="space-y-4">
-              <h1 className="text-xl text-center font-semibold">Parcours scolaire</h1>
+              <h1 className="text-xl text-center font-semibold text-mc">
+                Parcours scolaire
+              </h1>
               {schools.map((school, index) => {
                 return (
                   <div
@@ -373,7 +381,7 @@ const AddCandidature: React.FC = () => {
                     {index !== 0 && (
                       <div className="absolute right-2">
                         <button
-                          className="btn btn-sm btn-circle btn-outline"
+                          className="btn btn-sm btn-circle btn-primary btn-outline"
                           onClick={(e) => {
                             e.preventDefault()
                             setSchools((prev) => {
@@ -439,7 +447,7 @@ const AddCandidature: React.FC = () => {
               })}
               <div className="flex justify-center mt-2">
                 <button
-                  className="btn btn-outline"
+                  className="btn btn-outline btn-primary"
                   onClick={() => {
                     setSchools((prev) => {
                       return [
@@ -460,7 +468,7 @@ const AddCandidature: React.FC = () => {
               </div>
             </div>
             <div id="skills" className="space-y-4">
-              <h1 className="text-xl text-center font-semibold">Compétences</h1>
+              <h1 className="text-xl text-center font-semibold text-mc">Compétences</h1>
               {competences.map((competence, index) => {
                 return (
                   <div
@@ -470,7 +478,7 @@ const AddCandidature: React.FC = () => {
                     {index !== 0 && (
                       <div className="absolute right-2">
                         <button
-                          className="btn btn-sm btn-circle btn-outline"
+                          className="btn btn-sm btn-circle btn-outline btn-primary"
                           onClick={(e) => {
                             e.preventDefault()
                             setCompetences((prev) => {
@@ -522,7 +530,7 @@ const AddCandidature: React.FC = () => {
               })}
               <div className="flex justify-center mt-2">
                 <button
-                  className="btn btn-outline"
+                  className="btn btn-outline btn-primary"
                   onClick={() => {
                     setCompetences((prev) => {
                       return [
