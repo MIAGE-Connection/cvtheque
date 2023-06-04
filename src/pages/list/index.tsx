@@ -1,6 +1,7 @@
 import Spin from 'components/Spin'
 import Link from 'next/link'
 import { trpc } from 'utils/trpc'
+import { getCompetencesByType, getSelectValue } from 'utils/utils'
 
 const List: React.FC = () => {
   /* const { data: profile } = trpc.user.profile.useQuery()
@@ -13,6 +14,7 @@ const List: React.FC = () => {
       <th className="text-xl bg-mc text-white">Nom</th>
       <th className="text-xl bg-mc text-white">Poste</th>
       <th className="text-xl bg-mc text-white">Ville</th>
+      <th className="text-xl bg-mc text-white">Compétences</th>
       <th className="text-xl bg-mc text-white"></th>
     </>
   )
@@ -86,6 +88,11 @@ const List: React.FC = () => {
                       </td>
                       <td>{candidature.title}</td>
                       <td>{candidature.city}</td>
+                      <td>
+                        {getCompetencesByType(candidature.Competences)
+                          .map((c) => getSelectValue(c.type))
+                          .join(', ')}
+                      </td>
 
                       <th className="text-center">
                         <button className="btn btn-ghost btn-xs">

@@ -8,7 +8,13 @@ const CV: NextPageWithLayout = () => {
   const id = useRouter().query.id as string
   const { data: candidature, isLoading } = trpc.candidature.details.useQuery({ id })
   return (
-    <>{isLoading ? <Spin /> : candidature && <CVDetails candidature={candidature} />}</>
+    <>
+      {isLoading ? (
+        <Spin />
+      ) : (
+        candidature && <CVDetails candidature={candidature} size="center" />
+      )}
+    </>
   )
 }
 

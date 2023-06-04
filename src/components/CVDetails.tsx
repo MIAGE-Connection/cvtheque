@@ -2,35 +2,43 @@ import { RouterOutput } from 'utils/trpc'
 
 type Candidature = Partial<RouterOutput['candidature']['details']>
 
-export const CVDetails = (props: { candidature: Candidature }) => {
-  const { candidature } = props
+export const CVDetails = (props: {
+  candidature: Candidature
+  size: 'full' | 'center'
+}) => {
+  const { candidature, size } = props
   return (
     <div className="flex justify-center">
-      <div className="p-8 border rounded-xl mx-8 mt-4 w-4/6">
+      <div
+        className={`p-8 border rounded-xl mx-8 mt-4 ${
+          size === 'full' ? 'w-full' : 'w-4/6'
+        }`}
+      >
         <div className="flex justify-between items-center">
           <div>
-            <div className="flex space-x-2 font-bold text-xl">
+            <div className="flex space-x-2 font-bold text-2xl text-mc">
               <div>{candidature?.firstName}</div>
               <div>{candidature?.lastName}</div>
             </div>
-            <div>{candidature?.city}</div>
-            <div>{candidature?.email}</div>
+            <div className="text-xl">{candidature?.email}</div>
           </div>
-          <div className="text-4xl font-bold">{candidature?.title}</div>
+          <div className="text-6xl font-bold text-mc">{candidature?.title}</div>
         </div>
         <div className="space-y-12 mt-12">
           <div>
-            <p className="text-lg font-semibold">Ville</p>
-            <p>{candidature?.city}</p>
+            <p className="text-2xl font-semibold text-mc">Ville</p>
+            <p className="text-lg">{candidature?.city}</p>
           </div>
           <div>
-            <p className="text-xl">Éxperiences</p>
+            <p className="text-2xl text-mc">Éxperiences</p>
             <div>
               {candidature?.experiences?.map((experience, i) => {
                 return (
                   <div key={i} className="mt-4">
                     <div className="flex justify-between">
-                      <div className="font-semibold">{experience.companyName}</div>
+                      <div className="font-semibold text-lg">
+                        {experience.companyName}
+                      </div>
                       <div className="flex space-x-4 items-center">
                         <div className="text-sm">
                           {experience.startAt?.toLocaleDateString()}
@@ -58,13 +66,13 @@ export const CVDetails = (props: { candidature: Candidature }) => {
             </div>
           </div>
           <div>
-            <p className="text-xl">Parcours scolaire</p>
+            <p className="text-2xl text-mc">Parcours scolaire</p>
             <div>
               {candidature?.schools?.map((school, i) => {
                 return (
                   <div key={i} className="mt-4">
                     <div className="flex justify-between">
-                      <div className="font-semibold">{school.universityName}</div>
+                      <div className="font-semibold text-lg">{school.universityName}</div>
                       <div className="flex space-x-4 items-center">
                         <div className="text-sm">
                           {school.startAt?.toLocaleDateString()}
@@ -86,13 +94,13 @@ export const CVDetails = (props: { candidature: Candidature }) => {
             </div>
           </div>
           <div>
-            <p className="text-xl">Compétences</p>
+            <p className="text-2xl text-mc">Compétences</p>
             <div>
               {candidature?.competenceByType?.map((competence) => {
                 return (
                   <div key={competence.type} className="mt-4">
                     <div className="">
-                      <div className="font-semibold">{competence.type}</div>
+                      <div className="font-semibold text-xl">{competence.type}</div>
                       <ul className="list-disc ml-4">
                         {competence.descriptions.map((description, i) => {
                           return <li key={`${description}-${i}`}>{description}</li>

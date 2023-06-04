@@ -1,7 +1,7 @@
 import { Competences as CompetenceT, CompetenceType } from '@prisma/client'
 import { CVDetails } from 'components/CVDetails'
 import { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { RouterInput, trpc } from 'utils/trpc'
 import { getCompetencesByType, getSelectValue } from 'utils/utils'
 
@@ -50,13 +50,61 @@ const AddCandidature: React.FC = () => {
 
   const { mutate } = trpc.candidature.add.useMutation()
 
+  const resolver: Resolver<AddCandidatureInput> = async (values) => {
+    return {
+      values: values.firstName ? values : {},
+      errors: {
+        ...(!values.firstName
+          ? {
+              firstName: {
+                type: 'required',
+                message: 'Veuillez renseignez votre prénom',
+              },
+            }
+          : {}),
+        ...(!values.lastName
+          ? {
+              firstName: {
+                type: 'required',
+                message: 'Veuillez renseignez votre nom',
+              },
+            }
+          : {}),
+        ...(!values.city
+          ? {
+              city: {
+                type: 'required',
+                message: 'Veuillez renseignez votre ville',
+              },
+            }
+          : {}),
+        ...(!values.email
+          ? {
+              email: {
+                type: 'required',
+                message: 'Veuillez renseignez votre email',
+              },
+            }
+          : {}),
+        ...(!values.title
+          ? {
+              title: {
+                type: 'required',
+                message: 'Veuillez donner un titre, ex: Développeur fullstack',
+              },
+            }
+          : {}),
+      },
+    }
+  }
+
   const {
     unregister,
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<AddCandidatureInput>()
+  } = useForm<AddCandidatureInput>({ resolver })
 
   const watchFields = watch(['firstName', 'lastName', 'city', 'kind', 'title']) // you can also target specific fields by their names
 
@@ -85,6 +133,10 @@ const AddCandidature: React.FC = () => {
 
     data.experiences = experiences
     data.schools = schools
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
 
     mutate(data)
   }
@@ -115,6 +167,9 @@ const AddCandidature: React.FC = () => {
                   {...register('title')}
                   key="firstName"
                 />
+                <label className="label">
+                  <span className="label-text-alt text-mc">{errors.title?.message}</span>
+                </label>
               </div>
             </div>
             <div id="profile" className="space-y-4">
@@ -132,6 +187,11 @@ const AddCandidature: React.FC = () => {
                       {...register('firstName')}
                       key="firstName"
                     />
+                    <label className="label">
+                      <span className="label-text-alt text-mc">
+                        {errors.firstName?.message}
+                      </span>
+                    </label>
                   </div>
                   <div className="form-control w-full max-w-xs">
                     <label className="label">
@@ -143,6 +203,11 @@ const AddCandidature: React.FC = () => {
                       className="input input-bordered w-full max-w-xs"
                       type="text"
                     />
+                    <label className="label">
+                      <span className="label-text-alt text-mc">
+                        {errors.lastName?.message}
+                      </span>
+                    </label>
                   </div>
                 </div>
                 <div className="sm:flex sm:space-x-16 justify-center">
@@ -156,6 +221,11 @@ const AddCandidature: React.FC = () => {
                       type="text"
                       {...register('city')}
                     />
+                    <label className="label">
+                      <span className="label-text-alt text-mc">
+                        {errors.city?.message}
+                      </span>
+                    </label>
                   </div>
                   <div className="form-control w-full max-w-xs">
                     <label className="label">
@@ -197,8 +267,26 @@ const AddCandidature: React.FC = () => {
                       type="text"
                       {...register('email')}
                     />
+                    <label className="label">
+                      <span className="label-text-alt text-mc">
+                        {errors.email?.message}
+                      </span>
+                    </label>
                   </div>
                   <div className="form-control w-full max-w-xs">
+                    <label className="label">
+                      <span className="label-text">Téléphone</span>
+                    </label>
+                    <input
+                      className="input input-bordered w-full max-w-xs"
+                      placeholder="06 11 12 09 86"
+                      type="text"
+                      {...register('mobile')}
+                    />
+                  </div>
+                </div>
+                <div className="sm:flex sm:space-x-16 justify-center">
+                  <div className="form-control w-full sm:w-4/6">
                     <label className="label">
                       <span className="label-text">Télétravail</span>
                     </label>
@@ -265,6 +353,7 @@ const AddCandidature: React.FC = () => {
                         <input
                           className="input input-bordered w-full max-w-xs"
                           type="date"
+                          required
                           // defaultValue={experience.experiences[0].startAt.toISOString()}
                           {...register(`experiences.${index}.startAt`)}
                         />
@@ -416,6 +505,7 @@ const AddCandidature: React.FC = () => {
                         <input
                           className="input input-bordered w-full max-w-xs"
                           type="date"
+                          required
                           {...register(`schools.${index}.startAt`)}
                         />
                       </div>
@@ -587,14 +677,14 @@ const AddCandidature: React.FC = () => {
                 title: watchFields[4],
                 experiences: experiencesWatched?.map((experience) => ({
                   ...experience,
-                  startAt: new Date(experience.startAt),
+                  startAt: experience.startAt ? new Date(experience.startAt) : new Date(),
                   endAt: experience.endAt ? new Date(experience.endAt) : new Date(),
                   id: '',
                   candidatureId: '',
                 })),
                 schools: schoolsWatched?.map((school) => ({
                   ...school,
-                  startAt: new Date(school.startAt),
+                  startAt: school.startAt ? new Date(school.startAt) : new Date(),
                   endAt: school.endAt ? new Date(school.endAt) : new Date(),
                   id: '',
                   candidatureId: '',
@@ -607,6 +697,7 @@ const AddCandidature: React.FC = () => {
                 })),
                 email: 'mail@preview.com',
               }}
+              size="full"
             />
           </div>
         </div>
