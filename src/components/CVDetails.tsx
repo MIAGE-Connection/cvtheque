@@ -88,18 +88,21 @@ export const CVDetails = (props: { candidature: Candidature }) => {
           <div>
             <p className="text-xl">Compétences</p>
             <div>
-              {candidature?.Competences?.map((competence) => {
+              {candidature?.competenceByType?.map((competence) => {
                 return (
-                  <div key={competence.id} className="mt-4">
+                  <div key={competence.type} className="mt-4">
                     <div className="">
                       <div className="font-semibold">{competence.type}</div>
-                      <div className="flex space-x-4 items-center">
-                        <div>{competence.description}</div>
-                      </div>
+                      <ul className="list-disc ml-4">
+                        {competence.descriptions.map((description, i) => {
+                          return <li key={`${description}-${i}`}>{description}</li>
+                        })}
+                      </ul>
                     </div>
                   </div>
                 )
               })}
+              x
             </div>
           </div>
         </div>

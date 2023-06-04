@@ -2,10 +2,12 @@
  *
  * This is an example router, you can delete this file and then update `../pages/api/trpc/[trpc].tsx`
  */
+import { CandidatureKind, CompetenceType } from '@prisma/client'
 import { prisma } from 'server/prisma'
+import { getCompetencesByType } from 'utils/utils'
 import { z } from 'zod'
 import { publicProcedure, router } from '../trpc'
-import { CandidatureKind, CompetenceType } from '@prisma/client'
+
 export const candidatureRouter = router({
   add: publicProcedure
     .input(
@@ -15,6 +17,7 @@ export const candidatureRouter = router({
         city: z.string(),
         info: z.string().nullish(),
         title: z.string(),
+        email: z.string(),
         kind: z.enum([
           CandidatureKind.ALTERNANCE,
           CandidatureKind.CDI,
@@ -70,6 +73,7 @@ export const candidatureRouter = router({
         kind,
         title,
         competences,
+        email,
       } = input
       const candidature = await prisma.candidature.create({
         data: {
@@ -79,6 +83,7 @@ export const candidatureRouter = router({
           info,
           kind,
           title,
+          email,
           remote: false,
           schools: { createMany: { data: schools } },
           experiences: { createMany: { data: experiences } },
@@ -99,17 +104,13 @@ export const candidatureRouter = router({
         include: { experiences: true, schools: true, Competences: true },
       })
 
-      //      const competences = candidature?.Competences
+      const competences = candidature?.Competences
 
-      /* const competencesByType = competences?.reduce((acc, competence) => {
-        const type = competence.type
-        if (!acc[type]) {
-          acc[type] = []
-        }
-        acc[type].push(competence)
-        return acc
-      }, {} as Record<CompetenceType, typeof competences>) */
+      const competencesByType = competences ? getCompetencesByType(competences) : []
 
-      return candidature
+      return {
+        ...candidature,
+        competenceByType: competencesByType,
+      }
     }),
 })

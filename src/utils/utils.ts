@@ -1,4 +1,29 @@
-import { CompetenceType } from '@prisma/client'
+import { CompetenceType, Competences } from '@prisma/client'
+
+type CandidatureByType = {
+  type: CompetenceType
+  descriptions: string[]
+}
+
+export const getCompetencesByType = (
+  competences: Pick<Competences, 'description' | 'type'>[],
+): CandidatureByType[] => {
+  const competencesByType: CandidatureByType[] = []
+
+  Object.keys(CompetenceType).forEach((key) => {
+    const competenceByType = competences?.filter((c) => c.type === key)
+    competencesByType.push({
+      type: key as CompetenceType,
+      descriptions: competenceByType
+        ? competenceByType.map((c) => c.description || '')
+        : [''],
+    })
+  })
+
+  return competencesByType.filter(
+    (c) => c.descriptions.every((d) => d !== '') && c.descriptions.length > 0,
+  )
+}
 
 export const getSelectValue = (competence: CompetenceType): string => {
   switch (competence) {

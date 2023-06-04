@@ -1,9 +1,9 @@
-import { CompetenceType, Competences as CompetenceT } from '@prisma/client'
+import { Competences as CompetenceT, CompetenceType } from '@prisma/client'
 import { CVDetails } from 'components/CVDetails'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { RouterInput, trpc } from 'utils/trpc'
-import { getSelectValue } from 'utils/utils'
+import { getCompetencesByType, getSelectValue } from 'utils/utils'
 
 /* import { useSession } from 'next-auth/react'
 import { trpc } from 'utils/trpc'
@@ -61,7 +61,7 @@ const AddCandidature: React.FC = () => {
   const watchFields = watch(['firstName', 'lastName', 'city', 'kind', 'title']) // you can also target specific fields by their names
 
   const experiencesWatched = watch('experiences')
-  const compentenceWatched = watch('competences')
+  const competencesWatched = watch('competences')
   const schoolsWatched = watch('schools')
 
   const onSubmit: SubmitHandler<AddCandidatureInput> = (data: AddCandidatureInput) => {
@@ -89,14 +89,7 @@ const AddCandidature: React.FC = () => {
     mutate(data)
   }
 
-  const competencesByType = competences?.reduce((acc, competence) => {
-    const type = competence.type
-    if (!acc[type]) {
-      acc[type] = []
-    }
-    acc[type].push(competence)
-    return acc
-  }, {} as Record<CompetenceType, typeof competences>)
+  const competencesByType = getCompetencesByType(competencesWatched)
 
   return (
     <>
@@ -191,6 +184,30 @@ const AddCandidature: React.FC = () => {
                       <option value="CDI">CDI</option>
                       <option value="STAGE">Stage</option>
                     </select>
+                  </div>
+                </div>
+                <div className="sm:flex sm:space-x-16 justify-center">
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">
+                      <span className="label-text">Email</span>
+                    </label>
+                    <input
+                      className="input input-bordered w-full max-w-xs"
+                      placeholder="mail@mail.com"
+                      type="text"
+                      {...register('email')}
+                    />
+                  </div>
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">
+                      <span className="label-text">Informations complémentaires</span>
+                    </label>
+                    <input
+                      {...register('info')}
+                      placeholder="Disponible dans toute la france..."
+                      className="input input-bordered w-full max-w-xs"
+                      type="text"
+                    />
                   </div>
                 </div>
               </div>
@@ -374,7 +391,7 @@ const AddCandidature: React.FC = () => {
                     <div className="sm:flex sm:space-x-16 justify-center">
                       <div className="form-control w-full sm:w-4/6">
                         <label className="label">
-                          <span className="label-text">Lieu d'étude</span>
+                          <span className="label-text">Lieu d&apos;étude</span>
                         </label>
                         <input
                           className="input input-bordered w-full"
@@ -574,7 +591,8 @@ const AddCandidature: React.FC = () => {
                   id: '',
                   candidatureId: '',
                 })),
-                Competences: compentenceWatched?.map((competence) => ({
+                competenceByType: competencesByType,
+                Competences: competencesWatched?.map((competence) => ({
                   ...competence,
                   id: '',
                   candidatureId: '',
