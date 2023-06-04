@@ -99,20 +99,17 @@ export const candidatureRouter = router({
         include: { experiences: true, schools: true, Competences: true },
       })
 
-      const competences = candidature?.Competences
+      //      const competences = candidature?.Competences
 
-      const competencesByType = competences?.reduce((acc, competence) => {
+      /* const competencesByType = competences?.reduce((acc, competence) => {
         const type = competence.type
         if (!acc[type]) {
           acc[type] = []
         }
         acc[type].push(competence)
         return acc
-      }, {} as Record<CompetenceType, typeof competences>)
+      }, {} as Record<CompetenceType, typeof competences>) */
 
-      return {
-        ...candidature,
-        Competence: competencesByType,
-      }
+      return candidature
     }),
 })
