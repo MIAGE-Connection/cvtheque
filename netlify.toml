@@ -1,0 +1,6 @@
+[install]
+  command = "pnpm install"
+
+[build]
+  command = "next build"
+  publish = ".next"

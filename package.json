@@ -5,7 +5,6 @@
   "packageManager": "pnpm@7.27.1",
   "scripts": {
     "prebuild": "prisma generate && prisma migrate deploy",
-    "build:0-install": "pnpm install",
     "build:1-next": "cross-env NODE_ENV=production next build",
     "build:2-server": "tsc --project tsconfig.server.json",
     "build": "run-s build:*",
@@ -46,10 +45,11 @@
     "@trpc/react-query": "^10.29.1",
     "@trpc/server": "^10.29.1",
     "clsx": "^1.1.1",
-    "daisyui": "^2.51.5",
+    "daisyui": "^3.0.3",
+    "follow-redirects": "^1.15.2",
     "global": "^4.4.0",
     "next": "^13.4.4",
-    "next-auth": "^4.14.0",
+    "next-auth": "^4.22.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
@@ -60,6 +60,8 @@
     "zod": "^3.0.0"
   },
   "devDependencies": {
+    "@netlify/esbuild-darwin-64": "^0.14.39",
+    "@netlify/plugin-nextjs": "^4.37.4",
     "@playwright/test": "^1.26.1",
     "@tanstack/react-query-devtools": "^4.3.8",
     "@types/node": "^18.7.20",

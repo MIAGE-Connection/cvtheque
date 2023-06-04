@@ -3,18 +3,10 @@ import { AppProviders } from 'next-auth/providers'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GithubProvider from 'next-auth/providers/github'
 import { prisma } from 'server/prisma'
-import GoogleProvider from 'next-auth/providers/google'
 
 let useMockProvider = process.env.NODE_ENV === 'test'
-const {
-  GITHUB_CLIENT_ID,
-  GITHUB_SECRET,
-  NODE_ENV,
-  APP_ENV,
-  NEXTAUTH_SECRET,
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-} = process.env
+const { GITHUB_CLIENT_ID, GITHUB_SECRET, NODE_ENV, APP_ENV, NEXTAUTH_SECRET } =
+  process.env
 if (
   (NODE_ENV !== 'production' || APP_ENV === 'test') &&
   (!GITHUB_CLIENT_ID || !GITHUB_SECRET)
@@ -45,27 +37,13 @@ if (useMockProvider) {
     }),
   )
 } else {
-  if (!GITHUB_CLIENT_ID || !GITHUB_SECRET || !GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+  if (!GITHUB_CLIENT_ID || !GITHUB_SECRET) {
     throw new Error('GITHUB_CLIENT_ID and GITHUB_SECRET must be set')
   }
   providers.push(
     GithubProvider({
       clientId: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_SECRET,
-      profile(profile) {
-        return {
-          id: profile.id,
-          name: profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-        } as any
-      },
-    }),
-  )
-  providers.push(
-    GoogleProvider({
-      clientId: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
       profile(profile) {
         return {
           id: profile.id,
