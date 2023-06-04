@@ -47,7 +47,7 @@ export const CVDetails = (props: { candidature: Candidature }) => {
                     </div>
                     <div className="mt-2">
                       <ul className="list-disc ml-4">
-                        {experience.missions.map((mission, i) => {
+                        {experience.missions?.map((mission, i) => {
                           return <li key={`${mission}-${i}`}>{mission}</li>
                         })}
                       </ul>

@@ -10,22 +10,22 @@ const List: React.FC = () => {
 
   const headers: JSX.Element = (
     <>
-      <th className="text-xl">Nom</th>
-      <th className="text-xl">Poste</th>
-      <th className="text-xl">Ville</th>
-      <th className="text-xl"></th>
+      <th className="text-xl bg-mc text-white">Nom</th>
+      <th className="text-xl bg-mc text-white">Poste</th>
+      <th className="text-xl bg-mc text-white">Ville</th>
+      <th className="text-xl bg-mc text-white"></th>
     </>
   )
 
   return (
     <div>
-      <h1 className="font-bold text-3xl text-center mt-4">Liste des CVs</h1>
+      <h1 className="font-bold text-3xl text-center mt-4 text-mc">Liste des CVs</h1>
       <div className="mt-4 mx-16">
         {isFetching ? (
           <Spin />
         ) : (
           <div className="overflow-x-auto">
-            <table className="table w-full text-lg">
+            <table className="table w-full text-lg border rounded-xl">
               <thead>
                 <tr>
                   {/* <th>
