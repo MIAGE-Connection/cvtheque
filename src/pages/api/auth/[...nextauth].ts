@@ -2,6 +2,8 @@ import NextAuth, { NextAuthOptions } from 'next-auth'
 import { AppProviders } from 'next-auth/providers'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GithubProvider from 'next-auth/providers/github'
+import EmailProvider from 'next-auth/providers/email'
+
 import { prisma } from 'server/prisma'
 
 let useMockProvider = process.env.NODE_ENV === 'test'
@@ -52,6 +54,18 @@ if (useMockProvider) {
           image: profile.avatar_url,
         } as any
       },
+    }),
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: process.env.EMAIL_SERVER_PORT,
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.EMAIL_SERVER_PASSWORD,
+        },
+      },
+      from: process.env.EMAIL_FROM,
+      maxAge: 24 * 60 * 60,
     }),
   )
 }

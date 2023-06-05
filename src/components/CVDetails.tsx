@@ -53,13 +53,19 @@ export const CVDetails = (props: {
                         )}
                       </div>
                     </div>
-                    <div className="mt-2">
-                      <ul className="list-disc ml-4">
-                        {experience.missions?.map((mission, i) => {
-                          return <li key={`${mission}-${i}`}>{mission}</li>
-                        })}
-                      </ul>
-                    </div>
+                    {experience.missions.length && (
+                      <div className="mt-2">
+                        <ul className="list-disc ml-4">
+                          {experience.missions?.map((mission, i) => {
+                            return mission === '' ? (
+                              <></>
+                            ) : (
+                              <li key={`${mission}-${i}`}>{mission}</li>
+                            )
+                          })}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 )
               })}
@@ -95,11 +101,11 @@ export const CVDetails = (props: {
           </div>
           <div>
             <p className="text-2xl text-mc">Compétences</p>
-            <div>
+            <div className="grid grid-cols-2">
               {candidature?.competenceByType?.map((competence) => {
                 return (
                   <div key={competence.type} className="mt-4">
-                    <div className="">
+                    <div>
                       <div className="font-semibold text-xl">{competence.type}</div>
                       <ul className="list-disc ml-4">
                         {competence.descriptions.map((description, i) => {

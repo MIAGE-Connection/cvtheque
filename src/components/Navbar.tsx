@@ -9,7 +9,7 @@ const Navbar: React.FC<{ children: ReactElement }> = ({ children }) => {
   const routeItems = (
     <>
       <li>
-        <Link href="/" className="">
+        <Link href="/">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
