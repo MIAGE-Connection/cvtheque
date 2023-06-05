@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { NextPageWithLayout } from './_app'
-import { signOut } from 'next-auth/react'
+import { signIn, signOut } from 'next-auth/react'
 const IndexPage: NextPageWithLayout = () => {
   // prefetch all posts for instant navigation
   // useEffect(() => {
@@ -20,7 +20,11 @@ const IndexPage: NextPageWithLayout = () => {
         <button className="btn btn-primary">
           <Link href="list">Liste des CV</Link>
         </button>
-        <button onClick={() => signOut()}>logout</button>
+        <div>
+          <button onClick={() => signIn()}>LOGIN </button>
+
+          <button onClick={() => signOut()}>logout</button>
+        </div>
       </div>
     </>
   )

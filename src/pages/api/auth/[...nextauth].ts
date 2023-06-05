@@ -1,9 +1,9 @@
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import { AppProviders } from 'next-auth/providers'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import GithubProvider from 'next-auth/providers/github'
 import EmailProvider from 'next-auth/providers/email'
-
+import GithubProvider from 'next-auth/providers/github'
 import { prisma } from 'server/prisma'
 
 let useMockProvider = process.env.NODE_ENV === 'test'
@@ -17,6 +17,7 @@ if (
   useMockProvider = true
 }
 const providers: AppProviders = []
+
 if (useMockProvider) {
   providers.push(
     CredentialsProvider({
@@ -36,6 +37,18 @@ if (useMockProvider) {
       credentials: {
         name: { type: 'test' },
       },
+    }),
+    EmailProvider({
+      server: {
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD,
+        },
+      },
+      from: process.env.SMTP_FROM,
+      maxAge: 24 * 60 * 60,
     }),
   )
 } else {
@@ -57,14 +70,14 @@ if (useMockProvider) {
     }),
     EmailProvider({
       server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
         auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD,
         },
       },
-      from: process.env.EMAIL_FROM,
+      from: process.env.SMTP_FROM,
       maxAge: 24 * 60 * 60,
     }),
   )
@@ -72,6 +85,8 @@ if (useMockProvider) {
 
 export const authOptions: NextAuthOptions = {
   providers,
+  //adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma),
   secret: NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user }) {
@@ -85,10 +100,12 @@ export const authOptions: NextAuthOptions = {
         await prisma.user.create({
           data: {
             email: user.email,
-            name: user.name,
+            name: '',
           },
         })
       }
+
+      console.log('bisbis')
 
       return true
     },

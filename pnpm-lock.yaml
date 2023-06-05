@@ -3,8 +3,9 @@ lockfileVersion: 5.4
 specifiers:
   '@netlify/esbuild-darwin-64': ^0.14.39
   '@netlify/plugin-nextjs': ^4.37.4
+  '@next-auth/prisma-adapter': 1.0.7
   '@playwright/test': ^1.26.1
-  '@prisma/client': ^4.12.0
+  '@prisma/client': ^4.15.0
   '@tanstack/react-query': ^4.29.12
   '@tanstack/react-query-devtools': ^4.3.8
   '@trpc/client': ^10.29.1
@@ -26,18 +27,17 @@ specifiers:
   eslint-plugin-prettier: ^4.2.1
   eslint-plugin-react: ^7.31.11
   eslint-plugin-react-hooks: ^4.6.0
-  follow-redirects: ^1.15.2
   global: ^4.4.0
   next: ^13.4.4
   next-auth: ^4.22.1
+  nodemailer: ^6.9.3
   npm-run-all: ^4.1.5
   postcss: ^8.4.14
   prettier: ^2.8.7
-  prisma: ^4.12.0
+  prisma: ^4.15.0
   react: ^18.2.0
   react-dom: ^18.2.0
   react-hook-form: ^7.43.9
-  styled-jsx: ^5.1.2
   superjson: ^1.7.4
   tailwindcss: ^3.3.0
   tsx: ^3.12.3
@@ -46,6 +46,7 @@ specifiers:
   zod: ^3.0.0
 
 dependencies:
+  '@next-auth/prisma-adapter': 1.0.7_2damktpyaopg2xe7jnksbcpubi
   '@prisma/client': 4.15.0_prisma@4.15.0
   '@tanstack/react-query': 4.29.12_biqbaboplfbrettd7655fr4n2y
   '@trpc/client': 10.29.1_@trpc+server@10.29.1
@@ -54,14 +55,13 @@ dependencies:
   '@trpc/server': 10.29.1
   clsx: 1.2.1
   daisyui: 3.0.3_postcss@8.4.24
-  follow-redirects: 1.15.2
   global: 4.4.0
   next: 13.4.4_biqbaboplfbrettd7655fr4n2y
-  next-auth: 4.22.1_z4pol2qj2yv3um3jqqobs4b3eu
+  next-auth: 4.22.1_2idubvdem77q6zqylrwjfaxfw4
+  nodemailer: 6.9.3
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.44.3_react@18.2.0
-  styled-jsx: 5.1.2_react@18.2.0
   superjson: 1.12.3
   tsx: 3.12.7
   ws: 8.13.0
@@ -693,6 +693,16 @@ packages:
       - encoding
       - supports-color
     dev: true
+
+  /@next-auth/prisma-adapter/1.0.7_2damktpyaopg2xe7jnksbcpubi:
+    resolution: {integrity: sha512-Cdko4KfcmKjsyHFrWwZ//lfLUbcLqlyFqjd/nYE2m3aZ7tjMNUjpks47iw7NTCnXf+5UWz5Ypyt1dSs1EP5QJw==}
+    peerDependencies:
+      '@prisma/client': '>=2.26.0 || >=3'
+      next-auth: ^4
+    dependencies:
+      '@prisma/client': 4.15.0_prisma@4.15.0
+      next-auth: 4.22.1_2idubvdem77q6zqylrwjfaxfw4
+    dev: false
 
   /@next/env/13.4.4:
     resolution: {integrity: sha512-q/y7VZj/9YpgzDe64Zi6rY1xPizx80JjlU2BTevlajtaE3w1LqweH1gGgxou2N7hdFosXHjGrI4OUvtFXXhGLg==}
@@ -2304,6 +2314,7 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dev: true
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -3159,7 +3170,7 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
 
-  /next-auth/4.22.1_z4pol2qj2yv3um3jqqobs4b3eu:
+  /next-auth/4.22.1_2idubvdem77q6zqylrwjfaxfw4:
     resolution: {integrity: sha512-NTR3f6W7/AWXKw8GSsgSyQcDW6jkslZLH8AiZa5PQ09w1kR8uHtR9rez/E9gAq/o17+p0JYHE8QjF3RoniiObA==}
     peerDependencies:
       next: ^12.2.5 || ^13
@@ -3175,6 +3186,7 @@ packages:
       cookie: 0.5.0
       jose: 4.14.4
       next: 13.4.4_biqbaboplfbrettd7655fr4n2y
+      nodemailer: 6.9.3
       oauth: 0.9.15
       openid-client: 5.4.2
       preact: 10.15.1
@@ -3274,6 +3286,11 @@ packages:
     resolution: {integrity: sha512-LN4fydt9TqhZhThkZIVQnF9cwjU3qmUH9h78Mx/K7d3VvfRqqwthLwJEUOEL0QPZ0XQmNN7be5Ggit5+4dq3Bw==}
     engines: {node: '>=0.12.0'}
     dev: true
+
+  /nodemailer/6.9.3:
+    resolution: {integrity: sha512-fy9v3NgTzBngrMFkDsKEj0r02U7jm6XfC3b52eoNV+GCrGj+s8pt5OqhiJdWKuw51zCTdiNR/IUD1z33LIIGpg==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /normalize-package-data/2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
@@ -4177,23 +4194,6 @@ packages:
 
   /styled-jsx/5.1.1_react@18.2.0:
     resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
-    engines: {node: '>= 12.0.0'}
-    peerDependencies:
-      '@babel/core': '*'
-      babel-plugin-macros: '*'
-      react: '>= 16.8.0 || 17.x.x || ^18.0.0-0'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      babel-plugin-macros:
-        optional: true
-    dependencies:
-      client-only: 0.0.1
-      react: 18.2.0
-    dev: false
-
-  /styled-jsx/5.1.2_react@18.2.0:
-    resolution: {integrity: sha512-FI5r0a5ED2/+DSdG2ZRz3a4FtNQnKPLadauU5v76a9QsscwZrWggQKOmyxGGP5EWKbyY3bsuWAJYzyKaDAVAcw==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
       '@babel/core': '*'
