@@ -12,6 +12,7 @@ export const candidatureRouter = router({
   add: authedProcedure
     .input(
       z.object({
+        id: z.string().nullable(),
         firstName: z.string(),
         lastName: z.string(),
         city: z.string(),
@@ -45,28 +46,14 @@ export const candidatureRouter = router({
         competences: z.array(
           z.object({
             description: z.string(),
-            type: z.enum([
-              CompetenceType.FRONTEND,
-              CompetenceType.BACKEND,
-              CompetenceType.DEVOPS,
-              CompetenceType.MOBILE,
-              CompetenceType.DESIGN,
-              CompetenceType.MANAGEMENT,
-              CompetenceType.MARKETING,
-              CompetenceType.COMMUNICATION,
-              CompetenceType.SALES,
-              CompetenceType.BUSINESS,
-              CompetenceType.SOFTSKILLS,
-              CompetenceType.AGILE,
-              CompetenceType.PROJECT_MANAGEMENT,
-              CompetenceType.OTHER,
-            ]),
+            type: z.nativeEnum(CompetenceType),
           }),
         ),
       }),
     )
     .mutation(async ({ input, ctx }) => {
       const {
+        id,
         firstName,
         lastName,
         city,
@@ -81,7 +68,33 @@ export const candidatureRouter = router({
         mobile,
       } = input
       const { email: userEmail } = ctx.user
-      const candidature = await prisma.candidature.create({
+
+      if (!id) {
+        const candidature = await prisma.candidature.create({
+          data: {
+            firstName,
+            lastName,
+            city,
+            info,
+            kind,
+            title,
+            email,
+            remote,
+            mobile,
+            User: {
+              connect: {
+                email: userEmail,
+              },
+            },
+            schools: { createMany: { data: schools } },
+            experiences: { createMany: { data: experiences } },
+            Competences: { createMany: { data: competences } },
+          },
+        })
+        return candidature
+      }
+      const candidature = await prisma.candidature.update({
+        where: { id },
         data: {
           firstName,
           lastName,
@@ -92,14 +105,9 @@ export const candidatureRouter = router({
           email,
           remote,
           mobile,
-          User: {
-            connect: {
-              email: userEmail,
-            },
-          },
-          schools: { createMany: { data: schools } },
-          experiences: { createMany: { data: experiences } },
-          Competences: { createMany: { data: competences } },
+          schools: { deleteMany: {}, createMany: { data: schools } },
+          experiences: { deleteMany: {}, createMany: { data: experiences } },
+          Competences: { deleteMany: {}, createMany: { data: competences } },
         },
       })
       return candidature
@@ -113,12 +121,21 @@ export const candidatureRouter = router({
 
     return candidatures
   }),
-  details: publicProcedure
+  details: authedProcedure
     .input(z.object({ id: z.string().uuid() }))
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const candidature = await prisma.candidature.findUnique({
         where: { id: input.id },
-        include: { experiences: true, schools: true, Competences: true },
+        include: {
+          experiences: true,
+          schools: true,
+          Competences: true,
+          User: {
+            select: {
+              email: true,
+            },
+          },
+        },
       })
 
       const competences = candidature?.Competences
@@ -128,6 +145,7 @@ export const candidatureRouter = router({
       return {
         ...candidature,
         competenceByType: competencesByType,
+        isOwner: candidature?.User[0].email === ctx.user.email,
       }
     }),
   getByUser: authedProcedure.query(async ({ ctx }) => {

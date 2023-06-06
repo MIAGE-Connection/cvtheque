@@ -7,14 +7,22 @@ export const StudentHomePage: React.FC = () => {
 
   return (
     <div>
-      <div>
-        <p className="font-bold text-3xl">Mon CV</p>
-      </div>
+      {!candidature ? (
+        <div>
+          <p className="font-bold text-3xl">Mon CV</p>
+        </div>
+      ) : (
+        <div>
+          <p className="font-bold text-3xl link">
+            <Link href={`list/${candidature.id}`}>Mon CV</Link>
+          </p>
+        </div>
+      )}
       {!candidature && (
         <div>
           <p>
             Vous n&apos;avez pas encore déposé de candidature, vous pouvez le faire en{' '}
-            <Link href={'/cv'} className="link text-mc">
+            <Link href="/cv" className="link text-mc">
               cliquant via ce lien
             </Link>
           </p>

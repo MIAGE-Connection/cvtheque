@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { RouterOutput } from 'utils/trpc'
 
 type Candidature = Partial<RouterOutput['candidature']['details']>
@@ -7,8 +8,16 @@ export const CVDetails = (props: {
   size: 'full' | 'center'
 }) => {
   const { candidature, size } = props
+  const { isOwner } = candidature
   return (
     <div className="flex justify-center">
+      {isOwner && (
+        <div>
+          <button className="btn btn-primary mt-4">
+            <Link href={`/cv/${candidature.id}`}>Éditer</Link>
+          </button>
+        </div>
+      )}
       <div
         className={`p-8 border rounded-xl mx-8 mt-4 ${
           size === 'full' ? 'w-full' : 'w-4/6'
