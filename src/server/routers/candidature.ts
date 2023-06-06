@@ -12,7 +12,7 @@ export const candidatureRouter = router({
   add: authedProcedure
     .input(
       z.object({
-        id: z.string().nullable(),
+        id: z.string().nullish(),
         firstName: z.string(),
         lastName: z.string(),
         city: z.string(),
