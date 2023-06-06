@@ -50,9 +50,7 @@ export const mergeRouters = t.mergeRouters
 const isAuthed = middleware(({ next, ctx }) => {
   const user = ctx.session?.user
 
-  console.log('isAuthed', user)
-
-  if (!user?.name) {
+  if (!user?.name || !user?.email) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
 
@@ -61,6 +59,7 @@ const isAuthed = middleware(({ next, ctx }) => {
       user: {
         ...user,
         name: user.name,
+        email: user.email,
       },
     },
   })

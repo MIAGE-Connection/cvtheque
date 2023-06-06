@@ -17,7 +17,6 @@ type Competences = Pick<CompetenceT, 'description' | 'type'>
 
 const AddCandidature: React.FC = () => {
   const { data: session } = useSession()
-  console.log('#### ~ session:', session)
 
   const [experiences, setExperiences] = useState<Experiences>([
     {

@@ -1,10 +1,9 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import { AppProviders } from 'next-auth/providers'
-import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import GithubProvider from 'next-auth/providers/github'
-import { prisma } from 'server/prisma'
+import prisma from 'server/prisma'
 
 let useMockProvider = process.env.NODE_ENV === 'test'
 const { GITHUB_CLIENT_ID, GITHUB_SECRET, NODE_ENV, APP_ENV, NEXTAUTH_SECRET } =
@@ -18,9 +17,40 @@ if (
 }
 const providers: AppProviders = []
 
+const adapter = PrismaAdapter(prisma)
+
+adapter.createVerificationToken = async ({ token, identifier, expires }) => {
+  const verificationToken = await prisma.verificationRequest.create({
+    data: {
+      identifier,
+      token,
+      expires,
+      createdAt: new Date(),
+    },
+  })
+
+  return verificationToken
+}
+
+adapter.useVerificationToken = async ({ token, identifier }) => {
+  const verificationToken = await prisma.verificationRequest.findUnique({
+    where: {
+      identifier_token: { identifier, token },
+    },
+  })
+
+  await prisma.verificationRequest.delete({
+    where: {
+      identifier_token: { identifier, token },
+    },
+  })
+
+  return verificationToken
+}
+
 if (useMockProvider) {
   providers.push(
-    CredentialsProvider({
+    /* CredentialsProvider({
       id: 'github',
       name: 'Mocked GitHub',
       async authorize(credentials) {
@@ -29,6 +59,7 @@ if (useMockProvider) {
             id: credentials.name,
             name: credentials.name,
             email: credentials.name,
+            role: 'ADMIN' as Role,
           }
           return user
         }
@@ -37,7 +68,7 @@ if (useMockProvider) {
       credentials: {
         name: { type: 'test' },
       },
-    }),
+    }), */
     EmailProvider({
       server: {
         host: process.env.SMTP_HOST,
@@ -65,6 +96,7 @@ if (useMockProvider) {
           name: profile.login,
           email: profile.email,
           image: profile.avatar_url,
+          role: 'ADMIN',
         } as any
       },
     }),
@@ -86,9 +118,10 @@ if (useMockProvider) {
 export const authOptions: NextAuthOptions = {
   providers,
   //adapter: PrismaAdapter(prisma),
-  adapter: PrismaAdapter(prisma),
+  adapter: adapter,
   session: {
     strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60,
   },
   secret: NEXTAUTH_SECRET,
   callbacks: {
@@ -111,8 +144,30 @@ export const authOptions: NextAuthOptions = {
       return true
     },
     jwt: async ({ token, user }) => {
-      user && (token.user = user)
+      if (user) {
+        /*
+         * For adding custom parameters to user in session, we first need to add those parameters
+         * in token which then will be available in the `session()` callback
+         */
+        const email = user.email as string
+        const dbUser = await prisma.user.findUnique({ where: { email } })
+
+        if (!dbUser) {
+          throw new Error('User not found')
+        }
+
+        token.user = user
+        token.role = dbUser.role
+      }
       return token
+    },
+    session: async ({ session, token }) => {
+      if (session.user) {
+        // ** Add custom params to user in session which are added in `jwt()` callback via `token` parameter
+        session.user.role = token.role
+      }
+
+      return session
     },
     async redirect({ baseUrl }) {
       return baseUrl

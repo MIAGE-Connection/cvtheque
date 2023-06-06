@@ -56,11 +56,11 @@ export const CVDetails = (props: {
                     {experience.missions.length && (
                       <div className="mt-2">
                         <ul className="list-disc ml-4">
-                          {experience.missions?.map((mission, i) => {
+                          {experience.missions?.map((mission, j) => {
                             return mission === '' ? (
                               <></>
                             ) : (
-                              <li key={`${mission}-${i}`}>{mission}</li>
+                              <li key={`${mission}-${j}`}>{mission}</li>
                             )
                           })}
                         </ul>

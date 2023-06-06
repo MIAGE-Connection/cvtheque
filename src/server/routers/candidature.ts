@@ -124,4 +124,33 @@ export const candidatureRouter = router({
         competenceByType: competencesByType,
       }
     }),
+  getByUser: authedProcedure.query(async ({ ctx }) => {
+    const { email } = ctx.user
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    })
+
+    if (!user) {
+      throw new Error('No user found')
+    }
+
+    const candidatures = await prisma.candidature.findMany({
+      where: {
+        userId: user.id,
+      },
+      include: { experiences: true, schools: true, Competences: true },
+    })
+
+    const candidature = candidatures[0]
+
+    const competences = candidature?.Competences
+
+    const competencesByType = competences ? getCompetencesByType(competences) : []
+
+    return {
+      ...candidature,
+      competenceByType: competencesByType,
+    }
+  }),
 })

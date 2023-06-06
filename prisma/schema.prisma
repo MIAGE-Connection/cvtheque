@@ -6,16 +6,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  USER
+  PARTNER
+  REVIEWER
+}
+
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          Role         @default(USER)
   accounts      Account[]
   sessions      Session[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  candidatureId String?
+  Candidature   Candidature? @relation(fields: [candidatureId], references: [id])
 }
 
 generator client {
@@ -80,9 +90,11 @@ model Candidature {
   cityInfo    String?
   remote      Boolean
   email       String?
+  userId      String?
   experiences Experience[]
   schools     School[]
   Competences Competences[]
+  User        User[]
 }
 
 model Experience {

@@ -38,7 +38,8 @@
     "semi": false
   },
   "dependencies": {
-    "@next-auth/prisma-adapter": "1.0.7",
+    "@next-auth/prisma-adapter": "1.0.6",
+    "@next/swc-darwin-x64": "^13.4.4",
     "@prisma/client": "^4.15.0",
     "@tanstack/react-query": "^4.29.12",
     "@trpc/client": "^10.29.1",
