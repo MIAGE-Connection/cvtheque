@@ -5,9 +5,7 @@ import { Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { RouterInput, trpc } from 'utils/trpc'
 import { getCompetencesByType, getSelectValue } from 'utils/utils'
 
-/* import { useSession } from 'next-auth/react'
-import { trpc } from 'utils/trpc'
- */
+import { useSession } from 'next-auth/react'
 
 type AddCandidatureInput = RouterInput['candidature']['add']
 
@@ -18,8 +16,8 @@ type Schools = Pick<AddCandidatureInput, 'schools'>['schools'][number][]
 type Competences = Pick<CompetenceT, 'description' | 'type'>
 
 const AddCandidature: React.FC = () => {
-  /* const { data: profile } = trpc.user.profile.useQuery()
-  const { data: session } = useSession() */
+  const { data: session } = useSession()
+  console.log('#### ~ session:', session)
 
   const [experiences, setExperiences] = useState<Experiences>([
     {
@@ -138,7 +136,10 @@ const AddCandidature: React.FC = () => {
       return
     }
 
-    mutate(data)
+    mutate({
+      ...data,
+      userEmail: session?.user?.email || '',
+    })
   }
 
   const competencesByType = getCompetencesByType(competencesWatched)

@@ -2,14 +2,6 @@ import Link from 'next/link'
 import { NextPageWithLayout } from './_app'
 import { signIn, signOut } from 'next-auth/react'
 const IndexPage: NextPageWithLayout = () => {
-  // prefetch all posts for instant navigation
-  // useEffect(() => {
-  //   const allPosts = postsQuery.data?.pages.flatMap((page) => page.items) ?? [];
-  //   for (const { id } of allPosts) {
-  //     void utils.post.byId.prefetch({ id });
-  //   }
-  // }, [postsQuery.data, utils]);
-
   return (
     <>
       <div className="p-2" id="content">

@@ -87,6 +87,9 @@ export const authOptions: NextAuthOptions = {
   providers,
   //adapter: PrismaAdapter(prisma),
   adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: 'jwt',
+  },
   secret: NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user }) {
@@ -105,9 +108,11 @@ export const authOptions: NextAuthOptions = {
         })
       }
 
-      console.log('bisbis')
-
       return true
+    },
+    jwt: async ({ token, user }) => {
+      user && (token.user = user)
+      return token
     },
     async redirect({ baseUrl }) {
       return baseUrl

@@ -6,10 +6,10 @@ import { CandidatureKind, CompetenceType } from '@prisma/client'
 import { prisma } from 'server/prisma'
 import { getCompetencesByType } from 'utils/utils'
 import { z } from 'zod'
-import { publicProcedure, router } from '../trpc'
+import { authedProcedure, publicProcedure, router } from '../trpc'
 
 export const candidatureRouter = router({
-  add: publicProcedure
+  add: authedProcedure
     .input(
       z.object({
         firstName: z.string(),
@@ -20,6 +20,7 @@ export const candidatureRouter = router({
         email: z.string(),
         remote: z.boolean(),
         mobile: z.string().nullish(),
+        userEmail: z.string().email(),
         kind: z.enum([
           CandidatureKind.ALTERNANCE,
           CandidatureKind.CDI,
