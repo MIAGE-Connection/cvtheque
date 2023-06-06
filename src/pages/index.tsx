@@ -1,22 +1,29 @@
-import Link from 'next/link'
+import { Hero } from 'components/Hero'
 import { NextPageWithLayout } from './_app'
-import { signIn, signOut } from 'next-auth/react'
+import { StudentHomePage } from 'components/homepage/StudentHomePage'
+import { signOut, useSession } from 'next-auth/react'
+
 const IndexPage: NextPageWithLayout = () => {
+  const { data: session } = useSession()
+
+  const isStudent = session?.user?.role === 'USER'
+
   return (
     <>
-      <div className="p-2" id="content">
-        <h1 className="font-semibold text-4xl">CVTHEQUE</h1>
-        <button className="btn btn-primary">
-          <Link href="cv">Déposer un CV</Link>
-        </button>
-        <button className="btn btn-primary">
-          <Link href="list">Liste des CV</Link>
-        </button>
-        <div>
-          <button onClick={() => signIn()}>LOGIN </button>
-
-          <button onClick={() => signOut()}>logout</button>
+      {session && (
+        <div className="relative">
+          <button
+            className="btn btn-warning absolute right-4 top-12"
+            onClick={() => signOut()}
+          >
+            Se déconnecter
+          </button>
         </div>
+      )}
+      <div className="p-2 mt-12 mx-16" id="content">
+        <Hero />
+        <div className="divider" />
+        {isStudent && <StudentHomePage />}
       </div>
     </>
   )

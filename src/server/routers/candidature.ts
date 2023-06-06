@@ -65,7 +65,7 @@ export const candidatureRouter = router({
         ),
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const {
         firstName,
         lastName,
@@ -80,6 +80,7 @@ export const candidatureRouter = router({
         remote,
         mobile,
       } = input
+      const { email: userEmail } = ctx.user
       const candidature = await prisma.candidature.create({
         data: {
           firstName,
@@ -91,6 +92,11 @@ export const candidatureRouter = router({
           email,
           remote,
           mobile,
+          User: {
+            connect: {
+              email: userEmail,
+            },
+          },
           schools: { createMany: { data: schools } },
           experiences: { createMany: { data: experiences } },
           Competences: { createMany: { data: competences } },
@@ -137,7 +143,11 @@ export const candidatureRouter = router({
 
     const candidatures = await prisma.candidature.findMany({
       where: {
-        userId: user.id,
+        User: {
+          some: {
+            email,
+          },
+        },
       },
       include: { experiences: true, schools: true, Competences: true },
     })

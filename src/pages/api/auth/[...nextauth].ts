@@ -3,7 +3,9 @@ import NextAuth, { NextAuthOptions } from 'next-auth'
 import { AppProviders } from 'next-auth/providers'
 import EmailProvider from 'next-auth/providers/email'
 import GithubProvider from 'next-auth/providers/github'
-import prisma from 'server/prisma'
+import { prisma } from 'server/prisma'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { Role } from '@prisma/client'
 
 let useMockProvider = process.env.NODE_ENV === 'test'
 const { GITHUB_CLIENT_ID, GITHUB_SECRET, NODE_ENV, APP_ENV, NEXTAUTH_SECRET } =
@@ -50,7 +52,7 @@ adapter.useVerificationToken = async ({ token, identifier }) => {
 
 if (useMockProvider) {
   providers.push(
-    /* CredentialsProvider({
+    CredentialsProvider({
       id: 'github',
       name: 'Mocked GitHub',
       async authorize(credentials) {
@@ -59,7 +61,7 @@ if (useMockProvider) {
             id: credentials.name,
             name: credentials.name,
             email: credentials.name,
-            role: 'ADMIN' as Role,
+            role: 'USER' as Role,
           }
           return user
         }
@@ -68,7 +70,7 @@ if (useMockProvider) {
       credentials: {
         name: { type: 'test' },
       },
-    }), */
+    }),
     EmailProvider({
       server: {
         host: process.env.SMTP_HOST,
