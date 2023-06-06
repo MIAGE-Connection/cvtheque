@@ -2,5 +2,5 @@
   command = "pnpm install"
 
 [build]
-  command = "next build"
+  command = "pnpm prebuild && next build"
   publish = ".next"
