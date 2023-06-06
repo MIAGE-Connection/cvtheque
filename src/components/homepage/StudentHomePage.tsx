@@ -4,10 +4,11 @@ import { trpc } from 'utils/trpc'
 
 export const StudentHomePage: React.FC = () => {
   const { data: candidature, isLoading } = trpc.candidature.getByUser.useQuery()
+  const cvExist = !!candidature?.id
 
   return (
     <div>
-      {!candidature ? (
+      {!cvExist ? (
         <div>
           <p className="font-bold text-3xl">Mon CV</p>
         </div>
@@ -18,7 +19,7 @@ export const StudentHomePage: React.FC = () => {
           </p>
         </div>
       )}
-      {!candidature && (
+      {!cvExist && (
         <div>
           <p>
             Vous n&apos;avez pas encore déposé de candidature, vous pouvez le faire en{' '}
