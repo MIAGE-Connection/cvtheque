@@ -1,7 +1,7 @@
 import { Hero } from 'components/Hero'
-import { NextPageWithLayout } from './_app'
 import { StudentHomePage } from 'components/homepage/StudentHomePage'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
+import { NextPageWithLayout } from './_app'
 
 const IndexPage: NextPageWithLayout = () => {
   const { data: session } = useSession()
@@ -10,17 +10,7 @@ const IndexPage: NextPageWithLayout = () => {
 
   return (
     <>
-      {session && (
-        <div className="relative">
-          <button
-            className="btn btn-warning absolute right-4 top-12"
-            onClick={() => signOut()}
-          >
-            Se déconnecter
-          </button>
-        </div>
-      )}
-      <div className="p-2 mt-12 mx-16" id="content">
+      <div className="p-2 mt-12 md:mx-16" id="content">
         <Hero />
         <div className="divider" />
         {isStudent && <StudentHomePage />}

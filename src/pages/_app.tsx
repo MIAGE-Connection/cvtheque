@@ -1,4 +1,4 @@
-import Navbar from 'components/Navbar'
+import Sidebar from 'components/Sidebar'
 import { NextPage } from 'next'
 import type { Session } from 'next-auth'
 import { getSession, SessionProvider } from 'next-auth/react'
@@ -17,9 +17,9 @@ export type NextPageWithLayout<
 const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps }) => {
   return (
     <SessionProvider session={pageProps.session}>
-      <Navbar>
+      <Sidebar>
         <Component {...pageProps} />
-      </Navbar>
+      </Sidebar>
     </SessionProvider>
   )
 }
