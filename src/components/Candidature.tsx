@@ -690,6 +690,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                   ...school,
                   startAt: school.startAt ? new Date(school.startAt) : new Date(),
                   endAt: school.endAt ? new Date(school.endAt) : new Date(),
+                  universityName: school.universityName,
                   id: '',
                   candidatureId: '',
                 })),
