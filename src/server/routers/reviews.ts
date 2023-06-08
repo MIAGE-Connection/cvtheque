@@ -26,7 +26,13 @@ export const reviewRouter = router({
       return reviewRequest
     }),
   save: authedReviewerProcedure
-    .input(z.object({ id: z.string().uuid(), approved: z.boolean() }))
+    .input(
+      z.object({
+        id: z.string().uuid(),
+        approved: z.boolean(),
+        description: z.string().nullish(),
+      }),
+    )
     .mutation(async ({ input, ctx }) => {
       const { id } = input
 

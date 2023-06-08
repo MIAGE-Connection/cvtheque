@@ -1,6 +1,8 @@
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { useState } from 'react'
 import { RouterOutput, trpc } from 'utils/trpc'
+import Modal from './Modal'
 
 type Candidature = Partial<RouterOutput['candidature']['details']>
 
@@ -12,6 +14,9 @@ export const CVDetails = (props: {
   const { isOwner } = candidature
   const { data: session } = useSession()
   const { mutate: addReview } = trpc.review.save.useMutation()
+
+  const [visible, setVisible] = useState(false)
+  const [review, setReview] = useState('')
 
   const role = session?.user.role
   const isReviewer = role === 'REVIEWER' || role === 'ADMIN'
@@ -137,10 +142,7 @@ export const CVDetails = (props: {
           <div className="flex space-x-4">
             {isReviewer && (
               <>
-                <button
-                  className="btn btn-error mt-4"
-                  onClick={() => addReview({ id: candidature.id || '', approved: false })}
-                >
+                <button className="btn btn-error mt-4" onClick={() => setVisible(true)}>
                   Refuser
                 </button>
                 <button
@@ -158,6 +160,39 @@ export const CVDetails = (props: {
           </div>
         </div>
       )}
+      {/* Open the modal using ID.showModal() method */}
+      <Modal open={visible}>
+        <h3 className="font-bold text-lg">Raison du refus</h3>
+        <textarea
+          className="textarea textarea-bordered w-full"
+          placeholder="Explication du refus"
+          value={review}
+          onChange={(e) => setReview(e.target.value)}
+        />
+        <div className="modal-action">
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              setVisible(false)
+            }}
+          >
+            Annuler
+          </button>
+          <button
+            className="btn btn-error"
+            onClick={() => {
+              addReview({
+                id: candidature.id || '',
+                approved: false,
+                description: review,
+              })
+              setVisible(false)
+            }}
+          >
+            Refuser
+          </button>
+        </div>
+      </Modal>
     </div>
   )
 }
