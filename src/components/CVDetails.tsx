@@ -9,8 +9,9 @@ type Candidature = Partial<RouterOutput['candidature']['details']>
 export const CVDetails = (props: {
   candidature: Candidature
   size: 'full' | 'center'
+  showButton?: boolean
 }) => {
-  const { candidature, size } = props
+  const { candidature, size, showButton } = props
   const { isOwner } = candidature
   const { data: session } = useSession()
   const { mutate: addReview } = trpc.review.save.useMutation()
@@ -137,7 +138,7 @@ export const CVDetails = (props: {
           </div>
         </div>
       </div>
-      {(isReviewer || isOwner) && (
+      {(isReviewer || isOwner) && showButton && (
         <div className="flex justify-end">
           <div className="flex space-x-4">
             {isReviewer && (

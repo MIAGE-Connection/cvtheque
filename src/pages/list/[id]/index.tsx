@@ -12,7 +12,9 @@ const CV: NextPageWithLayout = () => {
       {isLoading ? (
         <Spin />
       ) : (
-        candidature && <CVDetails candidature={candidature} size="center" />
+        candidature && (
+          <CVDetails candidature={candidature} size="center" showButton={true} />
+        )
       )}
     </>
   )

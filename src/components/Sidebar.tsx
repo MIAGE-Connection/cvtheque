@@ -34,7 +34,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
       </li>
       {isLoggedIn && (
         <li>
-          <Link href="reviews">
+          <Link href="/reviews">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -55,7 +55,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
       )}
       {isPartner && (
         <li>
-          <Link href="list">
+          <Link href="/list">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -75,7 +75,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
         </li>
       )}
       <li>
-        <Link href="infos">
+        <Link href="/infos">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"

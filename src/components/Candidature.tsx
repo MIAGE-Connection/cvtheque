@@ -702,6 +702,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                 email: 'mail@preview.com',
               }}
               size="full"
+              showButton={false}
             />
           </div>
         </div>

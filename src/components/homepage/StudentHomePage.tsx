@@ -54,6 +54,7 @@ export const StudentHomePage: React.FC = () => {
             candidature={{
               ...candidature,
             }}
+            showButton={true}
           />
         </div>
       )}
