@@ -6,7 +6,7 @@ import { NextPageWithLayout } from './_app'
 const IndexPage: NextPageWithLayout = () => {
   const { data: session } = useSession()
 
-  const isStudent = session?.user?.role === 'USER'
+  const isStudent = session?.user?.role === 'USER' || session?.user?.role === 'REVIEWER'
 
   return (
     <>

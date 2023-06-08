@@ -65,6 +65,26 @@ const isAuthed = middleware(({ next, ctx }) => {
   })
 })
 
+const isReviewer = middleware(({ next, ctx }) => {
+  const user = ctx.session?.user
+
+  if (user?.role !== 'REVIEWER' && user?.role !== 'ADMIN') {
+    throw new TRPCError({ code: 'UNAUTHORIZED' })
+  }
+
+  return next({
+    ctx: {
+      user: {
+        ...user,
+        name: user.name,
+        email: user.email,
+      },
+    },
+  })
+})
+
+export const authedReviewerProcedure = t.procedure.use(isAuthed).use(isReviewer)
+
 /**
  * Protected base procedure
  */

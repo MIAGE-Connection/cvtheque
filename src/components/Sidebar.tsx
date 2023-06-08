@@ -5,6 +5,10 @@ import { ReactElement, useState } from 'react'
 const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
   const { data } = useSession()
   const isLoggedIn = !!data?.user?.email
+  const isPartner =
+    data?.user?.role === 'PARTNER' ||
+    data?.user?.role === 'ADMIN' ||
+    data?.user?.role === 'REVIEWER'
   const [visible, setVisible] = useState<boolean>(false)
 
   const routeItems = (
@@ -30,7 +34,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
       </li>
       {isLoggedIn && (
         <li>
-          <Link href="profile">
+          <Link href="reviews">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -45,7 +49,28 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
               />
             </svg>
-            Mon compte
+            Candidatures à corriger
+          </Link>
+        </li>
+      )}
+      {isPartner && (
+        <li>
+          <Link href="list">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+            Liste
           </Link>
         </li>
       )}
@@ -68,6 +93,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
           Infos
         </Link>
       </li>
+
       {isLoggedIn && (
         <li className="mt-auto">
           <a
@@ -107,7 +133,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
           type="checkbox"
           className="drawer-toggle"
           checked={visible}
-          onClick={() => setVisible((prev) => !prev)}
+          onChange={() => setVisible((prev) => !prev)}
         />
         <div className="drawer-content flex flex-col">
           {children}

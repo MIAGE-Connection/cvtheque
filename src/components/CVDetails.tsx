@@ -1,5 +1,6 @@
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { RouterOutput } from 'utils/trpc'
+import { RouterOutput, trpc } from 'utils/trpc'
 
 type Candidature = Partial<RouterOutput['candidature']['details']>
 
@@ -9,6 +10,11 @@ export const CVDetails = (props: {
 }) => {
   const { candidature, size } = props
   const { isOwner } = candidature
+  const { data: session } = useSession()
+  const { mutate: addReview } = trpc.review.save.useMutation()
+
+  const role = session?.user.role
+  const isReviewer = role === 'REVIEWER' || role === 'ADMIN'
   return (
     <div className="md:mx-8 mt-4">
       <div className="flex justify-center">
@@ -107,9 +113,9 @@ export const CVDetails = (props: {
             <div>
               <p className="text-2xl text-mc">Compétences</p>
               <div className="grid grid-cols-2">
-                {candidature?.competenceByType?.map((competence) => {
+                {candidature?.competenceByType?.map((competence, i) => {
                   return (
-                    <div key={competence.type} className="mt-4">
+                    <div key={i} className="mt-4">
                       <div>
                         <div className="font-semibold text-xl">{competence.type}</div>
                         <ul className="list-disc ml-4">
@@ -126,11 +132,30 @@ export const CVDetails = (props: {
           </div>
         </div>
       </div>
-      {isOwner && (
+      {(isReviewer || isOwner) && (
         <div className="flex justify-end">
-          <Link href={`/cv/${candidature.id}`}>
-            <button className="btn btn-primary mt-4">Éditer</button>
-          </Link>
+          <div className="flex space-x-4">
+            {isReviewer && (
+              <>
+                <button
+                  className="btn btn-error mt-4"
+                  onClick={() => addReview({ id: candidature.id || '', approved: false })}
+                >
+                  Refuser
+                </button>
+                <button
+                  className="btn btn-success mt-4"
+                  onClick={() => addReview({ id: candidature.id || '', approved: true })}
+                >
+                  Valider
+                </button>
+              </>
+            )}
+
+            <Link href={`/cv/${candidature.id}`}>
+              <button className="btn btn-primary mt-4">Éditer</button>
+            </Link>
+          </div>
         </div>
       )}
     </div>

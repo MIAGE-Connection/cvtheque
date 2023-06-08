@@ -4,6 +4,8 @@ import { trpc } from 'utils/trpc'
 
 export const StudentHomePage: React.FC = () => {
   const { data: candidature, isLoading } = trpc.candidature.getByUser.useQuery()
+
+  const { mutate: createCandidature } = trpc.review.create.useMutation()
   const cvExist = !!candidature?.id
 
   return (
@@ -13,10 +15,24 @@ export const StudentHomePage: React.FC = () => {
           <p className="font-bold text-3xl">Mon CV</p>
         </div>
       ) : (
-        <div>
+        <div className="flex justify-between">
           <p className="font-bold text-3xl link">
             <Link href={`list/${candidature.id}`}>Mon CV</Link>
           </p>
+          {candidature.reviewState === 'none' && (
+            <button
+              className="btn btn-primary"
+              onClick={() => createCandidature({ id: candidature.id })}
+            >
+              Demander une vérification
+            </button>
+          )}
+          {candidature.reviewState === 'pending' && (
+            <div className="btn btn-info cursor-default">En attente de vérification</div>
+          )}
+          {candidature.reviewState === 'approved' && (
+            <div className="btn btn-success cursor-default">Publié</div>
+          )}
         </div>
       )}
       {!cvExist && (

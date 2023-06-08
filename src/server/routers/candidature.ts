@@ -130,6 +130,7 @@ export const candidatureRouter = router({
           experiences: true,
           schools: true,
           Competences: true,
+          ReviewRequest: true,
           User: {
             select: {
               email: true,
@@ -167,7 +168,12 @@ export const candidatureRouter = router({
           },
         },
       },
-      include: { experiences: true, schools: true, Competences: true },
+      include: {
+        experiences: true,
+        schools: true,
+        Competences: true,
+        ReviewRequest: true,
+      },
     })
 
     const candidature = candidatures[0]
@@ -176,9 +182,34 @@ export const candidatureRouter = router({
 
     const competencesByType = competences ? getCompetencesByType(competences) : []
 
+    const reviewState = candidature.ReviewRequest
+      ? candidature.ReviewRequest.approved
+        ? ('approved' as const)
+        : ('pending' as const)
+      : ('none' as const)
+
     return {
       ...candidature,
       competenceByType: competencesByType,
+      reviewState,
     }
   }),
+  askReview: authedProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .mutation(async ({ input }) => {
+      const { id } = input
+
+      const candidature = await prisma.candidature.update({
+        where: { id },
+        data: {
+          ReviewRequest: {
+            create: {
+              candidatureId: id,
+            },
+          },
+        },
+      })
+
+      return candidature
+    }),
 })
