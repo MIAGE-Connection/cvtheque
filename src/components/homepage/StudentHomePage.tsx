@@ -3,9 +3,13 @@ import Link from 'next/link'
 import { trpc } from 'utils/trpc'
 
 export const StudentHomePage: React.FC = () => {
-  const { data: candidature, isLoading } = trpc.candidature.getByUser.useQuery()
+  const { data: candidature, isLoading, refetch } = trpc.candidature.getByUser.useQuery()
 
-  const { mutate: createCandidature } = trpc.review.create.useMutation()
+  const { mutate: createCandidature } = trpc.review.create.useMutation({
+    onSuccess: () => {
+      refetch()
+    },
+  })
   const cvExist = !!candidature?.id
 
   return (

@@ -117,7 +117,9 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     const experiences = data.experiences.map((experience) => {
       return {
         startAt: new Date(experience.startAt),
-        endAt: experience.endAt && new Date(experience.endAt),
+        ...(experience.endAt && {
+          endAt: new Date(experience.endAt),
+        }),
         companyName: experience.companyName,
         missions: experience.missions,
       }
@@ -126,7 +128,9 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     const schools = data.schools.map((school) => {
       return {
         startAt: new Date(school.startAt),
-        endAt: school.endAt && new Date(school.endAt),
+        ...(school.endAt && {
+          endAt: new Date(school.endAt),
+        }),
         universityName: school.universityName,
         description: school.description,
       }
@@ -138,6 +142,8 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     if (Object.keys(errors).length > 0) {
       return
     }
+
+    console.log(data)
 
     mutate({
       ...data,
