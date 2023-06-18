@@ -12,8 +12,8 @@ const Reviews: React.FC = () => {
       {isLoading ? (
         <Spin />
       ) : (
-        <div className="px-16">
-          <h1 className="text-xl text-center my-16 font-bold">
+        <div>
+          <h1 className="text-xl text-center mb-16 font-bold">
             CV en attente de vérification
           </h1>
 

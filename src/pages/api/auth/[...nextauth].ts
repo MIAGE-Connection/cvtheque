@@ -61,7 +61,7 @@ if (useMockProvider) {
             id: credentials.name,
             name: credentials.name,
             email: credentials.name,
-            role: 'USER' as Role,
+            role: Role.USER,
           }
           return user
         }

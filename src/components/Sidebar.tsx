@@ -9,6 +9,8 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
     data?.user?.role === 'PARTNER' ||
     data?.user?.role === 'ADMIN' ||
     data?.user?.role === 'REVIEWER'
+
+  const isAdmin = data?.user?.role === 'ADMIN'
   const [visible, setVisible] = useState<boolean>(false)
 
   const routeItems = (
@@ -74,6 +76,27 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
           </Link>
         </li>
       )}
+      {isAdmin && (
+        <li>
+          <Link href="/users">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+            Liste des utilisateurs
+          </Link>
+        </li>
+      )}
       <li>
         <Link href="/infos">
           <svg
@@ -136,7 +159,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
           onChange={() => setVisible((prev) => !prev)}
         />
         <div className="drawer-content flex flex-col">
-          {children}
+          <div className="mt-16 md:mx-16">{children}</div>
           <label htmlFor="my-drawer-2" className="absolute top-2 left-2 cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"

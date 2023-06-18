@@ -22,7 +22,7 @@ export const CVDetails = (props: {
   const role = session?.user.role
   const isReviewer = role === 'REVIEWER' || role === 'ADMIN'
   return (
-    <div className="md:mx-8 mt-4">
+    <div className=" mt-4">
       <div className="flex justify-center">
         <div
           className={`p-4 md:p-8 border rounded-xl ${

@@ -10,7 +10,7 @@ const IndexPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <div className="p-2 mt-12 md:mx-16" id="content">
+      <div id="content">
         <Hero />
         <div className="divider" />
         {isStudent && <StudentHomePage />}

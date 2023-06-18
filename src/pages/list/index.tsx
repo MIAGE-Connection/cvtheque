@@ -4,9 +4,6 @@ import { trpc } from 'utils/trpc'
 import { getCompetencesByType, getSelectValue } from 'utils/utils'
 
 const List: React.FC = () => {
-  /* const { data: profile } = trpc.user.profile.useQuery()
-    const { data: session } = useSession() */
-
   const { data: list, isFetching } = trpc.candidature.list.useQuery()
 
   const headers: JSX.Element = (
@@ -29,56 +26,12 @@ const List: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="table w-full text-lg border rounded-xl">
               <thead>
-                <tr>
-                  {/* <th>
-                    <label>
-                      <input type="checkbox" className="checkbox" />
-                    </label>
-                  </th> */}
-                  {headers}
-                </tr>
+                <tr>{headers}</tr>
               </thead>
               <tbody>
                 {list?.map((candidature) => {
                   return (
                     <tr key={candidature.id}>
-                      {/*    <div
-                      key={candidature.id}
-                      className="border rounded-xl w-10/12 px-8 py-2"
-                    >
-                      <div className="grid grid-cols-5">
-                        <div className="flex space-x-2 font-semibold">
-                          <p>{candidature.firstName}</p>
-                          <p>{candidature.lastName}</p>
-                        </div>
-                        <div className="text-center font-bold">{candidature.title}</div>
-                        <div className="text-center">{candidature.city}</div>
-                        <div className="text-center">
-                          {
-                            {
-                              ALTERNANCE: 'Alternance',
-                              STAGE: 'Stage',
-                              CDI: 'CDI',
-                            }[candidature.kind]
-                          }
-                        </div>
-                        <Link
-                          href={`list/${candidature.id}`}
-                          className="text-right link link-primary"
-                        >
-                          Voir plus
-                        </Link>
-                      </div>
-                    </div> */}
-
-                      {/* head */}
-
-                      {/*  <th>
-                        <label>
-                          <input type="checkbox" className="checkbox" />
-                        </label>
-                      </th> */}
-
                       <td>
                         {candidature.firstName} {candidature.lastName}
                         <br />
@@ -104,15 +57,10 @@ const List: React.FC = () => {
                           </Link>
                         </button>
                       </th>
-                      {/* foot */}
                     </tr>
                   )
                 })}
               </tbody>
-
-              {/* <tfoot>
-                <tr>{headers}</tr>
-              </tfoot> */}
             </table>
           </div>
         )}
