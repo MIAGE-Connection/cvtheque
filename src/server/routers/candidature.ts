@@ -32,7 +32,11 @@ export const candidatureRouter = router({
             startAt: z.date(),
             endAt: z.date().nullish(),
             companyName: z.string(),
-            missions: z.array(z.string()),
+            missions: z.array(
+              z.object({
+                mission: z.string(),
+              }),
+            ),
           }),
         ),
         schools: z.array(
@@ -69,6 +73,10 @@ export const candidatureRouter = router({
       } = input
       const { email: userEmail } = ctx.user
 
+      const experiencesFormatted = experiences.map((e) => {
+        return { ...e, missions: e.missions.map((m) => m.mission) }
+      })
+
       if (!id) {
         const candidature = await prisma.candidature.create({
           data: {
@@ -87,7 +95,11 @@ export const candidatureRouter = router({
               },
             },
             schools: { createMany: { data: schools } },
-            experiences: { createMany: { data: experiences } },
+            experiences: {
+              createMany: {
+                data: experiencesFormatted,
+              },
+            },
             Competences: { createMany: { data: competences } },
           },
         })
@@ -106,7 +118,12 @@ export const candidatureRouter = router({
           remote,
           mobile,
           schools: { deleteMany: {}, createMany: { data: schools } },
-          experiences: { deleteMany: {}, createMany: { data: experiences } },
+          experiences: {
+            deleteMany: {},
+            createMany: {
+              data: experiencesFormatted,
+            },
+          },
           Competences: { deleteMany: {}, createMany: { data: competences } },
         },
       })

@@ -27,7 +27,7 @@ const CandidatureEdit: React.FC = () => {
               companyName: e.companyName,
               endAt: dateToInputDate(e.endAt) || new Date(),
               startAt: dateToInputDate(e.startAt) || new Date(),
-              missions: e.missions,
+              missions: e.missions.map((m) => ({ mission: m })),
             }
           }) || [],
         firstName: candidature.firstName || '',

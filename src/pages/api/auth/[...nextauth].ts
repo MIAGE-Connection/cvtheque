@@ -1,11 +1,10 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { Role } from '@prisma/client'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import { AppProviders } from 'next-auth/providers'
-import EmailProvider from 'next-auth/providers/email'
-import GithubProvider from 'next-auth/providers/github'
-import { prisma } from 'server/prisma'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { Role } from '@prisma/client'
+import EmailProvider from 'next-auth/providers/email'
+import { prisma } from 'server/prisma'
 
 let useMockProvider = process.env.NODE_ENV === 'test'
 const {

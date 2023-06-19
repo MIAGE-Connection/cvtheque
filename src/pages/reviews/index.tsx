@@ -33,7 +33,7 @@ const Reviews: React.FC = () => {
                     <td>
                       {candidature.firstName} {candidature.lastName}
                       <br />
-                      <span className="badge badge-ghost badge-sm">
+                      <span className="badge badge-ghost badge-sm text-white">
                         {candidature.email || 'Aucun email'}
                       </span>
                     </td>
