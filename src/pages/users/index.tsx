@@ -23,13 +23,13 @@ const Users: React.FC = () => {
     <>
       <h1 className="text-3xl font-bold text-center mb-2">Utilisateurs</h1>
       {!isLoading ? (
-        <table className="table w-full text-lg border rounded-xl ">
+        <table className="table w-full text-lg">
           <thead>
             <tr>
-              <th className="text-xl bg-mc text-white">Nom</th>
+              <th className="text-xl bg-mc text-white rounded-tl-xl">Email</th>
               <th className="text-xl bg-mc text-white">Date de création</th>
               <th className="text-xl bg-mc text-white">Rôle</th>
-              <th className="text-xl bg-mc text-white"></th>
+              <th className="text-xl bg-mc text-white rounded-tr-xl"></th>
             </tr>
           </thead>
           <tbody>

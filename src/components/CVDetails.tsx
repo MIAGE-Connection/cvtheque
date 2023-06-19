@@ -179,11 +179,19 @@ export const CVDetails = (props: {
                 })}
               </div>
             </div>
+            {candidature.passions?.length ? (
+              <div>
+                <p className="text-2xl text-mc">Loisirs & Activités</p>
+                <div>{candidature.passions}</div>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>
       {(isReviewer || isOwner) && showButton && (
-        <div className="flex justify-end">
+        <div className="flex justify-end mb-4">
           <div className="flex space-x-4">
             {isReviewer && (
               <>

@@ -8,11 +8,11 @@ const List: React.FC = () => {
 
   const headers: JSX.Element = (
     <>
-      <th className="text-xl bg-mc text-white">Nom</th>
+      <th className="text-xl bg-mc text-white rounded-tl-xl">Nom</th>
       <th className="text-xl bg-mc text-white">Poste</th>
       <th className="text-xl bg-mc text-white">Ville</th>
       <th className="text-xl bg-mc text-white">Compétences</th>
-      <th className="text-xl bg-mc text-white"></th>
+      <th className="text-xl bg-mc text-white rounded-tr-xl"></th>
     </>
   )
 
@@ -24,7 +24,7 @@ const List: React.FC = () => {
           <Spin />
         ) : (
           <div className="overflow-x-auto">
-            <table className="table w-full text-lg border rounded-xl">
+            <table className="table w-full text-lg">
               <thead>
                 <tr>{headers}</tr>
               </thead>

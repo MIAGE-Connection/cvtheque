@@ -92,6 +92,7 @@ model Candidature {
   remote          Boolean
   email           String?
   userId          String?
+  passions        String?
   experiences     Experience[]
   schools         School[]
   Competences     Competences[]

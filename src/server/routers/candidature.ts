@@ -21,6 +21,7 @@ export const candidatureRouter = router({
         email: z.string(),
         remote: z.boolean(),
         mobile: z.string().nullish(),
+        passions: z.string().nullish(),
         userEmail: z.string().email(),
         kind: z.enum([
           CandidatureKind.ALTERNANCE,
@@ -83,6 +84,7 @@ export const candidatureRouter = router({
         email,
         remote,
         mobile,
+        passions,
       } = input
       const { email: userEmail } = ctx.user
 
@@ -106,6 +108,7 @@ export const candidatureRouter = router({
             email,
             remote,
             mobile,
+            passions,
             User: {
               connect: {
                 email: userEmail,
@@ -139,6 +142,7 @@ export const candidatureRouter = router({
           email,
           remote,
           mobile,
+          passions,
           Competences: { deleteMany: {}, createMany: { data: competences } },
           experiences: {
             deleteMany: {},

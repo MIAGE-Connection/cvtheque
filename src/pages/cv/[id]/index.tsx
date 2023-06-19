@@ -30,6 +30,15 @@ const CandidatureEdit: React.FC = () => {
               missions: e.missions.map((m) => ({ mission: m })),
             }
           }) || [],
+        experiencesAsso:
+          candidature.ExperienceAsso?.map((e) => {
+            return {
+              name: e.name,
+              endAt: dateToInputDate(e.endAt) || new Date(),
+              startAt: dateToInputDate(e.startAt) || new Date(),
+              missions: e.missions.map((m) => ({ mission: m })),
+            }
+          }) || [],
         firstName: candidature.firstName || '',
         lastName: candidature.lastName || '',
         title: candidature.title || '',

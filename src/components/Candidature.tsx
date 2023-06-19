@@ -81,7 +81,14 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
 
   const { mutate } = trpc.candidature.add.useMutation()
 
-  const watchFields = watch(['firstName', 'lastName', 'city', 'kind', 'title'])
+  const watchFields = watch([
+    'firstName',
+    'lastName',
+    'city',
+    'kind',
+    'title',
+    'passions',
+  ])
 
   const experiencesWatched = watch('experiences')
   const experiencesAssoWatched = watch('experiencesAsso')
@@ -172,6 +179,21 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
               <SchoolFields {...{ control, register }} />
               <SkillFields {...{ control, register }} />
               <AssociationFields {...{ control, register }} />
+              <div id="freetime" className="justify-center flex">
+                <div className="form-control w-4/6 ">
+                  <label className="label">
+                    <span className="label-text text-xl font-bold text-mc">
+                      Loisirs & activités
+                    </span>
+                  </label>
+                  <textarea
+                    className="textarea textarea-bordered w-full "
+                    placeholder="..."
+                    {...register('passions')}
+                    key="passions"
+                  />
+                </div>
+              </div>
               <div className="fixed right-0 bottom-2 m-2 justify-end">
                 <div className="space-x-2">
                   <button
@@ -216,6 +238,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                 lastName: watchFields[1],
                 kind: watchFields[3],
                 title: watchFields[4],
+                passions: watchFields[5],
                 experiences: experiencesWatched?.map((experience) => ({
                   ...experience,
                   missions: experience.missions.map((m) => m.mission),
