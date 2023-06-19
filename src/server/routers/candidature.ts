@@ -139,14 +139,20 @@ export const candidatureRouter = router({
           email,
           remote,
           mobile,
-          schools: { deleteMany: {}, createMany: { data: schools } },
+          Competences: { deleteMany: {}, createMany: { data: competences } },
           experiences: {
             deleteMany: {},
             createMany: {
               data: experiencesFormatted,
             },
           },
-          Competences: { deleteMany: {}, createMany: { data: competences } },
+          ExperienceAsso: {
+            deleteMany: {},
+            createMany: {
+              data: experiencesAssoFormatted,
+            },
+          },
+          schools: { deleteMany: {}, createMany: { data: schools } },
         },
       })
       return candidature

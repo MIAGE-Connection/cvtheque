@@ -5,12 +5,14 @@ type EnterprisFieldsProps = {
   index: number
   register: UseFormRegister<AddCandidatureInput>
   control: Control<AddCandidatureInput>
+  field: 'experiences' | 'experiencesAsso'
 }
 
 export const MissionsFields: React.FC<EnterprisFieldsProps> = ({
   control,
   index,
   register,
+  field,
 }) => {
   const {
     fields: missions,
@@ -18,7 +20,7 @@ export const MissionsFields: React.FC<EnterprisFieldsProps> = ({
     remove: removeMission,
   } = useFieldArray({
     control,
-    name: `experiences.${index}.missions`,
+    name: `${field}.${index}.missions`,
   })
   return (
     <div className="flex justify-center">
@@ -36,7 +38,7 @@ export const MissionsFields: React.FC<EnterprisFieldsProps> = ({
                 <input
                   className="input input-bordered w-full"
                   type="text"
-                  {...register(`experiences.${index}.missions.${indexMission}.mission`)}
+                  {...register(`${field}.${index}.missions.${indexMission}.mission`)}
                 />
                 <button
                   className="btn btn-sm btn-circle btn-outline btn-primary"

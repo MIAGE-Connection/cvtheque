@@ -1,54 +1,47 @@
-import { AddCandidatureInput } from 'components/Candidature'
-import { Control, UseFormRegister, useFieldArray } from 'react-hook-form'
+import { useFieldArray } from 'react-hook-form'
+import { CommonFormProps } from './EnterpriseFields'
 import { MissionsFields } from './MissionsFields'
 
-export type CommonFormProps = {
-  register: UseFormRegister<AddCandidatureInput>
-  control: Control<AddCandidatureInput>
-}
-
-export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register }) => {
+export const AssociationFields: React.FC<CommonFormProps> = ({ control, register }) => {
   const {
-    fields: experiences,
+    fields: associations,
     remove,
     append,
   } = useFieldArray({
     control,
-    name: `experiences`,
+    name: `experiencesAsso`,
   })
 
   return (
     <>
-      <div id="experiences" className="space-y-4">
-        <h1 className="text-xl text-center font-semibold text-mc">Expériences</h1>
-        {experiences.map((_experience, index) => {
+      <div id="associations" className="space-y-4">
+        <h1 className="text-xl text-center font-semibold text-mc">Associations</h1>
+        {associations.map((_association, index) => {
           return (
             <div
               className="table mx-auto my-0 w-11/12 sm:w-4/6 border rounded-xl p-4"
               key={index}
             >
-              {index !== 0 && (
-                <div className="absolute right-2">
-                  <button
-                    className="btn btn-sm btn-circle btn-outline btn-primary"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      remove(index)
-                    }}
-                  >
-                    X
-                  </button>
-                </div>
-              )}
+              <div className="absolute right-2">
+                <button
+                  className="btn btn-sm btn-circle btn-outline btn-primary"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    remove(index)
+                  }}
+                >
+                  X
+                </button>
+              </div>
               <div className="sm:flex sm:space-x-16 justify-center">
                 <div className="form-control w-full sm:w-4/6">
                   <label className="label">
-                    <span className="label-text">Entreprise</span>
+                    <span className="label-text">Association</span>
                   </label>
                   <input
                     className="input input-bordered w-full"
                     type="text"
-                    {...register(`experiences.${index}.companyName`)}
+                    {...register(`experiencesAsso.${index}.name`)}
                   />
                 </div>
               </div>
@@ -61,7 +54,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
                     className="input input-bordered w-full md:max-w-xs"
                     type="date"
                     required
-                    {...register(`experiences.${index}.startAt`)}
+                    {...register(`experiencesAsso.${index}.startAt`)}
                   />
                 </div>
 
@@ -72,11 +65,11 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
                   <input
                     className="input input-bordered w-full md:max-w-xs"
                     type="date"
-                    {...register(`experiences.${index}.endAt`)}
+                    {...register(`experiencesAsso.${index}.endAt`)}
                   />
                 </div>
               </div>
-              <MissionsFields {...{ control, register, index }} field="experiences" />
+              <MissionsFields {...{ control, register, index }} field="experiencesAsso" />
             </div>
           )
         })}
@@ -85,7 +78,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
             className="btn btn-outline btn-primary"
             onClick={() => {
               append({
-                companyName: '',
+                name: '',
                 missions: [{ mission: '' }],
                 startAt: new Date(),
                 endAt: new Date(),
@@ -93,7 +86,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
             }}
             type="button"
           >
-            Ajouter une éxperience
+            Ajouter une association
           </button>
         </div>
       </div>

@@ -8,6 +8,7 @@ import { EntrepriseFields } from './candidature/EnterpriseFields'
 import { ProfileFields } from './candidature/ProfileFields'
 import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
+import { AssociationFields } from './candidature/AssociationFields'
 
 export type AddCandidatureInput = RouterInput['candidature']['add']
 
@@ -83,11 +84,22 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   const watchFields = watch(['firstName', 'lastName', 'city', 'kind', 'title'])
 
   const experiencesWatched = watch('experiences')
+  const experiencesAssoWatched = watch('experiencesAsso')
   const competencesWatched = watch('competences')
   const schoolsWatched = watch('schools')
 
   const onSubmit: SubmitHandler<AddCandidatureInput> = (data: AddCandidatureInput) => {
     const experiences = data.experiences.map((experience) => {
+      return {
+        ...experience,
+        startAt: new Date(experience.startAt),
+        ...(experience.endAt && {
+          endAt: new Date(experience.endAt),
+        }),
+      }
+    })
+
+    const experiencesAsso = data.experiencesAsso.map((experience) => {
       return {
         ...experience,
         startAt: new Date(experience.startAt),
@@ -109,6 +121,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
 
     data.experiences = experiences
     data.schools = schools
+    data.experiencesAsso = experiencesAsso
 
     if (Object.keys(errors).length > 0) {
       return
@@ -158,6 +171,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
               <EntrepriseFields {...{ control, register }} />
               <SchoolFields {...{ control, register }} />
               <SkillFields {...{ control, register }} />
+              <AssociationFields {...{ control, register }} />
               <div className="fixed right-0 bottom-2 m-2 justify-end">
                 <div className="space-x-2">
                   <button
@@ -203,6 +217,14 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                 kind: watchFields[3],
                 title: watchFields[4],
                 experiences: experiencesWatched?.map((experience) => ({
+                  ...experience,
+                  missions: experience.missions.map((m) => m.mission),
+                  startAt: experience.startAt ? new Date(experience.startAt) : new Date(),
+                  endAt: experience.endAt ? new Date(experience.endAt) : new Date(),
+                  id: '',
+                  candidatureId: '',
+                })),
+                ExperienceAsso: experiencesAssoWatched?.map((experience) => ({
                   ...experience,
                   missions: experience.missions.map((m) => m.mission),
                   startAt: experience.startAt ? new Date(experience.startAt) : new Date(),

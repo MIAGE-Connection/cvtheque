@@ -86,6 +86,50 @@ export const CVDetails = (props: {
                 })}
               </div>
             </div>
+            {candidature.ExperienceAsso?.length ? (
+              <div>
+                <p className="text-2xl text-mc">Associations</p>
+                <div>
+                  {candidature.ExperienceAsso.map((association, i) => {
+                    return (
+                      <div key={i} className="mt-4">
+                        <div className="flex justify-between">
+                          <div className="font-semibold text-lg">{association.name}</div>
+                          <div className="flex space-x-4 items-center">
+                            <div className="text-sm">
+                              {association.startAt?.toLocaleDateString()}
+                            </div>
+                            {association.endAt && (
+                              <>
+                                <p>-</p>
+                                <div className="text-sm">
+                                  {association.endAt.toLocaleDateString()}
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                        {association.missions.length && (
+                          <div className="mt-2">
+                            <ul className="list-disc ml-4">
+                              {association.missions?.map((mission, j) => {
+                                return mission === '' ? (
+                                  <></>
+                                ) : (
+                                  <li key={`asso-${mission}-${j}`}>{mission}</li>
+                                )
+                              })}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
             <div>
               <p className="text-2xl text-mc">Parcours scolaire</p>
               <div>
