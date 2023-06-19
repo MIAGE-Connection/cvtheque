@@ -25,7 +25,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   const [experiences, setExperiences] = useState<Experiences>([
     {
       startAt: new Date(),
-      endAt: new Date(),
+      endAt: null,
       companyName: '',
       missions: [''],
     },
@@ -34,7 +34,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   const [schools, setSchools] = useState<Schools>([
     {
       startAt: new Date(),
-      endAt: new Date(),
+      endAt: null,
       universityName: '',
       description: '',
     },
@@ -48,8 +48,6 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   ])
 
   const [checked, setChecked] = useState<boolean>(false)
-
-  const { mutate } = trpc.candidature.add.useMutation()
 
   const resolver: Resolver<AddCandidatureInput> = async (values) => {
     return {
@@ -107,6 +105,8 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     formState: { errors },
   } = useForm<AddCandidatureInput>({ resolver, defaultValues: initialValues })
 
+  const { mutate } = trpc.candidature.add.useMutation()
+
   const watchFields = watch(['firstName', 'lastName', 'city', 'kind', 'title']) // you can also target specific fields by their names
 
   const experiencesWatched = watch('experiences')
@@ -142,8 +142,6 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     if (Object.keys(errors).length > 0) {
       return
     }
-
-    console.log(data)
 
     mutate({
       ...data,
@@ -186,12 +184,12 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
               <h1 className="sm:text-xl text-center font-semibold text-mc">Profil</h1>
               <div className="table mx-auto my-0 w-11/12 sm:w-4/6 border rounded-xl p-4">
                 <div className="sm:flex sm:space-x-16 justify-center">
-                  <div className="form-control w-full max-w-xs">
+                  <div className="form-control w-full md:max-w-xs">
                     <label className="label">
                       <span className="label-text">Prénom</span>
                     </label>
                     <input
-                      className="input input-bordered w-full max-w-xs"
+                      className="input input-bordered w-full md:max-w-xs"
                       placeholder="..."
                       type="text"
                       {...register('firstName')}
@@ -203,14 +201,14 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                       </span>
                     </label>
                   </div>
-                  <div className="form-control w-full max-w-xs">
+                  <div className="form-control w-full md:max-w-xs">
                     <label className="label">
                       <span className="label-text">Nom</span>
                     </label>
                     <input
                       {...register('lastName')}
                       placeholder="..."
-                      className="input input-bordered w-full max-w-xs"
+                      className="input input-bordered w-full md:max-w-xs"
                       type="text"
                     />
                     <label className="label">
@@ -221,12 +219,12 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                   </div>
                 </div>
                 <div className="sm:flex sm:space-x-16 justify-center">
-                  <div className="form-control w-full max-w-xs">
+                  <div className="form-control w-full md:max-w-xs">
                     <label className="label">
                       <span className="label-text">Ville</span>
                     </label>
                     <input
-                      className="input input-bordered w-full max-w-xs"
+                      className="input input-bordered w-full md:max-w-xs"
                       placeholder="Lille, Amiens..."
                       type="text"
                       {...register('city')}
@@ -237,14 +235,14 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                       </span>
                     </label>
                   </div>
-                  <div className="form-control w-full max-w-xs">
+                  <div className="form-control w-full md:max-w-xs">
                     <label className="label">
                       <span className="label-text">Informations complémentaires</span>
                     </label>
                     <input
                       {...register('info')}
                       placeholder="Disponible dans toute la france..."
-                      className="input input-bordered w-full max-w-xs"
+                      className="input input-bordered w-full md:max-w-xs"
                       type="text"
                     />
                   </div>
@@ -267,12 +265,12 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                   </div>
                 </div>
                 <div className="sm:flex sm:space-x-16 justify-center">
-                  <div className="form-control w-full max-w-xs">
+                  <div className="form-control w-full md:max-w-xs">
                     <label className="label">
                       <span className="label-text">Email</span>
                     </label>
                     <input
-                      className="input input-bordered w-full max-w-xs"
+                      className="input input-bordered w-full md:max-w-xs"
                       placeholder="mail@mail.com"
                       type="text"
                       {...register('email')}
@@ -283,12 +281,12 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                       </span>
                     </label>
                   </div>
-                  <div className="form-control w-full max-w-xs">
+                  <div className="form-control w-full md:max-w-xs">
                     <label className="label">
                       <span className="label-text">Téléphone</span>
                     </label>
                     <input
-                      className="input input-bordered w-full max-w-xs"
+                      className="input input-bordered w-full md:max-w-xs"
                       placeholder="06 11 12 09 86"
                       type="text"
                       {...register('mobile')}
@@ -356,24 +354,25 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                       </div>
                     </div>
                     <div className="sm:flex sm:space-x-16 justify-center">
-                      <div className="form-control w-full max-w-xs">
+                      <div className="form-control w-full md:max-w-xs">
                         <label className="label">
                           <span className="label-text">Date de début</span>
                         </label>
                         <input
-                          className="input input-bordered w-full max-w-xs"
+                          className="input input-bordered w-full md:max-w-xs"
                           type="date"
                           required
                           // defaultValue={experience.experiences[0].startAt.toISOString()}
                           {...register(`experiences.${index}.startAt`)}
                         />
                       </div>
-                      <div className="form-control w-full max-w-xs">
+
+                      <div className="form-control w-full md:max-w-xs">
                         <label className="label">
                           <span className="label-text">Date de fin</span>
                         </label>
                         <input
-                          className="input input-bordered w-full max-w-xs"
+                          className="input input-bordered w-full md:max-w-xs"
                           type="date"
                           {...register(`experiences.${index}.endAt`)}
                         />
@@ -508,23 +507,23 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                       </div>
                     </div>
                     <div className="sm:flex sm:space-x-16 justify-center">
-                      <div className="form-control w-full max-w-xs">
+                      <div className="form-control w-full md:max-w-xs">
                         <label className="label">
                           <span className="label-text">Date de début</span>
                         </label>
                         <input
-                          className="input input-bordered w-full max-w-xs"
+                          className="input input-bordered w-full md:max-w-xs"
                           type="date"
                           required
                           {...register(`schools.${index}.startAt`)}
                         />
                       </div>
-                      <div className="form-control w-full max-w-xs">
+                      <div className="form-control w-full md:max-w-xs">
                         <label className="label">
                           <span className="label-text">Date de fin</span>
                         </label>
                         <input
-                          className="input input-bordered w-full max-w-xs"
+                          className="input input-bordered w-full md:max-w-xs"
                           type="date"
                           {...register(`schools.${index}.endAt`)}
                         />
@@ -658,9 +657,15 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                 >
                   Prévualiser
                 </button>
-                <button type="submit" className="btn btn-primary" disabled={false}>
-                  Déposer le CV
-                </button>
+                {initialValues ? (
+                  <button type="submit" className="btn btn-primary" disabled={false}>
+                    Sauvegarder
+                  </button>
+                ) : (
+                  <button type="submit" className="btn btn-primary" disabled={false}>
+                    Déposer le CV
+                  </button>
+                )}
               </div>
             </div>
           </form>
