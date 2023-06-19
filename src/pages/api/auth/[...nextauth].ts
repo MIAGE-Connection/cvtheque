@@ -8,8 +8,19 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { Role } from '@prisma/client'
 
 let useMockProvider = process.env.NODE_ENV === 'test'
-const { GITHUB_CLIENT_ID, GITHUB_SECRET, NODE_ENV, APP_ENV, NEXTAUTH_SECRET } =
-  process.env
+const {
+  GITHUB_CLIENT_ID,
+  GITHUB_SECRET,
+  NODE_ENV,
+  APP_ENV,
+  NEXTAUTH_SECRET,
+  SMTP_HOST,
+  SMTP_PORT,
+  SMTP_USER,
+  SMTP_PASSWORD,
+  SMTP_FROM,
+} = process.env
+
 if (
   (NODE_ENV !== 'production' || APP_ENV === 'test') &&
   (!GITHUB_CLIENT_ID || !GITHUB_SECRET)
@@ -73,45 +84,32 @@ if (useMockProvider) {
     }),
     EmailProvider({
       server: {
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT),
+        host: SMTP_HOST,
+        port: Number(SMTP_PORT),
         auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
+          user: SMTP_USER,
+          pass: SMTP_PASSWORD,
         },
       },
-      from: process.env.SMTP_FROM,
+      from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
     }),
   )
 } else {
-  if (!GITHUB_CLIENT_ID || !GITHUB_SECRET) {
+  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASSWORD || !SMTP_FROM) {
     throw new Error('GITHUB_CLIENT_ID and GITHUB_SECRET must be set')
   }
   providers.push(
-    GithubProvider({
-      clientId: GITHUB_CLIENT_ID,
-      clientSecret: GITHUB_SECRET,
-      profile(profile) {
-        return {
-          id: profile.id,
-          name: profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-          role: 'ADMIN',
-        } as any
-      },
-    }),
     EmailProvider({
       server: {
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT),
+        host: SMTP_HOST,
+        port: Number(SMTP_PORT),
         auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
+          user: SMTP_USER,
+          pass: SMTP_PASSWORD,
         },
       },
-      from: process.env.SMTP_FROM,
+      from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
     }),
   )
