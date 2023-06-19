@@ -39,6 +39,18 @@ export const candidatureRouter = router({
             ),
           }),
         ),
+        experiencesAsso: z.array(
+          z.object({
+            startAt: z.date(),
+            endAt: z.date().nullish(),
+            name: z.string(),
+            missions: z.array(
+              z.object({
+                mission: z.string(),
+              }),
+            ),
+          }),
+        ),
         schools: z.array(
           z.object({
             startAt: z.date(),
@@ -62,6 +74,7 @@ export const candidatureRouter = router({
         lastName,
         city,
         experiences,
+        experiencesAsso,
         schools,
         info,
         kind,
@@ -74,6 +87,10 @@ export const candidatureRouter = router({
       const { email: userEmail } = ctx.user
 
       const experiencesFormatted = experiences.map((e) => {
+        return { ...e, missions: e.missions.map((m) => m.mission) }
+      })
+
+      const experiencesAssoFormatted = experiencesAsso.map((e) => {
         return { ...e, missions: e.missions.map((m) => m.mission) }
       })
 
@@ -98,6 +115,11 @@ export const candidatureRouter = router({
             experiences: {
               createMany: {
                 data: experiencesFormatted,
+              },
+            },
+            ExperienceAsso: {
+              createMany: {
+                data: experiencesAssoFormatted,
               },
             },
             Competences: { createMany: { data: competences } },
@@ -145,6 +167,7 @@ export const candidatureRouter = router({
         where: { id: input.id },
         include: {
           experiences: true,
+          ExperienceAsso: true,
           schools: true,
           Competences: true,
           ReviewRequest: true,
@@ -189,6 +212,7 @@ export const candidatureRouter = router({
         experiences: true,
         schools: true,
         Competences: true,
+        ExperienceAsso: true,
         ReviewRequest: true,
       },
     })

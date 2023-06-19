@@ -78,9 +78,9 @@ model VerificationRequest {
 }
 
 model Candidature {
-  id              String          @id @default(uuid())
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @default(now()) @updatedAt
+  id              String           @id @default(uuid())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
   title           String
   kind            CandidatureKind
   mobile          String?
@@ -96,8 +96,9 @@ model Candidature {
   schools         School[]
   Competences     Competences[]
   User            User[]
-  ReviewRequest   ReviewRequest?  @relation(fields: [reviewRequestId], references: [id])
+  ReviewRequest   ReviewRequest?   @relation(fields: [reviewRequestId], references: [id])
   reviewRequestId String?
+  ExperienceAsso  ExperienceAsso[]
 }
 
 model ReviewRequest {
@@ -117,6 +118,16 @@ model Experience {
   startAt       DateTime?
   endAt         DateTime?
   companyName   String
+  missions      String[]
+  Candidature   Candidature? @relation(fields: [candidatureId], references: [id])
+  candidatureId String?
+}
+
+model ExperienceAsso {
+  id            String       @id @default(uuid())
+  startAt       DateTime?
+  endAt         DateTime?
+  name          String
   missions      String[]
   Candidature   Candidature? @relation(fields: [candidatureId], references: [id])
   candidatureId String?

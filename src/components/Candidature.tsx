@@ -197,9 +197,10 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
             <h2 className="text-lg font-semibold">Prévisualition</h2>
             <CVDetails
               candidature={{
+                city: watchFields[2],
                 firstName: watchFields[0],
                 lastName: watchFields[1],
-                city: watchFields[2],
+                kind: watchFields[3],
                 title: watchFields[4],
                 experiences: experiencesWatched?.map((experience) => ({
                   ...experience,
