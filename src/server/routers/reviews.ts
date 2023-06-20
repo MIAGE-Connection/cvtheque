@@ -1,7 +1,3 @@
-/**
- *
- * This is an example router, you can delete this file and then update `../pages/api/trpc/[trpc].tsx`
- */
 import { prisma } from 'server/prisma'
 import { z } from 'zod'
 import { authedProcedure, authedReviewerProcedure, router } from '../trpc'
@@ -34,7 +30,7 @@ export const reviewRouter = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const { id } = input
+      const { id, description, approved } = input
 
       const userEmail = ctx.user.email || ''
 
@@ -51,17 +47,18 @@ export const reviewRouter = router({
         throw new Error('User not found')
       }
 
-      const reviewRequest = await prisma.reviewRequest.updateMany({
+      await prisma.reviewRequest.updateMany({
         where: {
           candidatureId: id,
         },
         data: {
-          approved: input.approved,
+          approved,
+          description: description || '',
           reviewerId: user.id,
         },
       })
 
-      return reviewRequest
+      return { approved }
     }),
   findAll: authedReviewerProcedure.query(async () => {
     const candidatures = await prisma.candidature.findMany({

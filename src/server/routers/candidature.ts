@@ -1,7 +1,3 @@
-/**
- *
- * This is an example router, you can delete this file and then update `../pages/api/trpc/[trpc].tsx`
- */
 import { CandidatureKind, CompetenceType } from '@prisma/client'
 import { prisma } from 'server/prisma'
 import { getCompetencesByType } from 'utils/utils'
@@ -165,6 +161,11 @@ export const candidatureRouter = router({
     const candidatures = await prisma.candidature.findMany({
       include: {
         Competences: true,
+      },
+      where: {
+        ReviewRequest: {
+          approved: true,
+        },
       },
     })
 

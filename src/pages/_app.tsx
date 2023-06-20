@@ -6,6 +6,8 @@ import type { AppType } from 'next/app'
 import { ReactElement, ReactNode } from 'react'
 import { trpc } from 'utils/trpc'
 import '../styles/global.css'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export type NextPageWithLayout<
   TProps = Record<string, unknown>,
@@ -20,6 +22,7 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps }) =
       <Sidebar>
         <Component {...pageProps} />
       </Sidebar>
+      <ToastContainer autoClose={3000} />
     </SessionProvider>
   )
 }

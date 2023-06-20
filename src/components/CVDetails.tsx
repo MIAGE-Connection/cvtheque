@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { RouterOutput, trpc } from 'utils/trpc'
 import Modal from './Modal'
+import { getSelectValue } from 'utils/utils'
+import { toast } from 'react-toastify'
 
 type Candidature = Partial<RouterOutput['candidature']['details']>
 
@@ -14,13 +16,23 @@ export const CVDetails = (props: {
   const { candidature, size, showButton } = props
   const { isOwner } = candidature
   const { data: session } = useSession()
-  const { mutate: addReview } = trpc.review.save.useMutation()
+  const { mutate: addReview } = trpc.review.save.useMutation({
+    onSuccess: (candidature) => {
+      if (candidature.approved) {
+        toast.success('Candidature approuvée!')
+      } else {
+        toast.info('Candidature rejetée!')
+      }
+      setVisible(false)
+    },
+  })
 
   const [visible, setVisible] = useState(false)
   const [review, setReview] = useState('')
 
   const role = session?.user.role
   const isReviewer = role === 'REVIEWER' || role === 'ADMIN'
+  const showEditButtons = isOwner || isReviewer
   return (
     <div className=" mt-4">
       <div className="flex justify-center">
@@ -167,7 +179,9 @@ export const CVDetails = (props: {
                   return (
                     <div key={i} className="mt-4">
                       <div>
-                        <div className="font-semibold text-xl">{competence.type}</div>
+                        <div className="font-semibold text-xl">
+                          {getSelectValue(competence.type)}
+                        </div>
                         <ul className="list-disc ml-4">
                           {competence.descriptions.map((description, i) => {
                             return <li key={`${description}-${i}`}>{description}</li>
@@ -190,7 +204,7 @@ export const CVDetails = (props: {
           </div>
         </div>
       </div>
-      {(isReviewer || isOwner) && showButton && (
+      {showEditButtons && showButton && (
         <div className="flex justify-end mb-4">
           <div className="flex space-x-4">
             {isReviewer && (
@@ -199,7 +213,7 @@ export const CVDetails = (props: {
                   Refuser
                 </button>
                 <button
-                  className="btn btn-success mt-4"
+                  className={`btn btn-success mt-4`}
                   onClick={() => addReview({ id: candidature.id || '', approved: true })}
                 >
                   Valider
@@ -213,7 +227,14 @@ export const CVDetails = (props: {
           </div>
         </div>
       )}
-      {/* Open the modal using ID.showModal() method */}
+      {showEditButtons && candidature.ReviewRequest?.description && (
+        <div className="border rounded-xl p-8">
+          <p className="text-mc font-bold text-xl ">
+            Votre CV nécessite des modifications:
+          </p>
+          <p className="whitespace-pre-wrap">{candidature.ReviewRequest.description}</p>
+        </div>
+      )}
       <Modal open={visible}>
         <h3 className="font-bold text-lg">Raison du refus</h3>
         <textarea
@@ -232,15 +253,14 @@ export const CVDetails = (props: {
             Annuler
           </button>
           <button
-            className="btn btn-error"
-            onClick={() => {
+            className={`btn btn-error`}
+            onClick={() =>
               addReview({
                 id: candidature.id || '',
                 approved: false,
                 description: review,
               })
-              setVisible(false)
-            }}
+            }
           >
             Refuser
           </button>

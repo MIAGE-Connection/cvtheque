@@ -9,6 +9,7 @@ import { ProfileFields } from './candidature/ProfileFields'
 import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
 import { AssociationFields } from './candidature/AssociationFields'
+import { toast } from 'react-toastify'
 
 export type AddCandidatureInput = RouterInput['candidature']['add']
 
@@ -20,6 +21,8 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   const { data: session } = useSession()
 
   const [checked, setChecked] = useState<boolean>(false)
+
+  const isOwner = session?.user?.email === initialValues?.userEmail
 
   const resolver: Resolver<AddCandidatureInput> = async (values) => {
     return {
@@ -79,7 +82,17 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     getValues,
   } = methods
 
-  const { mutate } = trpc.candidature.add.useMutation()
+  const { mutate } = trpc.candidature.add.useMutation({
+    onSuccess: () => {
+      if (initialValues) {
+        isOwner
+          ? toast.success('Votre candidature a bien été mise à jour')
+          : toast.success('La candidature a bien été mise à jour')
+        return
+      }
+      toast.success('Votre candidature a bien été envoyée et est soumise à validation')
+    },
+  })
 
   const [candidature, setCandidature] = useState<AddCandidatureInput | undefined>()
 
