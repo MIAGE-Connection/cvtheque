@@ -1,4 +1,5 @@
 import { AddCandidatureInput } from 'components/Candidature'
+import { Input } from 'components/Input'
 import { UseFormRegister, useFormContext } from 'react-hook-form'
 
 type ProfileFieldsProps = {
@@ -14,62 +15,40 @@ export const ProfileFields: React.FC<ProfileFieldsProps> = ({ register }) => {
       <h1 className="sm:text-xl text-center font-semibold text-mc">Profil</h1>
       <div className="table mx-auto my-0 w-11/12 sm:w-4/6 border rounded-xl p-4">
         <div className="sm:flex sm:space-x-16 justify-center">
-          <div className="form-control w-full md:max-w-xs">
-            <label className="label">
-              <span className="label-text">Prénom</span>
-            </label>
-            <input
-              className="input input-bordered w-full md:max-w-xs"
-              placeholder="..."
-              type="text"
-              {...register('firstName')}
-              key="firstName"
-            />
-            <label className="label">
-              <span className="label-text-alt text-mc">{errors.firstName?.message}</span>
-            </label>
-          </div>
-          <div className="form-control w-full md:max-w-xs">
-            <label className="label">
-              <span className="label-text">Nom</span>
-            </label>
-            <input
-              {...register('lastName')}
-              placeholder="..."
-              className="input input-bordered w-full md:max-w-xs"
-              type="text"
-            />
-            <label className="label">
-              <span className="label-text-alt text-mc">{errors.lastName?.message}</span>
-            </label>
-          </div>
+          <Input
+            label="Prénom"
+            register={register as any}
+            name="firstName"
+            type="text"
+            error={errors.firstName?.message}
+            key={'firstName'}
+          />
+          <Input
+            label="Nom"
+            register={register as any}
+            name="lastName"
+            type="text"
+            error={errors.lastName?.message}
+            key={'lastName'}
+          />
         </div>
         <div className="sm:flex sm:space-x-16 justify-center">
-          <div className="form-control w-full md:max-w-xs">
-            <label className="label">
-              <span className="label-text">Ville</span>
-            </label>
-            <input
-              className="input input-bordered w-full md:max-w-xs"
-              placeholder="Lille, Amiens..."
-              type="text"
-              {...register('city')}
-            />
-            <label className="label">
-              <span className="label-text-alt text-mc">{errors.city?.message}</span>
-            </label>
-          </div>
-          <div className="form-control w-full md:max-w-xs">
-            <label className="label">
-              <span className="label-text">Informations complémentaires</span>
-            </label>
-            <input
-              {...register('info')}
-              placeholder="Disponible dans toute la france..."
-              className="input input-bordered w-full md:max-w-xs"
-              type="text"
-            />
-          </div>
+          <Input
+            label="Ville"
+            register={register as any}
+            name="city"
+            type="text"
+            error={errors.city?.message}
+            key={'city'}
+          />
+          <Input
+            label="Informations complémentaires"
+            register={register as any}
+            name="info"
+            type="text"
+            placeholder="Disponible dans toute la france..."
+            key={'info'}
+          />
         </div>
         <div className="sm:flex sm:space-x-16 justify-center">
           <div className="form-control w-full sm:w-4/6">
@@ -89,31 +68,24 @@ export const ProfileFields: React.FC<ProfileFieldsProps> = ({ register }) => {
           </div>
         </div>
         <div className="sm:flex sm:space-x-16 justify-center">
-          <div className="form-control w-full md:max-w-xs">
-            <label className="label">
-              <span className="label-text">Email</span>
-            </label>
-            <input
-              className="input input-bordered w-full md:max-w-xs"
-              placeholder="mail@mail.com"
-              type="text"
-              {...register('email')}
-            />
-            <label className="label">
-              <span className="label-text-alt text-mc">{errors.email?.message}</span>
-            </label>
-          </div>
-          <div className="form-control w-full md:max-w-xs">
-            <label className="label">
-              <span className="label-text">Téléphone</span>
-            </label>
-            <input
-              className="input input-bordered w-full md:max-w-xs"
-              placeholder="06 11 12 09 86"
-              type="text"
-              {...register('mobile')}
-            />
-          </div>
+          <Input
+            label="Email"
+            register={register as any}
+            name="email"
+            type="email"
+            error={errors.email?.message}
+            placeholder="Disponible dans toute la france..."
+            key={'email'}
+          />
+
+          <Input
+            label="Téléphone"
+            register={register as any}
+            name="mobile"
+            type="text"
+            placeholder="06 12 34 56 78"
+            key={'mobile'}
+          />
         </div>
         <div className="sm:flex sm:space-x-16 justify-center">
           <div className="form-control w-full sm:w-4/6">

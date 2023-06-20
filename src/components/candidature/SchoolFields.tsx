@@ -1,5 +1,6 @@
 import { useFieldArray } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
+import { Input } from 'components/Input'
 
 export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) => {
   const {
@@ -33,16 +34,14 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
               </div>
             )}
             <div className="sm:flex sm:space-x-16 justify-center">
-              <div className="form-control w-full sm:w-4/6">
-                <label className="label">
-                  <span className="label-text">Lieu d&apos;étude</span>
-                </label>
-                <input
-                  className="input input-bordered w-full"
-                  type="text"
-                  {...register(`schools.${index}.universityName`)}
-                />
-              </div>
+              <Input
+                label="Lieu d'étude"
+                register={register as any}
+                name={`schools.${index}.universityName`}
+                type="text"
+                key={`schools.${index}.universityName`}
+                large={true}
+              />
             </div>
             <div className="sm:flex sm:space-x-16 justify-center">
               <div className="form-control w-full md:max-w-xs">

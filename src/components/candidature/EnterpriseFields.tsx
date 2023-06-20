@@ -1,6 +1,7 @@
 import { AddCandidatureInput } from 'components/Candidature'
 import { Control, UseFormRegister, useFieldArray } from 'react-hook-form'
 import { MissionsFields } from './MissionsFields'
+import { Input } from 'components/Input'
 
 export type CommonFormProps = {
   register: UseFormRegister<AddCandidatureInput>
@@ -40,18 +41,18 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
                   </button>
                 </div>
               )}
-              <div className="sm:flex sm:space-x-16 justify-center">
-                <div className="form-control w-full sm:w-4/6">
-                  <label className="label">
-                    <span className="label-text">Entreprise</span>
-                  </label>
-                  <input
-                    className="input input-bordered w-full"
-                    type="text"
-                    {...register(`experiences.${index}.companyName`)}
-                  />
-                </div>
+              <div className="sm:flex justify-center">
+                <Input
+                  label="Entreprise"
+                  register={register as any}
+                  name={`experiences.${index}.companyName`}
+                  type="text"
+                  placeholder="06 12 34 56 78"
+                  key={`experiences.${index}.companyName`}
+                  large={true}
+                />
               </div>
+
               <div className="sm:flex sm:space-x-16 justify-center">
                 <div className="form-control w-full md:max-w-xs">
                   <label className="label">

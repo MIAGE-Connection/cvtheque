@@ -74,26 +74,14 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   const {
     register,
     handleSubmit,
-    watch,
     control,
     formState: { errors },
+    getValues,
   } = methods
 
   const { mutate } = trpc.candidature.add.useMutation()
 
-  const watchFields = watch([
-    'firstName',
-    'lastName',
-    'city',
-    'kind',
-    'title',
-    'passions',
-  ])
-
-  const experiencesWatched = watch('experiences')
-  const experiencesAssoWatched = watch('experiencesAsso')
-  const competencesWatched = watch('competences')
-  const schoolsWatched = watch('schools')
+  const [candidature, setCandidature] = useState<AddCandidatureInput | undefined>()
 
   const onSubmit: SubmitHandler<AddCandidatureInput> = (data: AddCandidatureInput) => {
     const experiences = data.experiences.map((experience) => {
@@ -139,8 +127,6 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
       userEmail: session?.user?.email || '',
     })
   }
-
-  const competencesByType = getCompetencesByType(competencesWatched)
 
   return (
     <>
@@ -200,7 +186,10 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                     type="button"
                     className="btn btn-info hidden md:inline-flex"
                     disabled={false}
-                    onClick={() => setChecked((prev) => !prev)}
+                    onClick={() => {
+                      setCandidature(getValues())
+                      setChecked((prev) => !prev)
+                    }}
                   >
                     Prévualiser
                   </button>
@@ -231,49 +220,55 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
         <div className="fixed hidden md:block top-0 left-0 z-20 w-9/12 h-full transition-all duration-500 transform -translate-x-full bg-white shadow-lg peer-checked:translate-x-0">
           <div className="px-6 py-4">
             <h2 className="text-lg font-semibold">Prévisualition</h2>
-            <CVDetails
-              candidature={{
-                city: watchFields[2],
-                firstName: watchFields[0],
-                lastName: watchFields[1],
-                kind: watchFields[3],
-                title: watchFields[4],
-                passions: watchFields[5],
-                experiences: experiencesWatched?.map((experience) => ({
-                  ...experience,
-                  missions: experience.missions.map((m) => m.mission),
-                  startAt: experience.startAt ? new Date(experience.startAt) : new Date(),
-                  endAt: experience.endAt ? new Date(experience.endAt) : new Date(),
-                  id: '',
-                  candidatureId: '',
-                })),
-                ExperienceAsso: experiencesAssoWatched?.map((experience) => ({
-                  ...experience,
-                  missions: experience.missions.map((m) => m.mission),
-                  startAt: experience.startAt ? new Date(experience.startAt) : new Date(),
-                  endAt: experience.endAt ? new Date(experience.endAt) : new Date(),
-                  id: '',
-                  candidatureId: '',
-                })),
-                schools: schoolsWatched?.map((school) => ({
-                  ...school,
-                  startAt: school.startAt ? new Date(school.startAt) : new Date(),
-                  endAt: school.endAt ? new Date(school.endAt) : new Date(),
-                  universityName: school.universityName,
-                  id: '',
-                  candidatureId: '',
-                })),
-                competenceByType: competencesByType,
-                Competences: competencesWatched?.map((competence) => ({
-                  ...competence,
-                  id: '',
-                  candidatureId: '',
-                })),
-                email: 'mail@preview.com',
-              }}
-              size="full"
-              showButton={false}
-            />
+            {candidature && (
+              <CVDetails
+                candidature={{
+                  city: candidature.city,
+                  firstName: candidature.firstName,
+                  lastName: candidature.lastName,
+                  kind: candidature.kind,
+                  title: candidature.title,
+                  passions: candidature.passions,
+                  experiences: candidature.experiences?.map((experience) => ({
+                    ...experience,
+                    missions: experience.missions.map((m) => m.mission),
+                    startAt: experience.startAt
+                      ? new Date(experience.startAt)
+                      : new Date(),
+                    endAt: experience.endAt ? new Date(experience.endAt) : new Date(),
+                    id: '',
+                    candidatureId: '',
+                  })),
+                  ExperienceAsso: candidature.experiencesAsso?.map((experience) => ({
+                    ...experience,
+                    missions: experience.missions.map((m) => m.mission),
+                    startAt: experience.startAt
+                      ? new Date(experience.startAt)
+                      : new Date(),
+                    endAt: experience.endAt ? new Date(experience.endAt) : new Date(),
+                    id: '',
+                    candidatureId: '',
+                  })),
+                  schools: candidature.schools?.map((school) => ({
+                    ...school,
+                    startAt: school.startAt ? new Date(school.startAt) : new Date(),
+                    endAt: school.endAt ? new Date(school.endAt) : new Date(),
+                    universityName: school.universityName,
+                    id: '',
+                    candidatureId: '',
+                  })),
+                  competenceByType: getCompetencesByType(candidature.competences),
+                  Competences: candidature.competences?.map((competence) => ({
+                    ...competence,
+                    id: '',
+                    candidatureId: '',
+                  })),
+                  email: 'mail@preview.com',
+                }}
+                size="full"
+                showButton={false}
+              />
+            )}
           </div>
         </div>
       </div>
