@@ -55,6 +55,11 @@ export const CVDetails = (props: {
             <div>
               <p className="text-2xl font-semibold text-mc">Ville</p>
               <p className="text-lg">{candidature?.city}</p>
+              {candidature.remote ? (
+                <p className="text-lg text-gray-500">Ouvert au télétravail</p>
+              ) : (
+                <></>
+              )}
             </div>
             <div>
               <p className="text-2xl text-mc">Éxperiences</p>
