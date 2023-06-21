@@ -91,12 +91,12 @@ model Candidature {
   cityInfo        String?
   remote          Boolean
   email           String?
-  userId          String?
   passions        String?
   experiences     Experience[]
   schools         School[]
   Competences     Competences[]
   User            User[]
+  userId          String?
   ReviewRequest   ReviewRequest?   @relation(fields: [reviewRequestId], references: [id])
   reviewRequestId String?
   ExperienceAsso  ExperienceAsso[]

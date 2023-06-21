@@ -1,6 +1,7 @@
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { ReactElement, useState } from 'react'
+import { trpc } from 'utils/trpc'
 import { isUserPartner, isUserReviewer } from 'utils/utils'
 
 const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
@@ -8,6 +9,9 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
   const isLoggedIn = !!data?.user?.email
   const isPartner = isUserPartner(data?.user.role)
   const isReviewer = isUserReviewer(data?.user.role)
+  const { data: candidature } = trpc.candidature.findByEmail.useQuery(undefined, {
+    refetchOnMount: false,
+  })
 
   const isAdmin = data?.user?.role === 'ADMIN'
   const [visible, setVisible] = useState<boolean>(false)
@@ -37,17 +41,20 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
         <li>
           <Link href="/reviews">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
+              className="h-5 w-5 stroke-green-600"
               viewBox="0 0 24 24"
-              stroke="currentColor"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                d="M19.688 5.69833C20.3342 6.28473 20.6573 6.57793 20.8287 6.96478C21 7.35163 21 7.78795 21 8.66058L21 13C21 14.8856 21 15.8284 20.4142 16.4142C19.8284 17 18.8856 17 17 17H13C11.1144 17 10.1716 17 9.58579 16.4142C9 15.8284 9 14.8856 9 13L9 7C9 5.11438 9 4.17157 9.58579 3.58579C10.1716 3 11.1144 3 13 3H15.17C15.9332 3 16.3148 3 16.6625 3.13422C17.0101 3.26845 17.2927 3.52488 17.8579 4.03776L19.688 5.69833Z"
                 strokeWidth="2"
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M9 7L7 7C5.11438 7 4.17157 7 3.58579 7.58579C3 8.17157 3 9.11438 3 11L3 17C3 18.8856 3 19.8284 3.58579 20.4142C4.17157 21 5.11438 21 7 21H11C12.8856 21 13.8284 21 14.4142 20.4142C15 19.8284 15 18.8856 15 17V17"
+                strokeWidth="2"
+                strokeLinejoin="round"
               />
             </svg>
             Candidatures à corriger
@@ -58,17 +65,21 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
         <li>
           <Link href="/list">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
-              fill="none"
               viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
               stroke="currentColor"
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                d="M19.688 5.69833C20.3342 6.28473 20.6573 6.57793 20.8287 6.96478C21 7.35163 21 7.78795 21 8.66058L21 13C21 14.8856 21 15.8284 20.4142 16.4142C19.8284 17 18.8856 17 17 17H13C11.1144 17 10.1716 17 9.58579 16.4142C9 15.8284 9 14.8856 9 13L9 7C9 5.11438 9 4.17157 9.58579 3.58579C10.1716 3 11.1144 3 13 3H15.17C15.9332 3 16.3148 3 16.6625 3.13422C17.0101 3.26845 17.2927 3.52488 17.8579 4.03776L19.688 5.69833Z"
                 strokeWidth="2"
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M9 7L7 7C5.11438 7 4.17157 7 3.58579 7.58579C3 8.17157 3 9.11438 3 11L3 17C3 18.8856 3 19.8284 3.58579 20.4142C4.17157 21 5.11438 21 7 21H11C12.8856 21 13.8284 21 14.4142 20.4142C15 19.8284 15 18.8856 15 17V17"
+                strokeWidth="2"
+                strokeLinejoin="round"
               />
             </svg>
             Liste
@@ -115,6 +126,30 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
           Infos
         </Link>
       </li>
+      {isLoggedIn && candidature && (
+        <li>
+          <Link href={`/cv/${candidature.candidatureId}`}>
+            <svg
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="currentColor"
+            >
+              <g id="User / User_01">
+                <path
+                  id="Vector"
+                  d="M19 21C19 17.134 15.866 14 12 14C8.13401 14 5 17.134 5 21M12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7C16 9.20914 14.2091 11 12 11Z"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </g>
+            </svg>
+            Mon CV
+          </Link>
+        </li>
+      )}
 
       {isLoggedIn && (
         <li className="mt-auto">
@@ -173,7 +208,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
         </div>
         <div className="drawer-side">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 h-full bg-base-200 text-white text-xl">
+          <ul className="menu p-4 w-80 h-full bg-blue-700 text-white text-xl">
             <p className="m-4 font-semibold text-white text-2xl">Menu</p>
             {routeItems}
           </ul>

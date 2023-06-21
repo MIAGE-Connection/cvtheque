@@ -283,6 +283,35 @@ export const candidatureRouter = router({
       reviewState,
     }
   }),
+  findByEmail: authedProcedure.query(async ({ ctx }) => {
+    const { email } = ctx.user
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    })
+
+    if (!user) {
+      throw new Error('No user found')
+    }
+
+    const candidatures = await prisma.candidature.findMany({
+      where: {
+        User: {
+          some: {
+            email,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    })
+
+    const candidatureId = candidatures[0].id
+
+    return { candidatureId }
+  }),
+
   askReview: authedProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ input }) => {
