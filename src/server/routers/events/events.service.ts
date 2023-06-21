@@ -1,4 +1,4 @@
-import { Event } from '@prisma/client'
+import { Event, Prisma } from '@prisma/client'
 import { prisma } from 'server/prisma'
 
 type AddEvent = {
@@ -8,8 +8,10 @@ type AddEvent = {
 }
 
 export const eventService = {
-  async getEvents() {
-    return prisma.events.findMany()
+  async getEvents(where?: Prisma.EventsWhereInput) {
+    return prisma.events.findMany({
+      where,
+    })
   },
   async addEvent({ candidatureId, event, email }: AddEvent) {
     if (event === 'VIEW') {
@@ -43,6 +45,13 @@ export const eventService = {
         candidatureId,
         event,
         userId: user.id,
+      },
+    })
+  },
+  async getEventsForCandidature(candidatureId: string) {
+    return prisma.events.findMany({
+      where: {
+        candidatureId,
       },
     })
   },
