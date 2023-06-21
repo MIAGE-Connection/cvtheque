@@ -112,6 +112,7 @@ if (useMockProvider) {
       },
       from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
+      sendVerificationRequest,
     }),
   )
 }

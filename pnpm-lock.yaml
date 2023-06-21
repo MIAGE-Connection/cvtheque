@@ -29,6 +29,7 @@ specifiers:
   eslint-plugin-prettier: ^4.2.1
   eslint-plugin-react: ^7.31.11
   eslint-plugin-react-hooks: ^4.6.0
+  follow-redirects: ^1.15.2
   global: ^4.4.0
   next: ^13.4.4
   next-auth: ^4.22.1
@@ -59,6 +60,7 @@ dependencies:
   '@trpc/server': 10.29.1
   clsx: 1.2.1
   daisyui: 3.0.3_postcss@8.4.24
+  follow-redirects: 1.15.2
   global: 4.4.0
   next: 13.4.4_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.22.1_2idubvdem77q6zqylrwjfaxfw4
@@ -2325,7 +2327,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dev: true
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
