@@ -19,7 +19,7 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
         {associations.map((_association, index) => {
           return (
             <div
-              className="table mx-auto my-0 w-11/12 sm:w-4/6 border rounded-xl p-4"
+              className="table mx-auto my-0 w-11/12 lg:w-4/6 border rounded-xl p-4"
               key={index}
             >
               <div className="absolute right-2">

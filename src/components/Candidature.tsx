@@ -181,7 +181,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
               <SkillFields {...{ control, register }} />
               <AssociationFields {...{ control, register }} />
               <div id="freetime" className="justify-center flex">
-                <div className="form-control w-4/6 ">
+                <div className="form-control w-11/12 lg:w-4/6 ">
                   <label className="label">
                     <span className="label-text text-xl font-bold text-mc">
                       Loisirs & activités
