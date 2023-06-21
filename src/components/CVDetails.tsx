@@ -38,18 +38,20 @@ export const CVDetails = (props: {
       <div className="flex justify-center">
         <div
           className={`p-4 md:p-8 border rounded-xl ${
-            size === 'full' ? 'w-full' : 'w-full md:w-4/6 lg:w-full'
+            size === 'full' ? 'w-full' : 'w-full xl:w-4/6'
           }`}
         >
           <div className="flex justify-between items-center">
             <div>
-              <div className="flex space-x-2 font-bold text-2xl text-mc">
+              <div className="flex space-x-2 font-bold text-lg lg:text-2xl text-mc">
                 <div>{candidature?.firstName}</div>
                 <div>{candidature?.lastName}</div>
               </div>
               <div className="text-xl">{candidature?.email}</div>
             </div>
-            <div className="text-6xl font-bold text-mc">{candidature?.title}</div>
+            <div className="text-xl lg:text-6xl font-bold text-mc text-right">
+              {candidature?.title}
+            </div>
           </div>
           <div className="space-y-12 mt-12">
             <div>
@@ -183,7 +185,7 @@ export const CVDetails = (props: {
             </div>
             <div>
               <p className="text-2xl text-mc">Compétences</p>
-              <div className="grid grid-cols-2">
+              <div className="md:grid md:grid-cols-2">
                 {candidature?.competenceByType?.map((competence, i) => {
                   return (
                     <div key={i} className="mt-4">
