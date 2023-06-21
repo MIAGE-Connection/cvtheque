@@ -10,6 +10,7 @@ import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
 import { AssociationFields } from './candidature/AssociationFields'
 import { toast } from 'react-toastify'
+import Modal from './Modal'
 
 export type AddCandidatureInput = RouterInput['candidature']['add']
 
@@ -21,6 +22,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   const { data: session } = useSession()
 
   const [checked, setChecked] = useState<boolean>(false)
+  const [visible, setVisible] = useState<boolean>(false)
 
   const isOwner = session?.user?.email === initialValues?.userEmail
 
@@ -84,6 +86,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
 
   const { mutate } = trpc.candidature.add.useMutation({
     onSuccess: () => {
+      setVisible(false)
       if (initialValues) {
         isOwner
           ? toast.success('Votre candidature a bien été mise à jour')
@@ -207,16 +210,62 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                     Prévualiser
                   </button>
                   {initialValues ? (
-                    <button type="submit" className="btn btn-primary" disabled={false}>
+                    <button
+                      onClick={() => setVisible(true)}
+                      className="btn btn-primary"
+                      disabled={false}
+                      type="button"
+                    >
                       Sauvegarder
                     </button>
                   ) : (
-                    <button type="submit" className="btn btn-primary" disabled={false}>
+                    <button type="button" className="btn btn-primary" disabled={false}>
                       Déposer le CV
                     </button>
                   )}
                 </div>
               </div>
+              <Modal open={visible} style={{ maxWidth: '50%' }}>
+                <h3 className="font-bold text-2xl text-mc">Information</h3>
+                <div className="space-y-2 text-lg">
+                  <p className="text-wrap">
+                    Nous accordons une grande importance à la qualité et à la pertinence
+                    des CV soumis sur notre plateforme. Afin de garantir cela, tous les CV
+                    seront soumis à une <strong className="font-bold">validation</strong>{' '}
+                    rigoureuse par le bureau national de l&apos;association{' '}
+                    <strong className="text-mc">Miage Connection</strong>.
+                  </p>
+                  <p>
+                    Cette procédure de validation vise à assurer que seuls les CV qui
+                    répondent aux critères spécifiques de l&apos;association seront mis à
+                    disposition des employeurs. L&apos;équipe du bureau national examinera
+                    attentivement chaque CV pour évaluer sa conformité avec les exigences
+                    de l&apos;association.
+                  </p>
+                  <h3 className="font-bold text-2xl text-mc">Données personnelles</h3>
+                  <p>
+                    Nous comprenons l&apos;importance de protéger vos informations
+                    personnelles et nous vous assurons que ce processus de validation est
+                    strictement confidentiel.
+                  </p>
+                </div>
+                <div className="modal-action">
+                  <button
+                    className="btn btn-ghost"
+                    type="button"
+                    onClick={() => {
+                      setVisible(false)
+                    }}
+                  >
+                    Annuler
+                  </button>
+                  <button className="btn btn-primary" type="submit">
+                    {initialValues
+                      ? 'Sauvegarder et demander une relecture'
+                      : 'Déposer la candidature'}
+                  </button>
+                </div>
+              </Modal>
             </form>
           </FormProvider>
         </div>

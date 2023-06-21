@@ -43,13 +43,8 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
                 </td>
 
                 <th className="text-center">
-                  <button className="btn btn-ghost btn-xs">
-                    <Link
-                      href={`list/${candidature.id}`}
-                      className="text-right link link-primary text-lg"
-                    >
-                      Voir plus
-                    </Link>
+                  <button className="btn btn-link">
+                    <Link href={`list/${candidature.id}`}>Voir plus</Link>
                   </button>
                 </th>
               </tr>
