@@ -1,8 +1,9 @@
-import { CandidatureKind, CompetenceType } from '@prisma/client'
+import { CandidatureKind, CompetenceType, Event } from '@prisma/client'
 import { prisma } from 'server/prisma'
 import { getCompetencesByType, isUserReviewer } from 'utils/utils'
 import { z } from 'zod'
 import { authedProcedure, publicProcedure, router } from '../trpc'
+import { eventService } from './events/events.service'
 
 export const candidatureRouter = router({
   add: authedProcedure
@@ -194,10 +195,12 @@ export const candidatureRouter = router({
     return candidatures
   }),
   details: authedProcedure
-    .input(z.object({ id: z.string().uuid() }))
+    .input(z.object({ id: z.string().uuid(), viewed: z.boolean().optional() }))
     .query(async ({ input, ctx }) => {
+      const { role, email } = ctx.user
+      const { id, viewed } = input
       const candidature = await prisma.candidature.findUnique({
-        where: { id: input.id },
+        where: { id },
         include: {
           experiences: true,
           ExperienceAsso: true,
@@ -212,14 +215,26 @@ export const candidatureRouter = router({
         },
       })
 
-      const competences = candidature?.Competences
+      if (!candidature) {
+        throw new Error('No candidature found')
+      }
 
-      const competencesByType = competences ? getCompetencesByType(competences) : []
+      if (viewed && role === 'PARTNER') {
+        await eventService.addEvent({
+          event: Event.VIEW,
+          email: email,
+          candidatureId: candidature.id || '',
+        })
+      }
+
+      const competences = candidature.Competences
+
+      const competenceByType = getCompetencesByType(competences)
 
       return {
         ...candidature,
-        competenceByType: competencesByType,
-        isOwner: candidature?.User[0].email === ctx.user.email,
+        competenceByType,
+        isOwner: candidature?.User[0].email === email,
       }
     }),
   getByUser: authedProcedure.query(async ({ ctx }) => {

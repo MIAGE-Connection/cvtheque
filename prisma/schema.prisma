@@ -170,3 +170,16 @@ model Competences {
   Candidature   Candidature?   @relation(fields: [candidatureId], references: [id])
   candidatureId String?
 }
+
+enum Event {
+  VIEW
+  LIKED
+}
+
+model Events {
+  id            String   @id @default(uuid())
+  event         Event
+  userId        String
+  candidatureId String
+  createdAt     DateTime @default(now())
+}
