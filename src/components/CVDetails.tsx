@@ -1,10 +1,10 @@
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useState } from 'react'
-import { RouterOutput, trpc } from 'utils/trpc'
-import Modal from './Modal'
-import { getSelectValue } from 'utils/utils'
 import { toast } from 'react-toastify'
+import { RouterOutput, trpc } from 'utils/trpc'
+import { getSelectValue, isUserReviewer } from 'utils/utils'
+import Modal from './Modal'
 
 type Candidature = Partial<RouterOutput['candidature']['details']>
 
@@ -31,7 +31,7 @@ export const CVDetails = (props: {
   const [review, setReview] = useState('')
 
   const role = session?.user.role
-  const isReviewer = role === 'REVIEWER' || role === 'ADMIN'
+  const isReviewer = isUserReviewer(role)
   const showEditButtons = isOwner || isReviewer
   return (
     <div className=" mt-4">
@@ -80,7 +80,7 @@ export const CVDetails = (props: {
                           )}
                         </div>
                       </div>
-                      {experience.missions.length && (
+                      {experience.missions.length ? (
                         <div className="mt-2">
                           <ul className="list-disc ml-4">
                             {experience.missions?.map((mission, j) => {
@@ -92,6 +92,8 @@ export const CVDetails = (props: {
                             })}
                           </ul>
                         </div>
+                      ) : (
+                        <></>
                       )}
                     </div>
                   )
@@ -121,7 +123,7 @@ export const CVDetails = (props: {
                             )}
                           </div>
                         </div>
-                        {association.missions.length && (
+                        {association.missions.length ? (
                           <div className="mt-2">
                             <ul className="list-disc ml-4">
                               {association.missions?.map((mission, j) => {
@@ -133,6 +135,8 @@ export const CVDetails = (props: {
                               })}
                             </ul>
                           </div>
+                        ) : (
+                          <></>
                         )}
                       </div>
                     )

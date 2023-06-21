@@ -1,6 +1,6 @@
 import { CandidatureKind, CompetenceType } from '@prisma/client'
 import { prisma } from 'server/prisma'
-import { getCompetencesByType } from 'utils/utils'
+import { getCompetencesByType, isUserReviewer } from 'utils/utils'
 import { z } from 'zod'
 import { authedProcedure, publicProcedure, router } from '../trpc'
 
@@ -18,7 +18,6 @@ export const candidatureRouter = router({
         remote: z.boolean(),
         mobile: z.string().nullish(),
         passions: z.string().nullish(),
-        userEmail: z.string().email(),
         kind: z.enum([
           CandidatureKind.ALTERNANCE,
           CandidatureKind.CDI,
@@ -82,7 +81,8 @@ export const candidatureRouter = router({
         mobile,
         passions,
       } = input
-      const { email: userEmail } = ctx.user
+
+      const { role: role, email: userEmail } = ctx.user
 
       const experiencesFormatted = experiences.map((e) => {
         return { ...e, missions: e.missions.map((m) => m.mission) }
@@ -126,6 +126,8 @@ export const candidatureRouter = router({
         })
         return candidature
       }
+      const isReviewer = isUserReviewer(role)
+
       const candidature = await prisma.candidature.update({
         where: { id },
         data: {
@@ -155,6 +157,26 @@ export const candidatureRouter = router({
           schools: { deleteMany: {}, createMany: { data: schools } },
         },
       })
+
+      // Update ReviewRequest if exists
+
+      const ReviewRequest = await prisma.reviewRequest.findFirst({
+        where: {
+          candidatureId: id,
+        },
+      })
+
+      if (ReviewRequest) {
+        await prisma.reviewRequest.update({
+          where: {
+            id: ReviewRequest.id,
+          },
+          data: {
+            approved: isReviewer,
+          },
+        })
+      }
+
       return candidature
     }),
   list: publicProcedure.query(async () => {
@@ -234,7 +256,7 @@ export const candidatureRouter = router({
 
     const competencesByType = competences ? getCompetencesByType(competences) : []
 
-    const reviewState = candidature.ReviewRequest
+    const reviewState = candidature?.ReviewRequest
       ? candidature.ReviewRequest.approved
         ? ('approved' as const)
         : ('pending' as const)

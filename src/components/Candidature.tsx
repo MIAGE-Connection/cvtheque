@@ -12,7 +12,9 @@ import { AssociationFields } from './candidature/AssociationFields'
 import { toast } from 'react-toastify'
 import Modal from './Modal'
 
-export type AddCandidatureInput = RouterInput['candidature']['add']
+export type AddCandidatureInput = RouterInput['candidature']['add'] & {
+  userEmail: string
+}
 
 type Props = {
   initialValues?: AddCandidatureInput
@@ -138,10 +140,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
       return
     }
 
-    mutate({
-      ...data,
-      userEmail: session?.user?.email || '',
-    })
+    mutate(data)
   }
 
   return (
@@ -189,7 +188,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                     </span>
                   </label>
                   <textarea
-                    className="textarea textarea-bordered w-full "
+                    className="textarea textarea-bordered w-full"
                     placeholder="..."
                     {...register('passions')}
                     key="passions"
@@ -219,7 +218,12 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                       Sauvegarder
                     </button>
                   ) : (
-                    <button type="button" className="btn btn-primary" disabled={false}>
+                    <button
+                      onClick={() => setVisible(true)}
+                      type="button"
+                      className="btn btn-primary"
+                      disabled={false}
+                    >
                       Déposer le CV
                     </button>
                   )}

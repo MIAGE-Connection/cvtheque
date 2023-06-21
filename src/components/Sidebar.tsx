@@ -1,14 +1,13 @@
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { ReactElement, useState } from 'react'
+import { isUserPartner, isUserReviewer } from 'utils/utils'
 
 const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
   const { data } = useSession()
   const isLoggedIn = !!data?.user?.email
-  const isPartner =
-    data?.user?.role === 'PARTNER' ||
-    data?.user?.role === 'ADMIN' ||
-    data?.user?.role === 'REVIEWER'
+  const isPartner = isUserPartner(data?.user.role)
+  const isReviewer = isUserReviewer(data?.user.role)
 
   const isAdmin = data?.user?.role === 'ADMIN'
   const [visible, setVisible] = useState<boolean>(false)
@@ -34,7 +33,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
           Accueil
         </Link>
       </li>
-      {isLoggedIn && (
+      {isReviewer && (
         <li>
           <Link href="/reviews">
             <svg

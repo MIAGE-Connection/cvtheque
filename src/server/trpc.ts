@@ -11,6 +11,7 @@
 import { Context } from './context'
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
+import { isUserReviewer } from 'utils/utils'
 
 const t = initTRPC.context<Context>().create({
   /**
@@ -68,7 +69,11 @@ const isAuthed = middleware(({ next, ctx }) => {
 const isReviewer = middleware(({ next, ctx }) => {
   const user = ctx.session?.user
 
-  if (user?.role !== 'REVIEWER' && user?.role !== 'ADMIN') {
+  if (!user) {
+    throw new TRPCError({ code: 'FORBIDDEN' })
+  }
+
+  if (!isUserReviewer(user?.role)) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
 

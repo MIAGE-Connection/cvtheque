@@ -1,4 +1,4 @@
-import { CompetenceType, Competences } from '@prisma/client'
+import { CompetenceType, Competences, Role } from '@prisma/client'
 import { Maybe } from '@trpc/server'
 
 type CandidatureByType = {
@@ -6,6 +6,42 @@ type CandidatureByType = {
   descriptions: string[]
 }
 
+export const isUserReviewer = (role?: Role) => role === 'REVIEWER' || role === 'ADMIN'
+
+export const isUserPartner = (role?: Role) =>
+  role === 'PARTNER' || role === 'ADMIN' || role === 'REVIEWER'
+
+/**
+ * Retourne les compétences avec leur valeur groupée par leur type
+ * @param competences - Les compétences à grouper
+ * @returns
+ * @example
+ * const competences = [
+ * {
+ *  description: 'React',
+ *  type: 'FRONTEND'
+ * },
+ * {
+ *  description: 'VueJS',
+ *  type: 'FRONTEND'
+ * },
+ * {
+ *  description: 'Node',
+ *  type: 'BACKEND'
+ * }]
+ *
+ * const competencesByType = getCompetencesByType(competences)
+ *
+ * competencesByType = [
+ * {
+ *  type: 'FRONTEND',
+ *  descriptions: ['React', 'VueJS']
+ * },
+ * {
+ *  type: 'BACKEND',
+ *  descriptions: ['Node']
+ * }]
+ **/
 export const getCompetencesByType = (
   competences: Pick<Competences, 'description' | 'type'>[],
 ): CandidatureByType[] => {
