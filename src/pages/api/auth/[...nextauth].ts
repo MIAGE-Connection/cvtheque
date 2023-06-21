@@ -5,6 +5,7 @@ import { AppProviders } from 'next-auth/providers'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import { prisma } from 'server/prisma'
+import { sendVerificationRequest } from './signinemail'
 
 let useMockProvider = process.env.NODE_ENV === 'test'
 const {
@@ -92,6 +93,7 @@ if (useMockProvider) {
       },
       from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
+      sendVerificationRequest,
     }),
   )
 } else {
@@ -117,6 +119,9 @@ if (useMockProvider) {
 export const authOptions: NextAuthOptions = {
   providers,
   //adapter: PrismaAdapter(prisma),
+  pages: {
+    verifyRequest: '/auth/verify-request',
+  },
   adapter: adapter,
   session: {
     strategy: 'jwt',
