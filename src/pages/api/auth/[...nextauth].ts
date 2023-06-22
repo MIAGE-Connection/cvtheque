@@ -5,12 +5,10 @@ import { AppProviders } from 'next-auth/providers'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import { prisma } from 'server/prisma'
-import { sendVerificationRequest } from './signinemail'
+//import { sendVerificationRequest } from './signinemail'
 
 let useMockProvider = process.env.NODE_ENV === 'test'
 const {
-  GITHUB_CLIENT_ID,
-  GITHUB_SECRET,
   NODE_ENV,
   APP_ENV,
   NEXTAUTH_SECRET,
@@ -21,10 +19,7 @@ const {
   SMTP_FROM,
 } = process.env
 
-if (
-  (NODE_ENV !== 'production' || APP_ENV === 'test') &&
-  (!GITHUB_CLIENT_ID || !GITHUB_SECRET)
-) {
+if (NODE_ENV !== 'production' || APP_ENV === 'test') {
   console.log('⚠️ Using mocked GitHub auth correct credentials were not added')
   useMockProvider = true
 }
@@ -93,7 +88,7 @@ if (useMockProvider) {
       },
       from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
-      sendVerificationRequest,
+      //  sendVerificationRequest,
     }),
   )
 } else {
@@ -112,17 +107,17 @@ if (useMockProvider) {
       },
       from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
-      sendVerificationRequest,
+      // sendVerificationRequest,
     }),
   )
 }
 
 export const authOptions: NextAuthOptions = {
   providers,
-  //adapter: PrismaAdapter(prisma),
-  pages: {
+  /*  pages: {
     verifyRequest: '/auth/verify-request',
-  },
+    signIn: '/auth/email-signin',
+  }, */
   adapter: adapter,
   session: {
     strategy: 'jwt',
