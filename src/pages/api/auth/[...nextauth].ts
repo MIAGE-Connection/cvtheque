@@ -5,7 +5,7 @@ import { AppProviders } from 'next-auth/providers'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import { prisma } from 'server/prisma'
-//import { sendVerificationRequest } from './signinemail'
+import { sendVerificationRequest } from './signinemail'
 
 let useMockProvider = false
 const {
@@ -88,7 +88,7 @@ if (useMockProvider) {
       },
       from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
-      //  sendVerificationRequest,
+      sendVerificationRequest,
     }),
   )
 } else {
@@ -108,14 +108,14 @@ if (useMockProvider) {
       },
       from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
-      // sendVerificationRequest,
+      sendVerificationRequest,
     }),
   )
 }
 
 export const authOptions: NextAuthOptions = {
   providers,
-  /*  pages: {
+  /* pages: {
     verifyRequest: '/auth/verify-request',
     signIn: '/auth/email-signin',
   }, */
