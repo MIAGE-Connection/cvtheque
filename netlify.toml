@@ -1,3 +1,6 @@
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 [install]
   command = "pnpm install"
 
