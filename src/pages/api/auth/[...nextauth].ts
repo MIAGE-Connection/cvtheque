@@ -7,7 +7,7 @@ import EmailProvider from 'next-auth/providers/email'
 import { prisma } from 'server/prisma'
 //import { sendVerificationRequest } from './signinemail'
 
-let useMockProvider = process.env.NODE_ENV === 'test'
+let useMockProvider = false
 const {
   NODE_ENV,
   APP_ENV,
@@ -93,8 +93,9 @@ if (useMockProvider) {
   )
 } else {
   if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASSWORD || !SMTP_FROM) {
-    throw new Error('GITHUB_CLIENT_ID and GITHUB_SECRET must be set')
+    throw new Error('SMTP VALUES must be set')
   }
+  console.log('Using real email auth')
   providers.push(
     EmailProvider({
       server: {

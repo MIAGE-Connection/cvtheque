@@ -11,6 +11,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
   const isReviewer = isUserReviewer(data?.user.role)
   const { data: candidature } = trpc.candidature.findByEmail.useQuery(undefined, {
     refetchOnMount: false,
+    refetchInterval: 100000,
   })
 
   const isAdmin = data?.user?.role === 'ADMIN'
