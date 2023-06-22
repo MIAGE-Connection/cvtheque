@@ -6,7 +6,10 @@ import { trpc } from 'utils/trpc'
 
 const CV: NextPageWithLayout = () => {
   const id = useRouter().query.id as string
-  const { data: candidature, isLoading } = trpc.candidature.details.useQuery({ id })
+  const { data: candidature, isLoading } = trpc.candidature.details.useQuery({
+    id,
+    viewed: true,
+  })
   return (
     <>
       {isLoading ? (

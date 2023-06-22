@@ -5,11 +5,10 @@ import { AppProviders } from 'next-auth/providers'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import { prisma } from 'server/prisma'
+//import { sendVerificationRequest } from './signinemail'
 
-let useMockProvider = process.env.NODE_ENV === 'test'
+let useMockProvider = false
 const {
-  GITHUB_CLIENT_ID,
-  GITHUB_SECRET,
   NODE_ENV,
   APP_ENV,
   NEXTAUTH_SECRET,
@@ -20,10 +19,7 @@ const {
   SMTP_FROM,
 } = process.env
 
-if (
-  (NODE_ENV !== 'production' || APP_ENV === 'test') &&
-  (!GITHUB_CLIENT_ID || !GITHUB_SECRET)
-) {
+if (NODE_ENV !== 'production' || APP_ENV === 'test') {
   console.log('⚠️ Using mocked GitHub auth correct credentials were not added')
   useMockProvider = true
 }
@@ -92,12 +88,14 @@ if (useMockProvider) {
       },
       from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
+      //  sendVerificationRequest,
     }),
   )
 } else {
   if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASSWORD || !SMTP_FROM) {
-    throw new Error('GITHUB_CLIENT_ID and GITHUB_SECRET must be set')
+    throw new Error('SMTP VALUES must be set')
   }
+  console.log('Using real email auth')
   providers.push(
     EmailProvider({
       server: {
@@ -110,13 +108,17 @@ if (useMockProvider) {
       },
       from: SMTP_FROM,
       maxAge: 24 * 60 * 60,
+      // sendVerificationRequest,
     }),
   )
 }
 
 export const authOptions: NextAuthOptions = {
   providers,
-  //adapter: PrismaAdapter(prisma),
+  /*  pages: {
+    verifyRequest: '/auth/verify-request',
+    signIn: '/auth/email-signin',
+  }, */
   adapter: adapter,
   session: {
     strategy: 'jwt',

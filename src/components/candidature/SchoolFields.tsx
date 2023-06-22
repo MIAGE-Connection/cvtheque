@@ -17,7 +17,7 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
       {schools.map((_school, index) => {
         return (
           <div
-            className="table mx-auto my-0 w-11/12 sm:w-4/6 border rounded-xl p-2"
+            className="table mx-auto my-0 w-11/12 lg:w-4/6 border rounded-xl p-2"
             key={index}
           >
             {index !== 0 && (

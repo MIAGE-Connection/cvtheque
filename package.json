@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@netlify/esbuild-darwin-64": "^0.14.39",
-    "@netlify/plugin-nextjs": "^4.37.4",
+    "@netlify/plugin-nextjs": "^4.38.1",
     "@playwright/test": "^1.26.1",
     "@tanstack/react-query-devtools": "^4.3.8",
     "@types/node": "^18.7.20",

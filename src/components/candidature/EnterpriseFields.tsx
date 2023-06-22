@@ -25,7 +25,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
         {experiences.map((_experience, index) => {
           return (
             <div
-              className="table mx-auto my-0 w-11/12 sm:w-4/6 border rounded-xl p-4"
+              className="table mx-auto my-0 w-11/12 lg:w-4/6 border rounded-xl p-4"
               key={index}
             >
               {index !== 0 && (
