@@ -117,7 +117,7 @@ export const authOptions: NextAuthOptions = {
   providers,
   pages: {
     verifyRequest: '/auth/verify-request',
-    //signIn: '/auth/email-signin',
+    signIn: '/auth/email-signin',
   },
   adapter: adapter,
   session: {
