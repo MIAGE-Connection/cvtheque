@@ -110,7 +110,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
       )}
       {isLoggedIn && candidature && (
         <li>
-          <Link href={`/cv/${candidature.candidatureId}`}>
+          <Link href={`/list/${candidature.candidatureId}`}>
             <svg
               className="h-5 w-5"
               viewBox="0 0 24 24"
@@ -209,8 +209,8 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
         </div>
         <div className="drawer-side">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 h-full bg-blue-700 text-white text-xl">
-            <p className="m-4 font-semibold text-white text-2xl">Menu</p>
+          <ul className="menu p-4 w-80 bg-gray-100 h-full text-xl">
+            <p className="m-4 font-semibold text-mc text-2xl">Menu</p>
             {routeItems}
           </ul>
         </div>

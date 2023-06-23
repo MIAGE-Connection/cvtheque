@@ -45,9 +45,9 @@ export const SkillFields: React.FC<CommonFormProps> = ({ control, register }) =>
                   {...register(`competences.${index}.type`)}
                   defaultValue={CompetenceType.FRONTEND}
                 >
-                  {Object.keys(CompetenceType).map((key) => (
+                  {Object.values(CompetenceType).map((key) => (
                     <option key={key} value={key}>
-                      {getSelectValue(key as CompetenceType)}
+                      {getSelectValue(key)}
                     </option>
                   ))}
                 </select>
