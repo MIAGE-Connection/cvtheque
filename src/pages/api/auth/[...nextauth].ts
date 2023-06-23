@@ -7,7 +7,6 @@ import EmailProvider from 'next-auth/providers/email'
 import { prisma } from 'server/prisma'
 import { sendVerificationRequest } from './signinemail'
 
-let useMockProvider = false
 const {
   NODE_ENV,
   APP_ENV,
@@ -18,6 +17,8 @@ const {
   SMTP_PASSWORD,
   SMTP_FROM,
 } = process.env
+
+let useMockProvider = NODE_ENV === 'test'
 
 if (NODE_ENV !== 'production' || APP_ENV === 'test') {
   console.log('⚠️ Using mocked GitHub auth correct credentials were not added')
