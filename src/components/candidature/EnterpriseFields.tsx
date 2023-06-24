@@ -48,7 +48,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
                   register={register as any}
                   name={`experiences.${index}.companyName`}
                   type="text"
-                  placeholder="06 12 34 56 78"
+                  placeholder="Google, Apple, ..."
                   key={`experiences.${index}.companyName`}
                   large={true}
                 />
@@ -90,7 +90,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
                 companyName: '',
                 missions: [{ mission: '' }],
                 startAt: dateToInputDate(new Date()) || new Date(),
-                endAt: new Date(),
+                endAt: null,
               })
             }}
             type="button"

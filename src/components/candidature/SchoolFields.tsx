@@ -89,7 +89,7 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
             addSchool({
               description: '',
               startAt: dateToInputDate(new Date()) || new Date(),
-              endAt: new Date(),
+              endAt: null,
               universityName: '',
             })
           }}
