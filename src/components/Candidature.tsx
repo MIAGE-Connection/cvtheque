@@ -12,6 +12,7 @@ import { EntrepriseFields } from './candidature/EnterpriseFields'
 import { ProfileFields } from './candidature/ProfileFields'
 import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
+import { getAdaptedInput } from './utils'
 
 export type AddCandidatureInput = RouterInput['candidature']['add'] & {
   userEmail: string
@@ -115,42 +116,25 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
         router.push(`/list/${candidature.id}`)
         return
       }
-      toast.success('Votre candidature a bien été envoyée et est soumise à validation')
+      toast.success(
+        'Votre candidature a bien été sauvegardée. Vous pouvez demander la vérification à tout moment.',
+      )
+      router.push(`/list/${candidature.id}`)
     },
   })
 
   const [candidature, setCandidature] = useState<AddCandidatureInput | undefined>()
 
   const onSubmit: SubmitHandler<AddCandidatureInput> = (data: AddCandidatureInput) => {
-    const experiences = data.experiences?.map((experience) => {
-      return {
-        ...experience,
-        startAt: new Date(experience.startAt),
-        ...(experience.endAt && {
-          endAt: new Date(experience.endAt),
-        }),
-      }
-    })
+    const experiences = getAdaptedInput<AddCandidatureInput['experiences']>(
+      data.experiences,
+    )
 
-    const experiencesAsso = data.experiencesAsso?.map((experience) => {
-      return {
-        ...experience,
-        startAt: new Date(experience.startAt),
-        ...(experience.endAt && {
-          endAt: new Date(experience.endAt),
-        }),
-      }
-    })
+    const experiencesAsso = getAdaptedInput<AddCandidatureInput['experiencesAsso']>(
+      data.experiencesAsso,
+    )
 
-    const schools = data.schools?.map((school) => {
-      return {
-        ...school,
-        startAt: new Date(school.startAt),
-        ...(school.endAt && {
-          endAt: new Date(school.endAt),
-        }),
-      }
-    })
+    const schools = getAdaptedInput<AddCandidatureInput['schools']>(data.schools)
 
     data.experiences = experiences
     data.schools = schools
@@ -320,6 +304,12 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                     attentivement chaque CV pour évaluer sa conformité avec les exigences
                     de l&apos;association.
                   </p>
+                  <p>
+                    <strong>
+                      Chaque modification apportée sur un CV déjà publié entraîne une
+                      nouvelle validation.
+                    </strong>
+                  </p>
                   <h3 className="font-bold text-2xl text-mc">Données personnelles</h3>
                   <p>
                     Nous comprenons l&apos;importance de protéger vos informations
@@ -338,9 +328,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                     Annuler
                   </button>
                   <button className="btn btn-primary" type="submit">
-                    {initialValues
-                      ? 'Sauvegarder et demander une relecture'
-                      : 'Déposer la candidature'}
+                    {initialValues ? 'Sauvegarder' : 'Déposer la candidature'}
                   </button>
                 </div>
               </Modal>

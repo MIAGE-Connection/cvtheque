@@ -1,6 +1,31 @@
 import { CompetenceType } from '@prisma/client'
 import { useState } from 'react'
 import { RouterOutput } from 'utils/trpc'
+import { AddCandidatureInput } from './Candidature'
+
+/**
+ * @description get the same array with startAt and endAt as Date
+ * @param argument array of experiences, schools or experiencesAsso
+ * @returns the same array with startAt and endAt as Date
+ */
+export const getAdaptedInput = <T,>(
+  argument:
+    | AddCandidatureInput['experiences']
+    | AddCandidatureInput['schools']
+    | AddCandidatureInput['experiencesAsso'],
+): T => {
+  const values = argument?.map((arg) => {
+    return {
+      ...arg,
+      startAt: new Date(arg.startAt),
+      ...(arg.endAt && {
+        endAt: new Date(arg.endAt),
+      }),
+    }
+  })
+
+  return values as unknown as T
+}
 
 // write a function to do the same as this :
 export type Candidature = Partial<RouterOutput['candidature']['list'][number]>
