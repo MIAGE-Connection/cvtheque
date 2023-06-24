@@ -18,9 +18,9 @@ export const getAdaptedInput = <T,>(
     return {
       ...arg,
       startAt: new Date(arg.startAt),
-      ...(arg.endAt && {
-        endAt: new Date(arg.endAt),
-      }),
+      ...(arg.endAt && arg.endAt.toString() !== ''
+        ? { endAt: new Date(arg.endAt) }
+        : { endAt: null }),
     }
   })
 
