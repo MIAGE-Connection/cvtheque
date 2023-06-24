@@ -1,16 +1,17 @@
 import { CVDetails } from 'components/CVDetails'
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import { RouterInput, trpc } from 'utils/trpc'
 import { getCompetencesByType } from 'utils/utils'
+import Modal from './Modal'
+import { AssociationFields } from './candidature/AssociationFields'
 import { EntrepriseFields } from './candidature/EnterpriseFields'
 import { ProfileFields } from './candidature/ProfileFields'
 import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
-import { AssociationFields } from './candidature/AssociationFields'
-import { toast } from 'react-toastify'
-import Modal from './Modal'
 
 export type AddCandidatureInput = RouterInput['candidature']['add'] & {
   userEmail: string
@@ -20,8 +21,18 @@ type Props = {
   initialValues?: AddCandidatureInput
 }
 
+enum TabType {
+  profile = 'profile',
+  experiences = 'experiences',
+  schools = 'schools',
+  skills = 'skills',
+  associations = 'associations',
+  other = 'other',
+}
+
 const Candidature: React.FC<Props> = ({ initialValues }) => {
   const { data: session } = useSession()
+  const router = useRouter()
 
   const [checked, setChecked] = useState<boolean>(false)
   const [visible, setVisible] = useState<boolean>(false)
@@ -76,23 +87,32 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     }
   }
 
-  const methods = useForm<AddCandidatureInput>({ resolver, defaultValues: initialValues })
+  const methods = useForm<AddCandidatureInput>({
+    resolver,
+    defaultValues: initialValues,
+  })
 
   const {
     register,
+    reset,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
     getValues,
   } = methods
 
+  useEffect(() => {
+    reset(initialValues)
+  }, [initialValues, reset])
+
   const { mutate } = trpc.candidature.add.useMutation({
-    onSuccess: () => {
+    onSuccess: (candidature) => {
       setVisible(false)
       if (initialValues) {
         isOwner
           ? toast.success('Votre candidature a bien été mise à jour')
           : toast.success('La candidature a bien été mise à jour')
+        router.push(`/list/${candidature.id}`)
         return
       }
       toast.success('Votre candidature a bien été envoyée et est soumise à validation')
@@ -102,7 +122,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   const [candidature, setCandidature] = useState<AddCandidatureInput | undefined>()
 
   const onSubmit: SubmitHandler<AddCandidatureInput> = (data: AddCandidatureInput) => {
-    const experiences = data.experiences.map((experience) => {
+    const experiences = data.experiences?.map((experience) => {
       return {
         ...experience,
         startAt: new Date(experience.startAt),
@@ -112,7 +132,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
       }
     })
 
-    const experiencesAsso = data.experiencesAsso.map((experience) => {
+    const experiencesAsso = data.experiencesAsso?.map((experience) => {
       return {
         ...experience,
         startAt: new Date(experience.startAt),
@@ -122,7 +142,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
       }
     })
 
-    const schools = data.schools.map((school) => {
+    const schools = data.schools?.map((school) => {
       return {
         ...school,
         startAt: new Date(school.startAt),
@@ -143,6 +163,8 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     mutate(data)
   }
 
+  const [activeTab, setActiveTab] = useState<TabType>(TabType.profile)
+
   return (
     <>
       <div className="sm:m-4 space-y-2">
@@ -152,6 +174,31 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
             Nous vous invitons à compléter le formulaire ci-dessous afin que le bureau
             puisse éventuellement vous faire un retour avant publication.
           </h1>
+        </div>
+        <div className="flex space-x-8 justify-center items-baseline">
+          {Object.values(TabType).map((type) => (
+            <div key={type} onClick={() => setActiveTab(type)}>
+              <button
+                className={`${
+                  activeTab === type
+                    ? 'font-bold text-mc  border-b-2 border-mc text-3xl'
+                    : 'border-b-[1px] border-b-gray-700 text-2xl'
+                } ${!isValid ? 'cursor-not-allowed' : ''}`}
+                disabled={!isValid}
+              >
+                {
+                  {
+                    profile: 'Profil',
+                    experiences: 'Expériences',
+                    schools: 'Parcours scolaire',
+                    skills: 'Compétences',
+                    associations: 'Parcours associatif',
+                    other: 'Loisirs',
+                  }[type]
+                }
+              </button>
+            </div>
+          ))}
         </div>
         <div className="sm:p-2">
           <FormProvider {...methods}>
@@ -175,26 +222,33 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                   </label>
                 </div>
               </div>
-              <ProfileFields {...{ register }} />
-              <EntrepriseFields {...{ control, register }} />
-              <SchoolFields {...{ control, register }} />
-              <SkillFields {...{ control, register }} />
-              <AssociationFields {...{ control, register }} />
-              <div id="freetime" className="justify-center flex">
-                <div className="form-control w-11/12 lg:w-4/6 ">
-                  <label className="label">
-                    <span className="label-text text-xl font-bold text-mc">
-                      Loisirs & activités
-                    </span>
-                  </label>
-                  <textarea
-                    className="textarea textarea-bordered w-full"
-                    placeholder="..."
-                    {...register('passions')}
-                    key="passions"
-                  />
-                </div>
-              </div>
+              {
+                {
+                  profile: <ProfileFields {...{ register }} />,
+                  experiences: <EntrepriseFields {...{ control, register }} />,
+                  schools: <SchoolFields {...{ control, register }} />,
+                  skills: <SkillFields {...{ control, register }} />,
+                  associations: <AssociationFields {...{ control, register }} />,
+                  other: (
+                    <div id="freetime" className="justify-center flex">
+                      <div className="form-control w-11/12 lg:w-4/6 ">
+                        <label className="label">
+                          <span className="label-text text-xl font-bold text-mc">
+                            Loisirs & activités
+                          </span>
+                        </label>
+                        <textarea
+                          className="textarea textarea-bordered w-full"
+                          placeholder="..."
+                          {...register('passions')}
+                          key="passions"
+                        />
+                      </div>
+                    </div>
+                  ),
+                }[activeTab]
+              }
+
               <div className="fixed right-0 bottom-2 m-2 justify-end">
                 <div className="space-x-2">
                   <button
@@ -212,8 +266,8 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                     <button
                       onClick={() => setVisible(true)}
                       className="btn btn-primary"
-                      disabled={false}
                       type="button"
+                      disabled={!isValid}
                     >
                       Sauvegarder
                     </button>
@@ -222,7 +276,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                       onClick={() => setVisible(true)}
                       type="button"
                       className="btn btn-primary"
-                      disabled={false}
+                      disabled={!isValid}
                     >
                       Déposer le CV
                     </button>
@@ -295,6 +349,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                   kind: candidature.kind,
                   title: candidature.title,
                   passions: candidature.passions,
+                  mobile: candidature.mobile,
                   experiences: candidature.experiences?.map((experience) => ({
                     ...experience,
                     missions: experience.missions.map((m) => m.mission),
@@ -323,7 +378,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                     id: '',
                     candidatureId: '',
                   })),
-                  competenceByType: getCompetencesByType(candidature.competences),
+                  competenceByType: getCompetencesByType(candidature.competences || []),
                   Competences: candidature.competences?.map((competence) => ({
                     ...competence,
                     id: '',

@@ -2,6 +2,7 @@ import { AddCandidatureInput } from 'components/Candidature'
 import { Control, UseFormRegister, useFieldArray } from 'react-hook-form'
 import { MissionsFields } from './MissionsFields'
 import { Input } from 'components/Input'
+import { dateToInputDate } from 'utils/utils'
 
 export type CommonFormProps = {
   register: UseFormRegister<AddCandidatureInput>
@@ -88,7 +89,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
               append({
                 companyName: '',
                 missions: [{ mission: '' }],
-                startAt: new Date(),
+                startAt: dateToInputDate(new Date()) || new Date(),
                 endAt: new Date(),
               })
             }}

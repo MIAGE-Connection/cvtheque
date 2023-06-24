@@ -1,6 +1,7 @@
 import { useFieldArray } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 import { Input } from 'components/Input'
+import { dateToInputDate } from 'utils/utils'
 
 export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) => {
   const {
@@ -87,7 +88,7 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
           onClick={() => {
             addSchool({
               description: '',
-              startAt: new Date(),
+              startAt: dateToInputDate(new Date()) || new Date(),
               endAt: new Date(),
               universityName: '',
             })

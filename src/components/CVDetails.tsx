@@ -48,6 +48,7 @@ export const CVDetails = (props: {
                 <div>{candidature?.lastName}</div>
               </div>
               <div className="text-xl">{candidature?.email}</div>
+              <div className="text-lg text-gray-500">{candidature?.mobile}</div>
             </div>
             <div className="text-xl lg:text-6xl font-bold text-mc text-right">
               {candidature?.title}

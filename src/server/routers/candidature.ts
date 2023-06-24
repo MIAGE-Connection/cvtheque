@@ -24,44 +24,52 @@ export const candidatureRouter = router({
           CandidatureKind.CDI,
           CandidatureKind.STAGE,
         ]),
-        experiences: z.array(
-          z.object({
-            startAt: z.date(),
-            endAt: z.date().nullish(),
-            companyName: z.string(),
-            missions: z.array(
-              z.object({
-                mission: z.string(),
-              }),
-            ),
-          }),
-        ),
-        experiencesAsso: z.array(
-          z.object({
-            startAt: z.date(),
-            endAt: z.date().nullish(),
-            name: z.string(),
-            missions: z.array(
-              z.object({
-                mission: z.string(),
-              }),
-            ),
-          }),
-        ),
-        schools: z.array(
-          z.object({
-            startAt: z.date(),
-            endAt: z.date().nullish(),
-            universityName: z.string(),
-            description: z.string(),
-          }),
-        ),
-        competences: z.array(
-          z.object({
-            description: z.string(),
-            type: z.nativeEnum(CompetenceType),
-          }),
-        ),
+        experiences: z
+          .array(
+            z.object({
+              startAt: z.date(),
+              endAt: z.date().nullish(),
+              companyName: z.string(),
+              missions: z.array(
+                z.object({
+                  mission: z.string(),
+                }),
+              ),
+            }),
+          )
+          .optional(),
+        experiencesAsso: z
+          .array(
+            z.object({
+              startAt: z.date(),
+              endAt: z.date().nullish(),
+              name: z.string(),
+              missions: z.array(
+                z.object({
+                  mission: z.string(),
+                }),
+              ),
+            }),
+          )
+          .optional(),
+        schools: z
+          .array(
+            z.object({
+              startAt: z.date(),
+              endAt: z.date().nullish(),
+              universityName: z.string(),
+              description: z.string(),
+            }),
+          )
+          .optional(),
+        competences: z
+          .array(
+            z.object({
+              description: z.string(),
+              type: z.nativeEnum(CompetenceType),
+            }),
+          )
+          .optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -85,11 +93,11 @@ export const candidatureRouter = router({
 
       const { role: role, email: userEmail } = ctx.user
 
-      const experiencesFormatted = experiences.map((e) => {
+      const experiencesFormatted = experiences?.map((e) => {
         return { ...e, missions: e.missions.map((m) => m.mission) }
       })
 
-      const experiencesAssoFormatted = experiencesAsso.map((e) => {
+      const experiencesAssoFormatted = experiencesAsso?.map((e) => {
         return { ...e, missions: e.missions.map((m) => m.mission) }
       })
 
@@ -111,18 +119,18 @@ export const candidatureRouter = router({
                 email: userEmail,
               },
             },
-            schools: { createMany: { data: schools } },
+            schools: { createMany: { data: schools || [] } },
             experiences: {
               createMany: {
-                data: experiencesFormatted,
+                data: experiencesFormatted || [],
               },
             },
             ExperienceAsso: {
               createMany: {
-                data: experiencesAssoFormatted,
+                data: experiencesAssoFormatted || [],
               },
             },
-            Competences: { createMany: { data: competences } },
+            Competences: { createMany: { data: competences || [] } },
           },
         })
         return candidature
@@ -142,20 +150,20 @@ export const candidatureRouter = router({
           remote,
           mobile,
           passions,
-          Competences: { deleteMany: {}, createMany: { data: competences } },
+          Competences: { deleteMany: {}, createMany: { data: competences || [] } },
           experiences: {
             deleteMany: {},
             createMany: {
-              data: experiencesFormatted,
+              data: experiencesFormatted || [],
             },
           },
           ExperienceAsso: {
             deleteMany: {},
             createMany: {
-              data: experiencesAssoFormatted,
+              data: experiencesAssoFormatted || [],
             },
           },
-          schools: { deleteMany: {}, createMany: { data: schools } },
+          schools: { deleteMany: {}, createMany: { data: schools || [] } },
         },
       })
 
@@ -202,8 +210,16 @@ export const candidatureRouter = router({
       const candidature = await prisma.candidature.findUnique({
         where: { id },
         include: {
-          experiences: true,
-          ExperienceAsso: true,
+          experiences: {
+            orderBy: {
+              startAt: 'desc',
+            },
+          },
+          ExperienceAsso: {
+            orderBy: {
+              startAt: 'desc',
+            },
+          },
           schools: true,
           Competences: true,
           ReviewRequest: true,

@@ -1,6 +1,7 @@
 import { useFieldArray } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 import { MissionsFields } from './MissionsFields'
+import { dateToInputDate } from 'utils/utils'
 
 export const AssociationFields: React.FC<CommonFormProps> = ({ control, register }) => {
   const {
@@ -80,7 +81,7 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
               append({
                 name: '',
                 missions: [{ mission: '' }],
-                startAt: new Date(),
+                startAt: dateToInputDate(new Date()) || new Date(),
                 endAt: new Date(),
               })
             }}
