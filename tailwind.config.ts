@@ -7,6 +7,9 @@ const config: Config = {
       colors: {
         mc: '#2b309b',
       },
+      maxWidth: {
+        '1/2': '50%',
+      },
     },
   },
   daisyui: {

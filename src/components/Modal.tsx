@@ -1,17 +1,19 @@
 //Modal.tsx
-import React from 'react'
+import React, { HTMLAttributes } from 'react'
 type Props = {
   children: React.ReactNode
   open: boolean
-  style?: React.CSSProperties
+  style?: HTMLAttributes<HTMLDivElement>['className']
 }
 
 const Modal = ({ children, open, style }: Props) => {
   return (
-    <div className={`modal modal-bottom sm:modal-middle ${open ? 'modal-open' : ''}`}>
-      <div className="modal-box" style={style}>
-        {children}
-      </div>
+    <div
+      className={`modal !mt-0 modal-bottom sm:modal-middle place-items-center ${
+        open ? 'modal-open' : ''
+      }`}
+    >
+      <div className={`modal-box ${style}`}>{children}</div>
     </div>
   )
 }

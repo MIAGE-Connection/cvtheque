@@ -175,7 +175,8 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
             puisse éventuellement vous faire un retour avant publication.
           </h1>
         </div>
-        <div className="flex space-x-8 justify-center items-baseline">
+        {/* Medium screen and plus */}
+        <div className="hidden lg:flex space-x-8 justify-center items-baseline">
           {Object.values(TabType).map((type) => (
             <div key={type} onClick={() => setActiveTab(type)}>
               <button
@@ -200,6 +201,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
             </div>
           ))}
         </div>
+
         <div className="sm:p-2">
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -248,12 +250,30 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                   ),
                 }[activeTab]
               }
+              {/* Mobile screen */}
+              <div className="flex lg:hidden space-x-8 justify-center items-baseline">
+                {Object.values(TabType).map((type, i) => (
+                  <div key={type} onClick={() => setActiveTab(type)}>
+                    <button
+                      className={`${
+                        activeTab === type
+                          ? 'font-bold text-mc  border-b-2 border-mc text-3xl'
+                          : 'border-b-[1px] border-b-gray-700 text-2xl'
+                      } ${!isValid ? 'cursor-not-allowed' : ''}`}
+                      disabled={!isValid}
+                      type="button"
+                    >
+                      {i + 1}
+                    </button>
+                  </div>
+                ))}
+              </div>
 
-              <div className="fixed right-0 bottom-2 m-2 justify-end">
-                <div className="space-x-2">
+              <div className="lg:pr-4 lg:fixed lg:right-0 lg:bottom-2">
+                <div className="space-x-2 flex justify-center mt-16">
                   <button
                     type="button"
-                    className="btn btn-info hidden md:inline-flex"
+                    className="btn btn-info hidden lg:inline-flex"
                     disabled={false}
                     onClick={() => {
                       setCandidature(getValues())
@@ -283,7 +303,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                   )}
                 </div>
               </div>
-              <Modal open={visible} style={{ maxWidth: '50%' }}>
+              <Modal open={visible} style={'lg:!max-w-1/2'}>
                 <h3 className="font-bold text-2xl text-mc">Information</h3>
                 <div className="space-y-2 text-lg">
                   <p className="text-wrap">
@@ -307,9 +327,9 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                     strictement confidentiel.
                   </p>
                 </div>
-                <div className="modal-action">
+                <div className="modal-action block md:flex">
                   <button
-                    className="btn btn-ghost"
+                    className="btn btn-ghost w-full md:w-auto"
                     type="button"
                     onClick={() => {
                       setVisible(false)
