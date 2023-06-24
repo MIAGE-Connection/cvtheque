@@ -51,13 +51,13 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
         <div className="space-y-2 w-2/3">
           <p className="text-mc">Types de compétences</p>
           <div
-            className="input input-bordered w-full flex items-center justify-between"
+            className="input input-bordered w-full grid grid-cols-1 grid-flow-col items-center justify-between"
             onClick={() => setVisible((prev) => !prev)}
           >
             <div className="flex space-x-2 overflow-y-scroll items-center">
               {competences.map((competence) => (
                 <div
-                  className="flex space-x-[2px] py-2 px-4 border rounded-xl"
+                  className="flex space-x-[2px] py-2 px-4 border rounded-xl whitespace-nowrap"
                   key={competence}
                 >
                   <p>{getSelectValue(competence)}</p>{' '}
@@ -91,7 +91,7 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
           </div>
           {visible && (
             <div
-              className="absolute shadow top-100 bg-white z-40 w-full rounded max-h-select overflow-y-auto max-w-md"
+              className="absolute shadow top-100 bg-white z-40 w-full rounded max-h-select overflow-y-auto max-w-lg"
               ref={ref}
             >
               <div className="flex flex-col w-full">
@@ -156,6 +156,11 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
             })}
           </tbody>
         </table>
+        {!filteredCandidatures.length && (
+          <div className="mt-2 text-center">
+            <p>Aucune candidature</p>
+          </div>
+        )}
       </div>
     </>
   )

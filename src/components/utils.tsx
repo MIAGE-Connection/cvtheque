@@ -27,7 +27,6 @@ export const getAdaptedInput = <T,>(
   return values as unknown as T
 }
 
-// write a function to do the same as this :
 export type Candidature = Partial<RouterOutput['candidature']['list'][number]>
 
 export const getFilteredCandidatures = (
