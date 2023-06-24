@@ -240,11 +240,13 @@ export const CVDetails = (props: {
         </div>
       )}
       {showEditButtons && candidature.ReviewRequest?.description && (
-        <div className="border rounded-xl p-8">
-          <p className="text-mc font-bold text-xl ">
-            Votre CV nécessite des modifications:
-          </p>
-          <p className="whitespace-pre-wrap">{candidature.ReviewRequest.description}</p>
+        <div className="flex justify-center">
+          <div className="border rounded-xl p-8 w-full xl:w-4/6">
+            <p className="text-mc font-bold text-xl ">
+              Votre CV nécessite des modifications:
+            </p>
+            <p className="whitespace-pre-wrap">{candidature.ReviewRequest.description}</p>
+          </div>
         </div>
       )}
       <Modal open={visible}>

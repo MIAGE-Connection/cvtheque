@@ -181,7 +181,7 @@ export const candidatureRouter = router({
             id: ReviewRequest.id,
           },
           data: {
-            approved: isReviewer,
+            approved: ReviewRequest.approved ? isReviewer : false,
           },
         })
       }
