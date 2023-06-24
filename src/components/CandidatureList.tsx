@@ -1,13 +1,11 @@
 import { CompetenceType } from '@prisma/client'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { RouterOutput } from 'utils/trpc'
 import { getCompetencesByType, getSelectValue } from 'utils/utils'
-
-type Candidatures = Partial<RouterOutput['candidature']['list'][number]>
+import { Candidature, useFilteredCandidatures } from './utils'
 
 type Props = {
-  candidatures: Candidatures[]
+  candidatures: Candidature[]
 }
 export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
   const headers: JSX.Element = (
@@ -21,27 +19,10 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
   )
   const ref = useRef<HTMLDivElement>(null)
 
-  const [search, setSearch] = useState('')
-  const [competences, setCompetences] = useState<CompetenceType[]>([])
   const [visible, setVisible] = useState(false)
-  const candidaturesFiltered = candidatures.filter((candidature) => {
-    const searchLower = search.toLowerCase()
-    const fullName = `${candidature.firstName} ${candidature.lastName}`
-    const title = candidature.title
-    const city = candidature.city
-    const competencesString = candidature.Competences?.map((c) => c.type).join(' ')
-    const isInCompetencesType = competences.length
-      ? candidature.Competences?.some((c) => competences.includes(c.type))
-      : true
 
-    return (
-      (fullName.toLowerCase().includes(searchLower) ||
-        title?.toLowerCase().includes(searchLower) ||
-        competencesString?.toLowerCase().includes(searchLower) ||
-        city?.toLowerCase().includes(searchLower)) &&
-      isInCompetencesType
-    )
-  })
+  const { search, competences, filteredCandidatures, setCompetences, setSearch } =
+    useFilteredCandidatures(candidatures)
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -76,7 +57,7 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
             <div className="flex space-x-2 overflow-y-scroll items-center">
               {competences.map((competence) => (
                 <div
-                  className="flex space-x-[2px] p-2 border rounded-xl"
+                  className="flex space-x-[2px] py-2 px-4 border rounded-xl"
                   key={competence}
                 >
                   <p>{getSelectValue(competence)}</p>{' '}
@@ -147,7 +128,7 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
             <tr>{headers}</tr>
           </thead>
           <tbody>
-            {candidaturesFiltered?.map((candidature) => {
+            {filteredCandidatures?.map((candidature) => {
               return (
                 <tr key={candidature.id}>
                   <td>
