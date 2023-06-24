@@ -13,6 +13,7 @@ export const CVDetails = (props: {
   size: 'full' | 'center'
   showButton?: boolean
 }) => {
+  const utils = trpc.useContext()
   const { candidature, size, showButton } = props
   const { isOwner } = candidature
   const { data: session } = useSession()
@@ -23,6 +24,8 @@ export const CVDetails = (props: {
       } else {
         toast.info('Candidature rejetée!')
       }
+      utils.candidature.details.refetch()
+
       setVisible(false)
     },
   })
@@ -224,12 +227,16 @@ export const CVDetails = (props: {
                 <button className="btn btn-error mt-4" onClick={() => setVisible(true)}>
                   Refuser
                 </button>
-                <button
-                  className={`btn btn-success mt-4`}
-                  onClick={() => addReview({ id: candidature.id || '', approved: true })}
-                >
-                  Valider
-                </button>
+                {!candidature.ReviewRequest?.approved && (
+                  <button
+                    className={`btn btn-success mt-4`}
+                    onClick={() =>
+                      addReview({ id: candidature.id || '', approved: true })
+                    }
+                  >
+                    Valider
+                  </button>
+                )}
               </>
             )}
 
