@@ -9,10 +9,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
   const isLoggedIn = !!data?.user?.email
   const isPartner = isUserPartner(data?.user.role)
   const isReviewer = isUserReviewer(data?.user.role)
-  const { data: candidature } = trpc.candidature.findByEmail.useQuery(undefined, {
-    refetchOnMount: false,
-    refetchInterval: 100000,
-  })
+  const { data: candidature } = trpc.candidature.findByEmail.useQuery()
 
   const isAdmin = data?.user?.role === 'ADMIN'
   const [visible, setVisible] = useState<boolean>(false)
