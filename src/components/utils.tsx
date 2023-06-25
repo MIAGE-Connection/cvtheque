@@ -1,4 +1,4 @@
-import { CompetenceType } from '@prisma/client'
+import { CandidatureKind, CompetenceType } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
@@ -230,6 +230,7 @@ const getFilteredCandidatures = (
   candidatures: Candidature[],
   search: string,
   competences: string[],
+  contractType?: string,
 ) => {
   const filteredCandidatures = candidatures.filter((candidature) => {
     const searchLower = search.toLowerCase()
@@ -240,13 +241,15 @@ const getFilteredCandidatures = (
     const isInCompetencesType = competences.length
       ? candidature.Competences?.some((c) => competences.includes(c.type))
       : true
+    const isInContractType = contractType ? candidature.kind === contractType : true
 
     return (
       (fullName.toLowerCase().includes(searchLower) ||
         title?.toLowerCase().includes(searchLower) ||
         competencesString?.toLowerCase().includes(searchLower) ||
         city?.toLowerCase().includes(searchLower)) &&
-      isInCompetencesType
+      isInCompetencesType &&
+      isInContractType
     )
   })
 
@@ -256,8 +259,14 @@ const getFilteredCandidatures = (
 export const useFilteredCandidatures = (candidatures: Candidature[]) => {
   const [search, setSearch] = useState('')
   const [competences, setCompetences] = useState<CompetenceType[]>([])
+  const [contractType, setContractType] = useState<CandidatureKind>()
 
-  const filteredCandidatures = getFilteredCandidatures(candidatures, search, competences)
+  const filteredCandidatures = getFilteredCandidatures(
+    candidatures,
+    search,
+    competences,
+    contractType,
+  )
 
   return {
     filteredCandidatures,
@@ -265,6 +274,8 @@ export const useFilteredCandidatures = (candidatures: Candidature[]) => {
     setSearch,
     competences,
     setCompetences,
+    contractType,
+    setContractType,
   }
 }
 

@@ -1,4 +1,4 @@
-import { CompetenceType } from '@prisma/client'
+import { CandidatureKind, CompetenceType } from '@prisma/client'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { getCompetencesByType, getSelectValue } from 'utils/utils'
@@ -21,8 +21,15 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
 
   const [visible, setVisible] = useState(false)
 
-  const { search, competences, filteredCandidatures, setCompetences, setSearch } =
-    useFilteredCandidatures(candidatures)
+  const {
+    search,
+    competences,
+    filteredCandidatures,
+    setCompetences,
+    setSearch,
+    contractType,
+    setContractType,
+  } = useFilteredCandidatures(candidatures)
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -48,7 +55,28 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="space-y-2 w-2/3">
+        <div className="space-y-2 w-1/3">
+          <p className="text-mc">Contrat</p>
+
+          <select
+            className="select select-bordered w-full"
+            value={contractType}
+            onChange={(e) => setContractType(e.target.value as CandidatureKind)}
+          >
+            {Object.values(CandidatureKind).map((kind) => (
+              <option key={kind} value={kind}>
+                {
+                  {
+                    CDI: 'CDI',
+                    ALTERNANCE: 'Alternance',
+                    STAGE: 'Stage',
+                  }[kind]
+                }
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="space-y-2 w-1/3">
           <p className="text-mc">Types de compétences</p>
           <div
             className="input input-bordered w-full grid grid-cols-1 grid-flow-col items-center justify-between"

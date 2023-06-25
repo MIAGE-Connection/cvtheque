@@ -69,6 +69,7 @@ export const reviewRouter = router({
         title: true,
         city: true,
         email: true,
+        kind: true,
         ReviewRequest: {
           select: {
             id: true,
