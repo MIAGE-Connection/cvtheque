@@ -233,10 +233,12 @@ const getFilteredCandidatures = (
   contractType?: string,
 ) => {
   const filteredCandidatures = candidatures.filter((candidature) => {
-    const searchLower = search.toLowerCase()
-    const fullName = `${candidature.firstName} ${candidature.lastName}`
-    const title = candidature.title
-    const city = candidature.city
+    const searchLower = search
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+    const title = candidature.title?.normalize('NFD').replace(/\p{Diacritic}/gu, '')
+    const city = candidature.city?.normalize('NFD').replace(/\p{Diacritic}/gu, '')
     const competencesString = candidature.Competences?.map((c) => c.type).join(' ')
     const isInCompetencesType = competences.length
       ? candidature.Competences?.some((c) => competences.includes(c.type))
@@ -244,8 +246,7 @@ const getFilteredCandidatures = (
     const isInContractType = contractType ? candidature.kind === contractType : true
 
     return (
-      (fullName.toLowerCase().includes(searchLower) ||
-        title?.toLowerCase().includes(searchLower) ||
+      (title?.toLowerCase().includes(searchLower) ||
         competencesString?.toLowerCase().includes(searchLower) ||
         city?.toLowerCase().includes(searchLower)) &&
       isInCompetencesType &&
