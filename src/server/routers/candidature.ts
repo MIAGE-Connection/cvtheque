@@ -153,6 +153,7 @@ export const candidatureRouter = router({
         })
         return candidature
       }
+
       const isReviewer = isUserReviewer(role)
 
       const candidature = await prisma.candidature.update({
