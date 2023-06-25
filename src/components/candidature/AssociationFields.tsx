@@ -81,8 +81,8 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
               append({
                 name: '',
                 missions: [{ mission: '' }],
-                startAt: dateToInputDate(new Date()) || new Date(),
-                endAt: new Date(),
+                startAt: dateToInputDate(new Date()) || '',
+                endAt: null,
               })
             }}
             type="button"

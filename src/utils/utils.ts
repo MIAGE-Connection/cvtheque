@@ -75,7 +75,7 @@ export function dateToInputDate(date?: Maybe<Date>) {
   if (!date || !isValidDate(date)) {
     return undefined
   }
-  return date.toJSON().slice(0, 10) as unknown as Date
+  return date.toJSON().slice(0, 10) as unknown as string
 }
 
 export const getSelectValue = (competence: CompetenceType): string => {

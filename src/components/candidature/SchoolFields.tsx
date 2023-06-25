@@ -88,7 +88,7 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
           onClick={() => {
             addSchool({
               description: '',
-              startAt: dateToInputDate(new Date()) || new Date(),
+              startAt: dateToInputDate(new Date()) || '',
               endAt: null,
               universityName: '',
             })

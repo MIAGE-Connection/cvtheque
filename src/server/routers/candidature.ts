@@ -27,8 +27,8 @@ export const candidatureRouter = router({
         experiences: z
           .array(
             z.object({
-              startAt: z.date(),
-              endAt: z.date().nullish(),
+              startAt: z.string(),
+              endAt: z.string().nullish(),
               companyName: z.string(),
               missions: z.array(
                 z.object({
@@ -41,8 +41,8 @@ export const candidatureRouter = router({
         experiencesAsso: z
           .array(
             z.object({
-              startAt: z.date(),
-              endAt: z.date().nullish(),
+              startAt: z.string(),
+              endAt: z.string().nullish(),
               name: z.string(),
               missions: z.array(
                 z.object({
@@ -55,8 +55,8 @@ export const candidatureRouter = router({
         schools: z
           .array(
             z.object({
-              startAt: z.date(),
-              endAt: z.date().nullish(),
+              startAt: z.string(),
+              endAt: z.string().nullish(),
               universityName: z.string(),
               description: z.string(),
             }),
@@ -94,11 +94,29 @@ export const candidatureRouter = router({
       const { role: role, email: userEmail } = ctx.user
 
       const experiencesFormatted = experiences?.map((e) => {
-        return { ...e, missions: e.missions.map((m) => m.mission) }
+        return {
+          ...e,
+          missions: e.missions.map((m) => m.mission),
+          startAt: new Date(e.startAt),
+          ...(e.endAt && { endAt: new Date(e.endAt) }),
+        }
       })
 
       const experiencesAssoFormatted = experiencesAsso?.map((e) => {
-        return { ...e, missions: e.missions.map((m) => m.mission) }
+        return {
+          ...e,
+          missions: e.missions.map((m) => m.mission),
+          startAt: new Date(e.startAt),
+          ...(e.endAt && { endAt: new Date(e.endAt) }),
+        }
+      })
+
+      const schoolsFormatted = schools?.map((s) => {
+        return {
+          ...s,
+          startAt: new Date(s.startAt),
+          ...(s.endAt && { endAt: new Date(s.endAt) }),
+        }
       })
 
       if (!id) {
@@ -119,7 +137,7 @@ export const candidatureRouter = router({
                 email: userEmail,
               },
             },
-            schools: { createMany: { data: schools || [] } },
+            schools: { createMany: { data: schoolsFormatted || [] } },
             experiences: {
               createMany: {
                 data: experiencesFormatted || [],
@@ -163,7 +181,7 @@ export const candidatureRouter = router({
               data: experiencesAssoFormatted || [],
             },
           },
-          schools: { deleteMany: {}, createMany: { data: schools || [] } },
+          schools: { deleteMany: {}, createMany: { data: schoolsFormatted || [] } },
         },
       })
 

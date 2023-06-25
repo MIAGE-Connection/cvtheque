@@ -30,10 +30,19 @@ export const getAdaptedInput = <T,>(
     | RouterOutput['candidature']['getByUser']['ExperienceAsso'],
 ): T => {
   const values = argument?.map((arg) => {
-    if ('missions' in arg) {
+    const value = {
+      ...arg,
+      startAt: dateToInputDate(new Date(arg.startAt || '')),
+      ...(arg.endAt && arg.endAt.toString() !== ''
+        ? {
+            endAt: dateToInputDate(new Date(arg.endAt || '')),
+          }
+        : { endAt: null }),
+    }
+    if ('missions' in value) {
       return {
-        ...arg,
-        missions: arg.missions.map((mission) => {
+        ...value,
+        missions: value.missions.map((mission) => {
           // Check if mission is an object
           if (typeof mission === 'object') {
             return {
@@ -47,19 +56,10 @@ export const getAdaptedInput = <T,>(
             mission,
           }
         }),
-        startAt: dateToInputDate(arg.startAt),
-        ...(arg.endAt && arg.endAt.toString() !== ''
-          ? { endAt: dateToInputDate(arg.endAt) }
-          : { endAt: null }),
       }
     }
-    return {
-      ...arg,
-      startAt: dateToInputDate(arg.startAt),
-      ...(arg.endAt && arg.endAt.toString() !== ''
-        ? { endAt: dateToInputDate(arg.endAt) }
-        : { endAt: null }),
-    }
+
+    return value
   })
 
   return values as unknown as T

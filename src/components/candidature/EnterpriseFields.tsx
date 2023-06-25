@@ -89,7 +89,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
               append({
                 companyName: '',
                 missions: [{ mission: '' }],
-                startAt: dateToInputDate(new Date()) || new Date(),
+                startAt: dateToInputDate(new Date()) || '',
                 endAt: null,
               })
             }}
