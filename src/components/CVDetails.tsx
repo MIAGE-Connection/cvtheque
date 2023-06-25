@@ -2,11 +2,9 @@ import { ReviewRequest } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useState } from 'react'
-import { toast } from 'react-toastify'
-import { trpc } from 'utils/trpc'
 import { CandidatureCompetencesByType, getSelectValue, isUserReviewer } from 'utils/utils'
 import Modal from './Modal'
-import { AddCandidatureInput } from './utils'
+import { AddCandidatureInput, useAskReview } from './utils'
 
 export const CVDetails = (props: {
   candidature?:
@@ -18,29 +16,18 @@ export const CVDetails = (props: {
   size: 'full' | 'center'
   showButton?: boolean
 }) => {
-  const utils = trpc.useContext()
-  const { candidature, size, showButton } = props
-  const isOwner = candidature?.isOwner
   const { data: session } = useSession()
-  const { mutate: addReview } = trpc.review.save.useMutation({
-    onSuccess: (candidature) => {
-      if (candidature.approved) {
-        toast.success('Candidature approuvée!')
-      } else {
-        toast.info('Candidature rejetée!')
-      }
-      utils.candidature.details.refetch()
-
-      setVisible(false)
-    },
-  })
-
+  const { candidature, size, showButton } = props
   const [visible, setVisible] = useState(false)
   const [review, setReview] = useState('')
 
+  const { askReview, addReview } = useAskReview(setVisible)
+
+  const isOwner = candidature?.isOwner
   const role = session?.user.role
   const isReviewer = isUserReviewer(role)
   const showEditButtons = isOwner || isReviewer
+
   return (
     <div className="mt-4">
       <div className="flex justify-center overflow-x-scroll">
@@ -228,7 +215,7 @@ export const CVDetails = (props: {
       {showEditButtons && showButton && (
         <div className="flex justify-end mb-4">
           <div className="flex space-x-4">
-            {isReviewer && (
+            {isReviewer && candidature?.ReviewRequest && (
               <>
                 <button className="btn btn-error mt-4" onClick={() => setVisible(true)}>
                   Refuser
@@ -237,7 +224,7 @@ export const CVDetails = (props: {
                   <button
                     className={`btn btn-success mt-4`}
                     onClick={() =>
-                      addReview({ id: candidature?.id || '', approved: true })
+                      addReview?.({ id: candidature?.id || '', approved: true })
                     }
                   >
                     Valider
@@ -245,7 +232,14 @@ export const CVDetails = (props: {
                 )}
               </>
             )}
-
+            {candidature && !candidature?.ReviewRequest && (
+              <button
+                onClick={() => askReview({ id: candidature?.id || '' })}
+                className="btn btn-primary mt-4"
+              >
+                Demander la vérification
+              </button>
+            )}
             <Link href={`/cv/${candidature?.id}`}>
               <button className="btn btn-primary mt-4">Éditer</button>
             </Link>
@@ -282,7 +276,7 @@ export const CVDetails = (props: {
           <button
             className={`btn btn-error`}
             onClick={() =>
-              addReview({
+              addReview?.({
                 id: candidature?.id || '',
                 approved: false,
                 description: review,

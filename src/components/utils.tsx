@@ -15,6 +15,8 @@ export type AddCandidatureInput = RouterInput['candidature']['add'] & {
   userEmail: string
 }
 
+export type Candidature = Partial<RouterOutput['candidature']['list'][number]>
+
 /**
  * @description get the same array with startAt and endAt as Date
  * @param argument array of experiences, schools or experiencesAsso
@@ -224,8 +226,6 @@ export const useCandidatureForm = ({
   }
 }
 
-export type Candidature = Partial<RouterOutput['candidature']['list'][number]>
-
 const getFilteredCandidatures = (
   candidatures: Candidature[],
   search: string,
@@ -265,5 +265,44 @@ export const useFilteredCandidatures = (candidatures: Candidature[]) => {
     setSearch,
     competences,
     setCompetences,
+  }
+}
+
+export const useAskReview = (setVisible?: Dispatch<SetStateAction<boolean>>) => {
+  const utils = trpc.useContext()
+
+  const { mutate: askReview } = trpc.review.create.useMutation({
+    onSuccess: () => {
+      toast.success('Vérification de la candidature demandée!')
+
+      utils.candidature['details'].refetch()
+      utils.candidature['getByUser'].refetch()
+    },
+  })
+
+  if (!setVisible) {
+    return {
+      askReview,
+    }
+  }
+
+  const { mutate: addReview } = trpc.review.save.useMutation({
+    onSuccess: (candidature) => {
+      if (candidature.approved) {
+        toast.success('Candidature approuvée!')
+      } else {
+        toast.info('Candidature rejetée!')
+      }
+
+      utils.candidature['details'].refetch()
+      utils.candidature['getByUser'].refetch()
+
+      setVisible(false)
+    },
+  })
+
+  return {
+    askReview,
+    addReview,
   }
 }

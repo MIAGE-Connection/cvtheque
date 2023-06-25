@@ -4,13 +4,8 @@ import Link from 'next/link'
 import { trpc } from 'utils/trpc'
 
 export const StudentHomePage: React.FC = () => {
-  const { data: candidature, isLoading, refetch } = trpc.candidature.getByUser.useQuery()
+  const { data: candidature, isLoading } = trpc.candidature.getByUser.useQuery()
 
-  const { mutate: createCandidature } = trpc.review.create.useMutation({
-    onSuccess: () => {
-      refetch()
-    },
-  })
   const cvExist = !!candidature?.id
 
   return (
@@ -24,14 +19,6 @@ export const StudentHomePage: React.FC = () => {
           <p className="font-bold text-3xl link">
             <Link href={`list/${candidature.id}`}>Mon CV</Link>
           </p>
-          {candidature.reviewState === 'none' && (
-            <button
-              className="btn btn-primary"
-              onClick={() => createCandidature({ id: candidature.id })}
-            >
-              Demander une vérification
-            </button>
-          )}
           {candidature.reviewState === 'pending' && (
             <div className="btn btn-info cursor-default">En attente de vérification</div>
           )}
