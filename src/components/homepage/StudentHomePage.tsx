@@ -1,4 +1,5 @@
 import { CVDetails } from 'components/CVDetails'
+import { getAdaptedCandidature } from 'components/utils'
 import Link from 'next/link'
 import { trpc } from 'utils/trpc'
 
@@ -50,16 +51,16 @@ export const StudentHomePage: React.FC = () => {
         </div>
       )}
       {isLoading ? (
-        <CVDetails size="center" candidature={{}} />
+        <CVDetails size="center" />
       ) : (
         <div>
-          <CVDetails
-            size="center"
-            candidature={{
-              ...candidature,
-            }}
-            showButton={true}
-          />
+          {candidature && (
+            <CVDetails
+              size="center"
+              candidature={getAdaptedCandidature(candidature)}
+              showButton={true}
+            />
+          )}
         </div>
       )}
     </div>

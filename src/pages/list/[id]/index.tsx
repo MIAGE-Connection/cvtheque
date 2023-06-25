@@ -1,5 +1,6 @@
 import { CVDetails } from 'components/CVDetails'
 import Spin from 'components/Spin'
+import { getAdaptedCandidature } from 'components/utils'
 import { useRouter } from 'next/router'
 import { NextPageWithLayout } from 'pages/_app'
 import { trpc } from 'utils/trpc'
@@ -16,7 +17,11 @@ const CV: NextPageWithLayout = () => {
         <Spin />
       ) : (
         candidature && (
-          <CVDetails candidature={candidature} size="center" showButton={true} />
+          <CVDetails
+            candidature={getAdaptedCandidature(candidature)}
+            size="center"
+            showButton={true}
+          />
         )
       )}
     </>

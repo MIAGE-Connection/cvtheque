@@ -235,7 +235,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
           onChange={() => setChecked((prev) => !prev)}
         />
 
-        <div className="fixed hidden md:block top-0 left-0 z-20 w-9/12 h-full transition-all duration-500 transform -translate-x-full bg-white shadow-lg peer-checked:translate-x-0">
+        <div className="fixed hidden overflow-scroll md:block top-0 left-0 z-20 w-9/12 h-full transition-all duration-500 transform -translate-x-full bg-white shadow-lg peer-checked:translate-x-0">
           <div className="px-6 py-4">
             <h2 className="text-lg font-semibold">Prévisualition</h2>
             {candidature && (

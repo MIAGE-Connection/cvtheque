@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { RouterInput, RouterOutput, trpc } from 'utils/trpc'
+import { dateToInputDate } from 'utils/utils'
 
 export type Props = {
   initialValues?: AddCandidatureInput
@@ -17,25 +18,78 @@ export type AddCandidatureInput = RouterInput['candidature']['add'] & {
 /**
  * @description get the same array with startAt and endAt as Date
  * @param argument array of experiences, schools or experiencesAsso
- * @returns the same array with startAt and endAt as Date
+ * @returns the same array with startAt and endAt as Date and missions as object of mission
  */
 export const getAdaptedInput = <T,>(
   argument:
     | AddCandidatureInput['experiences']
     | AddCandidatureInput['schools']
-    | AddCandidatureInput['experiencesAsso'],
+    | AddCandidatureInput['experiencesAsso']
+    | RouterOutput['candidature']['getByUser']['experiences']
+    | RouterOutput['candidature']['getByUser']['schools']
+    | RouterOutput['candidature']['getByUser']['ExperienceAsso'],
 ): T => {
   const values = argument?.map((arg) => {
+    if ('missions' in arg) {
+      return {
+        ...arg,
+        missions: arg.missions.map((mission) => {
+          // Check if mission is an object
+          if (typeof mission === 'object') {
+            return {
+              ...mission,
+            }
+          }
+
+          // If mission is a string, return it as an object
+
+          return {
+            mission,
+          }
+        }),
+        startAt: dateToInputDate(arg.startAt),
+        ...(arg.endAt && arg.endAt.toString() !== ''
+          ? { endAt: dateToInputDate(arg.endAt) }
+          : { endAt: null }),
+      }
+    }
     return {
       ...arg,
-      startAt: new Date(arg.startAt),
+      startAt: dateToInputDate(arg.startAt),
       ...(arg.endAt && arg.endAt.toString() !== ''
-        ? { endAt: new Date(arg.endAt) }
+        ? { endAt: dateToInputDate(arg.endAt) }
         : { endAt: null }),
     }
   })
 
   return values as unknown as T
+}
+
+/**
+ * Return the candidature adapted to the details view
+ * @param candidature the candidature to adapt, coming from 2 context: getByUser or details
+ * @returns Adapter Candidature for the details view
+ */
+export const getAdaptedCandidature = (
+  candidature:
+    | RouterOutput['candidature']['getByUser']
+    | RouterOutput['candidature']['details'],
+): AddCandidatureInput => {
+  const experiences = getAdaptedInput<AddCandidatureInput['experiences']>(
+    candidature.experiences,
+  )
+  const experiencesAsso = getAdaptedInput<AddCandidatureInput['experiencesAsso']>(
+    candidature.ExperienceAsso,
+  )
+  const schools = getAdaptedInput<AddCandidatureInput['schools']>(candidature.schools)
+  return {
+    ...candidature,
+    userEmail: '',
+    email: 'mail@preview.com',
+    experiences: experiences,
+    experiencesAsso: experiencesAsso,
+    schools: schools,
+  }
 }
 
 /**
@@ -172,7 +226,7 @@ export const useCandidatureForm = ({
 
 export type Candidature = Partial<RouterOutput['candidature']['list'][number]>
 
-export const getFilteredCandidatures = (
+const getFilteredCandidatures = (
   candidatures: Candidature[],
   search: string,
   competences: string[],

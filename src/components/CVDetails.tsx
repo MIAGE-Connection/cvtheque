@@ -9,17 +9,18 @@ import Modal from './Modal'
 import { AddCandidatureInput } from './utils'
 
 export const CVDetails = (props: {
-  candidature: AddCandidatureInput & {
-    isOwner?: boolean
-    ReviewRequest?: ReviewRequest
-    competenceByType?: CandidatureCompetencesByType[]
-  }
+  candidature?:
+    | AddCandidatureInput & {
+        isOwner?: boolean
+        ReviewRequest?: ReviewRequest | null
+        competenceByType?: CandidatureCompetencesByType[]
+      }
   size: 'full' | 'center'
   showButton?: boolean
 }) => {
   const utils = trpc.useContext()
   const { candidature, size, showButton } = props
-  const { isOwner } = candidature
+  const isOwner = candidature?.isOwner
   const { data: session } = useSession()
   const { mutate: addReview } = trpc.review.save.useMutation({
     onSuccess: (candidature) => {
@@ -41,8 +42,8 @@ export const CVDetails = (props: {
   const isReviewer = isUserReviewer(role)
   const showEditButtons = isOwner || isReviewer
   return (
-    <div className=" mt-4">
-      <div className="flex justify-center">
+    <div className="mt-4">
+      <div className="flex justify-center overflow-x-scroll">
         <div
           className={`p-4 md:p-8 border rounded-xl ${
             size === 'full' ? 'w-full' : 'w-full xl:w-4/6'
@@ -65,7 +66,7 @@ export const CVDetails = (props: {
             <div>
               <p className="text-2xl font-semibold text-mc">Ville</p>
               <p className="text-lg">{candidature?.city}</p>
-              {candidature.remote ? (
+              {candidature?.remote ? (
                 <p className="text-lg text-gray-500">Ouvert au télétravail</p>
               ) : (
                 <></>
@@ -145,7 +146,7 @@ export const CVDetails = (props: {
                 })}
               </div>
             </div>
-            {candidature.experiencesAsso?.length ? (
+            {candidature?.experiencesAsso?.length ? (
               <div>
                 <p className="text-2xl text-mc">Associations</p>
                 <div>
@@ -213,7 +214,7 @@ export const CVDetails = (props: {
                 })}
               </div>
             </div>
-            {candidature.passions?.length ? (
+            {candidature?.passions?.length ? (
               <div>
                 <p className="text-2xl text-mc">Loisirs & Activités</p>
                 <div>{candidature.passions}</div>
@@ -232,11 +233,11 @@ export const CVDetails = (props: {
                 <button className="btn btn-error mt-4" onClick={() => setVisible(true)}>
                   Refuser
                 </button>
-                {!candidature.ReviewRequest?.approved && (
+                {!candidature?.ReviewRequest?.approved && (
                   <button
                     className={`btn btn-success mt-4`}
                     onClick={() =>
-                      addReview({ id: candidature.id || '', approved: true })
+                      addReview({ id: candidature?.id || '', approved: true })
                     }
                   >
                     Valider
@@ -245,13 +246,13 @@ export const CVDetails = (props: {
               </>
             )}
 
-            <Link href={`/cv/${candidature.id}`}>
+            <Link href={`/cv/${candidature?.id}`}>
               <button className="btn btn-primary mt-4">Éditer</button>
             </Link>
           </div>
         </div>
       )}
-      {showEditButtons && candidature.ReviewRequest?.description && (
+      {showEditButtons && candidature?.ReviewRequest?.description && (
         <div className="flex justify-center">
           <div className="border rounded-xl p-8 w-full xl:w-4/6">
             <p className="text-mc font-bold text-xl ">
@@ -282,7 +283,7 @@ export const CVDetails = (props: {
             className={`btn btn-error`}
             onClick={() =>
               addReview({
-                id: candidature.id || '',
+                id: candidature?.id || '',
                 approved: false,
                 description: review,
               })
