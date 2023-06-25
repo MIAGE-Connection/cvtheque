@@ -2,7 +2,7 @@ import { CandidatureKind, CompetenceType, Event } from '@prisma/client'
 import { prisma } from 'server/prisma'
 import { getCompetencesByType, isUserReviewer } from 'utils/utils'
 import { z } from 'zod'
-import { authedProcedure, publicProcedure, router } from '../trpc'
+import { authedPartnerProcedure, authedProcedure, router } from '../trpc'
 import { eventService } from './events/events.service'
 
 export const candidatureRouter = router({
@@ -206,7 +206,7 @@ export const candidatureRouter = router({
 
       return candidature
     }),
-  list: publicProcedure.query(async () => {
+  list: authedPartnerProcedure.query(async () => {
     const candidatures = await prisma.candidature.findMany({
       include: {
         Competences: true,

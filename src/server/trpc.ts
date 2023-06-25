@@ -11,7 +11,7 @@
 import { Context } from './context'
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
-import { isUserReviewer } from 'utils/utils'
+import { isUserPartner, isUserReviewer } from 'utils/utils'
 
 const t = initTRPC.context<Context>().create({
   /**
@@ -88,6 +88,28 @@ const isReviewer = middleware(({ next, ctx }) => {
   })
 })
 
+const isPartner = middleware(({ next, ctx }) => {
+  const user = ctx.session?.user
+
+  if (!user) {
+    throw new TRPCError({ code: 'FORBIDDEN' })
+  }
+
+  if (!isUserPartner(user?.role)) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' })
+  }
+
+  return next({
+    ctx: {
+      user: {
+        ...user,
+        name: user.name,
+        email: user.email,
+      },
+    },
+  })
+})
+
 const isAdmin = middleware(({ next, ctx }) => {
   const user = ctx.session?.user
 
@@ -107,8 +129,8 @@ const isAdmin = middleware(({ next, ctx }) => {
 })
 
 export const authedAdminProcedure = t.procedure.use(isAuthed).use(isAdmin)
-
 export const authedReviewerProcedure = t.procedure.use(isAuthed).use(isReviewer)
+export const authedPartnerProcedure = t.procedure.use(isAuthed).use(isPartner)
 
 /**
  * Protected base procedure
