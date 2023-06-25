@@ -1,8 +1,8 @@
-import { AddCandidatureInput } from 'components/Candidature'
 import { Control, UseFormRegister, useFieldArray } from 'react-hook-form'
 import { MissionsFields } from './MissionsFields'
 import { Input } from 'components/Input'
 import { dateToInputDate } from 'utils/utils'
+import { AddCandidatureInput } from 'components/utils'
 
 export type CommonFormProps = {
   register: UseFormRegister<AddCandidatureInput>

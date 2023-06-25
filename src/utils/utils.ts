@@ -1,7 +1,7 @@
 import { CompetenceType, Competences, Role } from '@prisma/client'
 import { Maybe } from '@trpc/server'
 
-type CandidatureByType = {
+export type CandidatureCompetencesByType = {
   type: CompetenceType
   descriptions: string[]
 }
@@ -44,8 +44,8 @@ export const isUserPartner = (role?: Role) =>
  **/
 export const getCompetencesByType = (
   competences: Pick<Competences, 'description' | 'type'>[],
-): CandidatureByType[] => {
-  const competencesByType: CandidatureByType[] = []
+): CandidatureCompetencesByType[] => {
+  const competencesByType: CandidatureCompetencesByType[] = []
 
   Object.keys(CompetenceType).forEach((key) => {
     const competenceByType = competences?.filter((c) => c.type === key)

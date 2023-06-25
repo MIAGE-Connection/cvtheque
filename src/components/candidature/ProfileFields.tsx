@@ -1,5 +1,5 @@
-import { AddCandidatureInput } from 'components/Candidature'
 import { Input } from 'components/Input'
+import { AddCandidatureInput } from 'components/utils'
 import { UseFormRegister, useFormContext } from 'react-hook-form'
 
 type ProfileFieldsProps = {

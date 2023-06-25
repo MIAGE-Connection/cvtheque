@@ -1,4 +1,4 @@
-import { AddCandidatureInput } from 'components/Candidature'
+import { AddCandidatureInput } from 'components/utils'
 import { Control, UseFormRegister, useFieldArray } from 'react-hook-form'
 
 type EnterprisFieldsProps = {

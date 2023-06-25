@@ -1,10 +1,6 @@
 import { CVDetails } from 'components/CVDetails'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
-import { RouterInput, trpc } from 'utils/trpc'
+import { useState } from 'react'
+import { FormProvider } from 'react-hook-form'
 import { getCompetencesByType } from 'utils/utils'
 import Modal from './Modal'
 import { AssociationFields } from './candidature/AssociationFields'
@@ -12,15 +8,7 @@ import { EntrepriseFields } from './candidature/EnterpriseFields'
 import { ProfileFields } from './candidature/ProfileFields'
 import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
-import { getAdaptedInput } from './utils'
-
-export type AddCandidatureInput = RouterInput['candidature']['add'] & {
-  userEmail: string
-}
-
-type Props = {
-  initialValues?: AddCandidatureInput
-}
+import { AddCandidatureInput, Props, useCandidatureForm } from './utils'
 
 enum TabType {
   profile = 'profile',
@@ -32,122 +20,24 @@ enum TabType {
 }
 
 const Candidature: React.FC<Props> = ({ initialValues }) => {
-  const { data: session } = useSession()
-  const router = useRouter()
-
   const [checked, setChecked] = useState<boolean>(false)
   const [visible, setVisible] = useState<boolean>(false)
-
-  const isOwner = session?.user?.email === initialValues?.userEmail
-
-  const resolver: Resolver<AddCandidatureInput> = async (values) => {
-    return {
-      values: values.firstName ? values : {},
-      errors: {
-        ...(!values.firstName
-          ? {
-              firstName: {
-                type: 'required',
-                message: 'Veuillez renseignez votre prénom',
-              },
-            }
-          : {}),
-        ...(!values.lastName
-          ? {
-              lastName: {
-                type: 'required',
-                message: 'Veuillez renseignez votre nom',
-              },
-            }
-          : {}),
-        ...(!values.city
-          ? {
-              city: {
-                type: 'required',
-                message: 'Veuillez renseignez votre ville',
-              },
-            }
-          : {}),
-        ...(!values.email
-          ? {
-              email: {
-                type: 'required',
-                message: 'Veuillez renseignez votre email',
-              },
-            }
-          : {}),
-        ...(!values.title
-          ? {
-              title: {
-                type: 'required',
-                message: 'Veuillez donner un titre, ex: Développeur fullstack',
-              },
-            }
-          : {}),
-      },
-    }
-  }
-
-  const methods = useForm<AddCandidatureInput>({
-    resolver,
-    defaultValues: initialValues,
-  })
+  const [candidature, setCandidature] = useState<AddCandidatureInput | undefined>()
+  const [activeTab, setActiveTab] = useState<TabType>(TabType.profile)
 
   const {
     register,
-    reset,
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    errors,
+    isValid,
     getValues,
-  } = methods
-
-  useEffect(() => {
-    reset(initialValues)
-  }, [initialValues, reset])
-
-  const { mutate } = trpc.candidature.add.useMutation({
-    onSuccess: (candidature) => {
-      setVisible(false)
-      if (initialValues) {
-        isOwner
-          ? toast.success('Votre candidature a bien été mise à jour')
-          : toast.success('La candidature a bien été mise à jour')
-        router.push(`/list/${candidature.id}`)
-        return
-      }
-      toast.success(
-        'Votre candidature a bien été sauvegardée. Vous pouvez demander la vérification à tout moment.',
-      )
-      router.push(`/list/${candidature.id}`)
-    },
+    onSubmit,
+    methods,
+  } = useCandidatureForm({
+    initialValues,
+    setVisible,
   })
-
-  const [candidature, setCandidature] = useState<AddCandidatureInput | undefined>()
-
-  const onSubmit: SubmitHandler<AddCandidatureInput> = (data: AddCandidatureInput) => {
-    const experiences = getAdaptedInput<AddCandidatureInput['experiences']>(
-      data.experiences,
-    )
-
-    const experiencesAsso = getAdaptedInput<AddCandidatureInput['experiencesAsso']>(
-      data.experiencesAsso,
-    )
-
-    const schools = getAdaptedInput<AddCandidatureInput['schools']>(data.schools)
-
-    data.experiences = experiences
-    data.schools = schools
-    data.experiencesAsso = experiencesAsso
-
-    if (Object.keys(errors).length > 0) {
-      return
-    }
-
-    mutate(data)
-  }
-
-  const [activeTab, setActiveTab] = useState<TabType>(TabType.profile)
 
   return (
     <>
@@ -336,7 +226,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
           </FormProvider>
         </div>
       </div>
-      <div className="flex ">
+      <div className="flex">
         <input
           type="checkbox"
           id="drawer-toggle"
@@ -351,48 +241,8 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
             {candidature && (
               <CVDetails
                 candidature={{
-                  city: candidature.city,
-                  firstName: candidature.firstName,
-                  lastName: candidature.lastName,
-                  kind: candidature.kind,
-                  title: candidature.title,
-                  passions: candidature.passions,
-                  mobile: candidature.mobile,
-                  experiences: candidature.experiences?.map((experience) => ({
-                    ...experience,
-                    missions: experience.missions.map((m) => m.mission),
-                    startAt: experience.startAt
-                      ? new Date(experience.startAt)
-                      : new Date(),
-                    endAt: experience.endAt ? new Date(experience.endAt) : new Date(),
-                    id: '',
-                    candidatureId: '',
-                  })),
-                  ExperienceAsso: candidature.experiencesAsso?.map((experience) => ({
-                    ...experience,
-                    missions: experience.missions.map((m) => m.mission),
-                    startAt: experience.startAt
-                      ? new Date(experience.startAt)
-                      : new Date(),
-                    endAt: experience.endAt ? new Date(experience.endAt) : new Date(),
-                    id: '',
-                    candidatureId: '',
-                  })),
-                  schools: candidature.schools?.map((school) => ({
-                    ...school,
-                    startAt: school.startAt ? new Date(school.startAt) : new Date(),
-                    endAt: school.endAt ? new Date(school.endAt) : new Date(),
-                    universityName: school.universityName,
-                    id: '',
-                    candidatureId: '',
-                  })),
+                  ...candidature,
                   competenceByType: getCompetencesByType(candidature.competences || []),
-                  Competences: candidature.competences?.map((competence) => ({
-                    ...competence,
-                    id: '',
-                    candidatureId: '',
-                  })),
-                  email: 'mail@preview.com',
                 }}
                 size="full"
                 showButton={false}

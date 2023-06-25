@@ -1,15 +1,19 @@
+import { ReviewRequest } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { RouterOutput, trpc } from 'utils/trpc'
-import { getSelectValue, isUserReviewer } from 'utils/utils'
+import { trpc } from 'utils/trpc'
+import { CandidatureCompetencesByType, getSelectValue, isUserReviewer } from 'utils/utils'
 import Modal from './Modal'
-
-type Candidature = Partial<RouterOutput['candidature']['details']>
+import { AddCandidatureInput } from './utils'
 
 export const CVDetails = (props: {
-  candidature: Candidature
+  candidature: AddCandidatureInput & {
+    isOwner?: boolean
+    ReviewRequest?: ReviewRequest
+    competenceByType?: CandidatureCompetencesByType[]
+  }
   size: 'full' | 'center'
   showButton?: boolean
 }) => {
@@ -79,13 +83,13 @@ export const CVDetails = (props: {
                         </div>
                         <div className="flex space-x-4 items-center">
                           <div className="text-sm">
-                            {experience.startAt?.toLocaleDateString()}
+                            {new Date(experience.startAt).toLocaleDateString()}
                           </div>
                           {experience.endAt && (
                             <>
                               <p>-</p>
                               <div className="text-sm">
-                                {experience.endAt.toLocaleDateString()}
+                                {new Date(experience.endAt).toLocaleDateString()}
                               </div>
                             </>
                           )}
@@ -95,10 +99,10 @@ export const CVDetails = (props: {
                         <div className="mt-2">
                           <ul className="list-disc ml-4">
                             {experience.missions?.map((mission, j) => {
-                              return mission === '' ? (
+                              return mission.mission === '' ? (
                                 <></>
                               ) : (
-                                <li key={`${mission}-${j}`}>{mission}</li>
+                                <li key={`${mission}-${j}`}>{mission.mission}</li>
                               )
                             })}
                           </ul>
@@ -111,24 +115,54 @@ export const CVDetails = (props: {
                 })}
               </div>
             </div>
-            {candidature.ExperienceAsso?.length ? (
+            <div>
+              <p className="text-2xl text-mc">Parcours scolaire</p>
+              <div>
+                {candidature?.schools?.map((school, i) => {
+                  return (
+                    <div key={i} className="mt-4">
+                      <div className="flex justify-between">
+                        <div className="font-semibold text-lg">
+                          {school.universityName}
+                        </div>
+                        <div className="flex space-x-4 items-center">
+                          <div className="text-sm">
+                            {new Date(school.startAt).toLocaleDateString()}
+                          </div>
+                          {school.endAt && (
+                            <>
+                              <p>-</p>
+                              <div className="text-sm">
+                                {new Date(school.endAt).toLocaleDateString()}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="mt-2">{school.description}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            {candidature.experiencesAsso?.length ? (
               <div>
                 <p className="text-2xl text-mc">Associations</p>
                 <div>
-                  {candidature.ExperienceAsso.map((association, i) => {
+                  {candidature.experiencesAsso.map((association, i) => {
                     return (
                       <div key={i} className="mt-4">
                         <div className="flex justify-between">
                           <div className="font-semibold text-lg">{association.name}</div>
                           <div className="flex space-x-4 items-center">
                             <div className="text-sm">
-                              {association.startAt?.toLocaleDateString()}
+                              {new Date(association.startAt).toLocaleDateString()}
                             </div>
                             {association.endAt && (
                               <>
                                 <p>-</p>
                                 <div className="text-sm">
-                                  {association.endAt.toLocaleDateString()}
+                                  {new Date(association.endAt).toLocaleDateString()}
                                 </div>
                               </>
                             )}
@@ -138,10 +172,10 @@ export const CVDetails = (props: {
                           <div className="mt-2">
                             <ul className="list-disc ml-4">
                               {association.missions?.map((mission, j) => {
-                                return mission === '' ? (
+                                return mission.mission === '' ? (
                                   <></>
                                 ) : (
-                                  <li key={`asso-${mission}-${j}`}>{mission}</li>
+                                  <li key={`asso-${mission}-${j}`}>{mission.mission}</li>
                                 )
                               })}
                             </ul>
@@ -157,36 +191,7 @@ export const CVDetails = (props: {
             ) : (
               <></>
             )}
-            <div>
-              <p className="text-2xl text-mc">Parcours scolaire</p>
-              <div>
-                {candidature?.schools?.map((school, i) => {
-                  return (
-                    <div key={i} className="mt-4">
-                      <div className="flex justify-between">
-                        <div className="font-semibold text-lg">
-                          {school.universityName}
-                        </div>
-                        <div className="flex space-x-4 items-center">
-                          <div className="text-sm">
-                            {school.startAt?.toLocaleDateString()}
-                          </div>
-                          {school.endAt && (
-                            <>
-                              <p>-</p>
-                              <div className="text-sm">
-                                {school.endAt.toLocaleDateString()}
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      <div className="mt-2">{school.description}</div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
+
             <div>
               <p className="text-2xl text-mc">Compétences</p>
               <div className="md:grid md:grid-cols-2">
