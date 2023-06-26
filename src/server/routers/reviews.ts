@@ -1,6 +1,7 @@
 import { prisma } from 'server/prisma'
 import { z } from 'zod'
 import { authedProcedure, authedReviewerProcedure, router } from '../trpc'
+import { mailService } from './mail/mail.service'
 
 export const reviewRouter = router({
   create: authedProcedure
@@ -17,6 +18,20 @@ export const reviewRouter = router({
             },
           },
         },
+        include: {
+          Candidature: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      })
+
+      mailService.sendCandidatureToReviewEmail({
+        candidatureId: reviewRequest.Candidature[0].id,
+        fullname: `${reviewRequest.Candidature[0].firstName} ${reviewRequest.Candidature[0].lastName}`,
       })
 
       return reviewRequest

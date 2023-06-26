@@ -33,6 +33,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# mail
+.react-email
+
 *.db
 *.db-journal
 .env
