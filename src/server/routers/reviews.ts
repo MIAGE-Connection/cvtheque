@@ -77,6 +77,7 @@ export const reviewRouter = router({
             reviewer: true,
           },
         },
+        Competences: true,
       },
     })
 

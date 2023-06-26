@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { CandidatureCompetencesByType, getSelectValue, isUserReviewer } from 'utils/utils'
 import Modal from './Modal'
 import { AddCandidatureInput, useAskReview } from './utils'
+import { v4 as uuidv4 } from 'uuid'
 
 export const CVDetails = (props: {
   candidature?:
@@ -62,9 +63,9 @@ export const CVDetails = (props: {
             <div>
               <p className="text-2xl text-mc">Éxperiences</p>
               <div>
-                {candidature?.experiences?.map((experience, i) => {
+                {candidature?.experiences?.map((experience) => {
                   return (
-                    <div key={i} className="mt-4">
+                    <div key={uuidv4()} className="mt-4">
                       <div className="flex justify-between">
                         <div className="font-semibold text-lg">
                           {experience.companyName}
@@ -86,11 +87,11 @@ export const CVDetails = (props: {
                       {experience.missions.length ? (
                         <div className="mt-2">
                           <ul className="list-disc ml-4">
-                            {experience.missions?.map((mission, j) => {
+                            {experience.missions?.map((mission) => {
                               return mission.mission === '' ? (
-                                <></>
+                                <p key={uuidv4()}></p>
                               ) : (
-                                <li key={`${mission}-${j}`}>{mission.mission}</li>
+                                <li key={uuidv4()}>{mission.mission}</li>
                               )
                             })}
                           </ul>
@@ -106,9 +107,9 @@ export const CVDetails = (props: {
             <div>
               <p className="text-2xl text-mc">Parcours scolaire</p>
               <div>
-                {candidature?.schools?.map((school, i) => {
+                {candidature?.schools?.map((school) => {
                   return (
-                    <div key={i} className="mt-4">
+                    <div key={uuidv4()} className="mt-4">
                       <div className="flex justify-between">
                         <div className="font-semibold text-lg">
                           {school.universityName}
@@ -137,9 +138,9 @@ export const CVDetails = (props: {
               <div>
                 <p className="text-2xl text-mc">Associations</p>
                 <div>
-                  {candidature.experiencesAsso.map((association, i) => {
+                  {candidature.experiencesAsso.map((association) => {
                     return (
-                      <div key={i} className="mt-4">
+                      <div key={uuidv4()} className="mt-4">
                         <div className="flex justify-between">
                           <div className="font-semibold text-lg">{association.name}</div>
                           <div className="flex space-x-4 items-center">
@@ -159,11 +160,11 @@ export const CVDetails = (props: {
                         {association.missions.length ? (
                           <div className="mt-2">
                             <ul className="list-disc ml-4">
-                              {association.missions?.map((mission, j) => {
+                              {association.missions?.map((mission) => {
                                 return mission.mission === '' ? (
-                                  <></>
+                                  <p key={uuidv4()}></p>
                                 ) : (
-                                  <li key={`asso-${mission}-${j}`}>{mission.mission}</li>
+                                  <li key={uuidv4()}>{mission.mission}</li>
                                 )
                               })}
                             </ul>
@@ -183,16 +184,16 @@ export const CVDetails = (props: {
             <div>
               <p className="text-2xl text-mc">Compétences</p>
               <div className="md:grid md:grid-cols-2">
-                {candidature?.competenceByType?.map((competence, i) => {
+                {candidature?.competenceByType?.map((competence) => {
                   return (
-                    <div key={i} className="mt-4">
+                    <div key={uuidv4()} className="mt-4">
                       <div>
                         <div className="font-semibold text-xl">
                           {getSelectValue(competence.type)}
                         </div>
                         <ul className="list-disc ml-4">
-                          {competence.descriptions.map((description, i) => {
-                            return <li key={`${description}-${i}`}>{description}</li>
+                          {competence.descriptions.map((description) => {
+                            return <li key={uuidv4()}>{description}</li>
                           })}
                         </ul>
                       </div>
