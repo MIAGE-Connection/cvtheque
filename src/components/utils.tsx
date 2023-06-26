@@ -171,7 +171,7 @@ export const useCandidatureForm = ({
 
   const isOwner = session?.user?.email === initialValues?.userEmail
 
-  const { mutate } = trpc.candidature.add.useMutation({
+  const { mutate, isLoading: isSubmitLoading } = trpc.candidature.add.useMutation({
     onSuccess: (candidature) => {
       setVisible(false)
       if (initialValues) {
@@ -223,6 +223,7 @@ export const useCandidatureForm = ({
     getValues,
     methods,
     onSubmit,
+    isSubmitLoading,
   }
 }
 

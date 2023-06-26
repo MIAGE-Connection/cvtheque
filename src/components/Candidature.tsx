@@ -33,6 +33,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     isValid,
     getValues,
     onSubmit,
+    isSubmitLoading,
     methods,
   } = useCandidatureForm({
     initialValues,
@@ -217,7 +218,10 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                   >
                     Annuler
                   </button>
-                  <button className="btn btn-primary" type="submit">
+                  <button className={'btn btn-primary'} type="submit">
+                    <span
+                      className={`${isSubmitLoading ? 'loading loading-spinner' : ''}`}
+                    />
                     {initialValues ? 'Sauvegarder' : 'Déposer la candidature'}
                   </button>
                 </div>
