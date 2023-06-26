@@ -4,6 +4,7 @@ import { trpc } from 'utils/trpc'
 
 const Reviews: React.FC = () => {
   const { data: candidatures, isLoading } = trpc.review.findAll.useQuery()
+  console.log('')
 
   const { old, toReview } = candidatures || { old: [], toReview: [] }
 
