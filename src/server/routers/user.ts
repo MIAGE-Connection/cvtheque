@@ -3,13 +3,22 @@ import { authedAdminProcedure, authedProcedure, router } from '../trpc'
 import { z } from 'zod'
 import { Role } from '@prisma/client'
 export const userRouter = router({
-  findAll: authedAdminProcedure.query(() => {
-    return prisma.user.findMany({
-      orderBy: {
-        role: 'asc',
-      },
-    })
-  }),
+  findAll: authedAdminProcedure
+    .input(
+      z.object({
+        role: z.nativeEnum(Role).optional(),
+      }),
+    )
+    .query(({ input: { role } }) => {
+      return prisma.user.findMany({
+        orderBy: {
+          role: 'asc',
+        },
+        where: {
+          role,
+        },
+      })
+    }),
 
   updateRole: authedAdminProcedure
     .input(

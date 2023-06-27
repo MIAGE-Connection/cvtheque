@@ -2,7 +2,12 @@ import { CandidatureKind, CompetenceType, Event } from '@prisma/client'
 import { prisma } from 'server/prisma'
 import { getCompetencesByType, isUserReviewer } from 'utils/utils'
 import { z } from 'zod'
-import { authedPartnerProcedure, authedProcedure, router } from '../trpc'
+import {
+  authedPartnerProcedure,
+  authedProcedure,
+  authedReviewerProcedure,
+  router,
+} from '../trpc'
 import { eventService } from './events/events.service'
 
 export const candidatureRouter = router({
@@ -346,7 +351,6 @@ export const candidatureRouter = router({
 
     return { candidatureId }
   }),
-
   askReview: authedProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ input }) => {
@@ -365,4 +369,117 @@ export const candidatureRouter = router({
 
       return candidature
     }),
+  stats: authedReviewerProcedure.query(async () => {
+    const candidatures = await prisma.candidature.findMany({
+      include: {
+        ReviewRequest: true,
+      },
+    })
+
+    const stats = candidatures.reduce(
+      (acc, candidature) => {
+        if (candidature.ReviewRequest?.approved) {
+          acc.reviews.approved += 1
+        } else if (candidature.ReviewRequest?.approved === false) {
+          acc.reviews.pending += 1
+        }
+
+        if (
+          candidature.createdAt.getMonth() === new Date().getMonth() &&
+          candidature.createdAt.getFullYear() === new Date().getFullYear()
+        ) {
+          acc.added.thisMonth += 1
+        } else if (
+          candidature.createdAt.getMonth() === new Date().getMonth() - 1 &&
+          candidature.createdAt.getFullYear() === new Date().getFullYear()
+        ) {
+          acc.added.lastMonth += 1
+        }
+        return acc
+      },
+      {
+        total: candidatures.length,
+        reviews: {
+          approved: 0,
+          pending: 0,
+        },
+        added: {
+          thisMonth: 0,
+          lastMonth: 0,
+        },
+      },
+    )
+
+    const statsView = await prisma.events.findMany({
+      where: {
+        event: Event.VIEW,
+      },
+      select: {
+        createdAt: true,
+      },
+    })
+
+    const statsViewByMonth = statsView.reduce(
+      (acc, event) => {
+        if (
+          event.createdAt.getMonth() === new Date().getMonth() &&
+          event.createdAt.getFullYear() === new Date().getFullYear()
+        ) {
+          acc.thisMonth += 1
+        } else if (
+          event.createdAt.getMonth() === new Date().getMonth() - 1 &&
+          event.createdAt.getFullYear() === new Date().getFullYear()
+        ) {
+          acc.lastMonth += 1
+        }
+        return acc
+      },
+      {
+        thisMonth: 0,
+        lastMonth: 0,
+      },
+    )
+
+    const reviewersAndPartners = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            role: 'REVIEWER',
+          },
+          {
+            role: 'PARTNER',
+          },
+        ],
+      },
+      select: {
+        role: true,
+        email: true,
+      },
+    })
+
+    const { reviewers, partners } = reviewersAndPartners.reduce(
+      (acc, user) => {
+        if (user.role === 'REVIEWER') {
+          acc.reviewers?.push(user.email || '')
+        } else if (user.role === 'PARTNER') {
+          acc.partners?.push(user.email || '')
+        }
+        return acc
+      },
+      {
+        reviewers: [] as string[] | undefined,
+        partners: [] as string[] | undefined,
+      },
+    )
+
+    return {
+      reviewers,
+      partners,
+      ...stats,
+      statsView: {
+        total: statsView.length,
+        statsViewByMonth,
+      },
+    }
+  }),
 })

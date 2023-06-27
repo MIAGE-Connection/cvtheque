@@ -1,11 +1,16 @@
 import { Role } from '@prisma/client'
 import Modal from 'components/Modal'
 import Spin from 'components/Spin'
+import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { trpc } from 'utils/trpc'
 
 const Users: React.FC = () => {
-  const { data: users, refetch } = trpc.user.findAll.useQuery()
+  const searchParams = useSearchParams()
+  const search = searchParams.get('search')
+  const { data: users, refetch } = trpc.user.findAll.useQuery({
+    role: search ? (search as Role) : undefined,
+  })
 
   const { mutate: updateRole, isLoading } = trpc.user.updateRole.useMutation({
     onSuccess: () => {
