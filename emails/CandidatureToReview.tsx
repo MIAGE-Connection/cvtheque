@@ -14,15 +14,13 @@ import {
 } from '@react-email/components'
 
 interface CandidatureToReviewEmailProps {
-  fullname?: string
   url?: string
 }
 
 const CandidatureToReview = ({
-  fullname = 'No Name',
   url = 'url not found',
 }: CandidatureToReviewEmailProps) => {
-  const previewText = `Candidature de ${fullname} à corriger`
+  const previewText = 'Validateur, une correction vous attend!'
 
   return (
     <Html>

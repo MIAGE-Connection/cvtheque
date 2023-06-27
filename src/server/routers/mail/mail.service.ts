@@ -18,7 +18,6 @@ const APP_URL = process.env.APP_URL
 const smtpOptions = {
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
-  secure: false,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
@@ -40,7 +39,7 @@ export const mailService = {
   /**
    * Envoi d'un mail à la mailing list de miage-connection des validateurs
    * @param fullname Le prénom-nom du candidat
-   * @param candidatureId L'id de la candidature
+   * @param candidatureId L'id de la candidature pour la redirection
    */
   sendCandidatureToReviewEmail({ fullname, candidatureId }: CandidatureToReviewEmail) {
     sendEmail({
@@ -49,7 +48,6 @@ export const mailService = {
       html: render(
         CandidatureToReview({
           url: `${APP_URL}/list/${candidatureId}`,
-          fullname,
         }),
       ),
     })
