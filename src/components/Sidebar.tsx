@@ -217,7 +217,7 @@ const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
           onChange={() => setVisible((prev) => !prev)}
         />
         <div className="drawer-content flex flex-col">
-          <div className="mt-16 md:mx-16">{children}</div>
+          <div className="mt-16 mx-2 md:mx-16">{children}</div>
           <label htmlFor="my-drawer-2" className="absolute top-2 left-2 cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"

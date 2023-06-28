@@ -12,22 +12,21 @@ const CV: NextPageWithLayout = () => {
     id,
     viewed: true,
   })
+
+  if (!candidature || isLoading) {
+    return <Spin />
+  }
+
   return (
     <>
       <Head>
         <title>{`CV de ${candidature?.firstName} ${candidature?.lastName}`}</title>
       </Head>
-      {isLoading ? (
-        <Spin />
-      ) : (
-        candidature && (
-          <CVDetails
-            candidature={getAdaptedCandidature(candidature)}
-            size="center"
-            showButton={true}
-          />
-        )
-      )}
+      <CVDetails
+        candidature={getAdaptedCandidature(candidature)}
+        size="center"
+        showButton={true}
+      />
     </>
   )
 }

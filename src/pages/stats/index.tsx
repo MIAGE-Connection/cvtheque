@@ -25,7 +25,7 @@ const Stats: React.FC = () => {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Candidatures</h1>
-      <div className="stats shadow stats-vertical lg:stats-horizontal w-full">
+      <div className="stats lg:grid lg:grid-cols-3 shadow stats-vertical lg:stats-horizontal w-full">
         <div className="stat">
           <div className="stat-figure text-primary text-4xl">➕</div>
           <div className="stat-title">Candidature déposées ce mois</div>
@@ -36,7 +36,7 @@ const Stats: React.FC = () => {
           <div className="stat-value text-mc">
             {getPercentageString(added.lastMonth, added.thisMonth)}
           </div>
-          <div className="stat-title">Candidature déposées comparé au mois précédent</div>
+          <div className="stat-title text-ellipsis">Comparé au mois précédent</div>
         </div>
         <div className="stat">
           <div className="stat-figure text-primary text-4xl">📝</div>
@@ -45,7 +45,7 @@ const Stats: React.FC = () => {
         </div>
       </div>
       <h1 className="text-2xl font-bold">Vues</h1>
-      <div className="stats shadow stats-vertical lg:stats-horizontal w-full">
+      <div className="stats lg:grid lg:grid-cols-3 shadow stats-vertical lg:stats-horizontal w-full">
         <div className="stat">
           <div className="stat-figure text-primary text-4xl">➕</div>
           <div className="stat-title">Vues sur les candidatures ce mois</div>

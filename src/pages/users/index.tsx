@@ -24,49 +24,50 @@ const Users: React.FC = () => {
   })
 
   const [visible, setVisible] = useState(false)
+
+  if (isLoading) {
+    return <Spin />
+  }
   return (
     <>
       <h1 className="text-3xl font-bold text-center mb-2">Utilisateurs</h1>
-      {!isLoading ? (
-        <table className="table w-full text-lg">
-          <thead>
-            <tr>
-              <th className="text-xl bg-mc text-white rounded-tl-xl">Email</th>
-              <th className="text-xl bg-mc text-white">Date de création</th>
-              <th className="text-xl bg-mc text-white">Rôle</th>
-              <th className="text-xl bg-mc text-white rounded-tr-xl"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {users?.map((userA) => {
-              return (
-                <tr key={userA.id}>
-                  <td>{userA.email}</td>
-                  <td>{userA.createdAt.toLocaleDateString()}</td>
-                  <td>{userA.role}</td>
+      <table className="table w-full text-lg">
+        <thead>
+          <tr>
+            <th className="text-xl bg-mc text-white rounded-tl-xl">Email</th>
+            <th className="text-xl bg-mc text-white">Date de création</th>
+            <th className="text-xl bg-mc text-white">Rôle</th>
+            <th className="text-xl bg-mc text-white rounded-tr-xl"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {users?.map((userA) => {
+            return (
+              <tr key={userA.id}>
+                <td>{userA.email}</td>
+                <td>{userA.createdAt.toLocaleDateString()}</td>
+                <td>{userA.role}</td>
 
-                  <th className="text-center">
-                    <button
-                      className="btn btn-ghost btn-xs"
-                      onClick={() => {
-                        setUser({
-                          email: userA.email || '',
-                          role: userA.role,
-                        })
-                        setVisible(true)
-                      }}
-                    >
-                      Modifier le rôle
-                    </button>
-                  </th>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      ) : (
-        <Spin />
-      )}
+                <th className="text-center">
+                  <button
+                    className="btn btn-ghost btn-xs"
+                    onClick={() => {
+                      setUser({
+                        email: userA.email || '',
+                        role: userA.role,
+                      })
+                      setVisible(true)
+                    }}
+                  >
+                    Modifier le rôle
+                  </button>
+                </th>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+
       <Modal open={visible}>
         <h3 className="font-bold text-lg">Modifier le rôle</h3>
         <select
