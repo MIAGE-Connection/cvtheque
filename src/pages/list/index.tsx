@@ -12,7 +12,7 @@ const List: React.FC = () => {
   return (
     <div>
       <h1 className="font-bold text-3xl text-center mt-4 text-mc">Liste des CVs</h1>
-      <div className="mt-4 mx-16">
+      <div className="mt-4 lg:mx-16">
         <CandidatureList candidatures={candidatures} />
       </div>
     </div>

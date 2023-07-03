@@ -45,8 +45,8 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
 
   return (
     <>
-      <div className="flex border rounded-xl p-4 mb-4 space-x-4 items-center">
-        <div className="space-y-2 w-1/3">
+      <div className="md:flex border rounded-xl p-4 mb-4 md:space-x-4 items-center">
+        <div className="space-y-2 md:w-1/3">
           <p className="text-mc">Recherche</p>
           <input
             className="input input-bordered w-full"
@@ -55,7 +55,7 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="space-y-2 w-1/3">
+        <div className="space-y-2 md:w-1/3">
           <p className="text-mc">Contrat</p>
 
           <select
@@ -76,7 +76,7 @@ export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
             ))}
           </select>
         </div>
-        <div className="space-y-2 w-1/3">
+        <div className="space-y-2 md:w-1/3">
           <p className="text-mc">Types de compétences</p>
           <div
             className="input input-bordered w-full grid grid-cols-1 grid-flow-col items-center justify-between"
