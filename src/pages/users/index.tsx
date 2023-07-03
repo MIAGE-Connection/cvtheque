@@ -7,10 +7,8 @@ import { trpc } from 'utils/trpc'
 
 const Users: React.FC = () => {
   const searchParams = useSearchParams()
-  const search = searchParams.get('search')
-  const { data: users, refetch } = trpc.user.findAll.useQuery({
-    role: search ? (search as Role) : undefined,
-  })
+  const search = searchParams.get('search') as Role | null
+  const { data: users, refetch } = trpc.user.findAll.useQuery({})
 
   const { mutate: updateRole, isLoading } = trpc.user.updateRole.useMutation({
     onSuccess: () => {
@@ -25,12 +23,74 @@ const Users: React.FC = () => {
 
   const [visible, setVisible] = useState(false)
 
-  if (isLoading) {
+  const [filters, setFilters] = useState<{
+    email: string
+    role: Role | ''
+  }>({
+    email: '',
+    role: search || '',
+  })
+
+  if (isLoading || !users) {
     return <Spin />
   }
+
+  const filteredUsers = users.filter((user) => {
+    const userEmail = user.email?.toLowerCase() || ''
+    const filterEmail = filters.email?.toLowerCase() || ''
+
+    return (
+      (filters.email === '' ? true : userEmail.includes(filterEmail)) &&
+      (filters.role === '' ? true : filters.role === user.role)
+    )
+  })
   return (
     <>
       <h1 className="text-3xl font-bold text-center mb-2">Utilisateurs</h1>
+      <div className="flex border rounded-xl p-4 mb-4 space-x-4 items-center">
+        <div className="space-y-2 w-1/3">
+          <p className="text-mc">Recherche</p>
+          <input
+            className="input input-bordered w-full"
+            type="text"
+            value={filters.email}
+            onChange={(e) =>
+              setFilters((prev) => ({
+                ...prev,
+                email: e.target.value,
+              }))
+            }
+          />
+        </div>
+        <div className="space-y-2 w-full">
+          <p className="text-mc">Contrat</p>
+
+          <select
+            className="select select-bordered w-full"
+            value={filters.role}
+            onChange={(e) =>
+              setFilters((prev) => ({
+                ...prev,
+                role: e.target.value as Role,
+              }))
+            }
+          >
+            <option value="">Tous</option>
+            {Object.values(Role).map((role) => (
+              <option key={role} value={role}>
+                {
+                  {
+                    REVIEWER: 'Validateur',
+                    ADMIN: 'Admin',
+                    PARTNER: 'Partenaire',
+                    USER: 'Utilisateur',
+                  }[role]
+                }
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
       <table className="table w-full text-lg">
         <thead>
           <tr>
@@ -41,7 +101,7 @@ const Users: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {users?.map((userA) => {
+          {filteredUsers.map((userA) => {
             return (
               <tr key={userA.id}>
                 <td>{userA.email}</td>
