@@ -193,7 +193,9 @@ export const CVDetails = (props: {
                         </div>
                         <ul className="list-disc ml-4">
                           {competence.descriptions.map((description) => {
-                            return <li key={uuidv4()}>{description}</li>
+                            return (
+                              description !== '' && <li key={uuidv4()}>{description}</li>
+                            )
                           })}
                         </ul>
                       </div>

@@ -84,6 +84,9 @@ export const getAdaptedCandidature = (
     candidature.ExperienceAsso,
   )
   const schools = getAdaptedInput<AddCandidatureInput['schools']>(candidature.schools)
+
+  const competences = candidature.Competences.map((competence) => competence)
+
   return {
     ...candidature,
     userEmail: '',
@@ -91,6 +94,7 @@ export const getAdaptedCandidature = (
     experiences: experiences,
     experiencesAsso: experiencesAsso,
     schools: schools,
+    competences,
   }
 }
 
@@ -212,6 +216,10 @@ export const useCandidatureForm = ({
 
   useEffect(() => {
     reset(initialValues)
+
+    return () => {
+      reset()
+    }
   }, [initialValues, reset])
 
   return {

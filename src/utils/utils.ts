@@ -57,9 +57,7 @@ export const getCompetencesByType = (
     })
   })
 
-  return competencesByType.filter(
-    (c) => c.descriptions.every((d) => d !== '') && c.descriptions.length > 0,
-  )
+  return competencesByType.filter((c) => c.descriptions.length > 0)
 }
 
 function isValidDate(date: Date) {
