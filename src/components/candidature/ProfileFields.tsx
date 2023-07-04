@@ -74,7 +74,7 @@ export const ProfileFields: React.FC<ProfileFieldsProps> = ({ register }) => {
             name="email"
             type="email"
             error={errors.email?.message}
-            placeholder="Disponible dans toute la france..."
+            placeholder="mail@preview.com"
             key={'email'}
           />
 
