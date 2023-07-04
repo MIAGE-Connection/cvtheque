@@ -90,7 +90,7 @@ export const getAdaptedCandidature = (
   return {
     ...candidature,
     userEmail: '',
-    email: 'mail@preview.com',
+    email: candidature.email ?? 'mail@preview.com',
     experiences: experiences,
     experiencesAsso: experiencesAsso,
     schools: schools,
