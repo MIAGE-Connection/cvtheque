@@ -85,7 +85,7 @@ export const getAdaptedCandidature = (
   )
   const schools = getAdaptedInput<AddCandidatureInput['schools']>(candidature.schools)
 
-  const competences = candidature.Competences.map((competence) => competence)
+  const competences = candidature?.Competences?.map((competence) => competence)
 
   return {
     ...candidature,
