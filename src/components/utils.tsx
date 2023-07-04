@@ -216,10 +216,6 @@ export const useCandidatureForm = ({
 
   useEffect(() => {
     reset(initialValues)
-
-    return () => {
-      reset()
-    }
   }, [initialValues, reset])
 
   return {
