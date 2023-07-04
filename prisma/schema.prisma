@@ -138,6 +138,7 @@ model School {
   startAt        DateTime?
   endAt          DateTime?
   universityName String
+  title          String       @default("")
   description    String
   Candidature    Candidature? @relation(fields: [candidatureId], references: [id])
   candidatureId  String?

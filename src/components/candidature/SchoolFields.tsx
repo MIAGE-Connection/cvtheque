@@ -45,6 +45,16 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
               />
             </div>
             <div className="sm:flex sm:space-x-16 justify-center">
+              <Input
+                label="Intitulé de la formation"
+                register={register as any}
+                name={`schools.${index}.title`}
+                type="text"
+                key={`schools.${index}.title`}
+                large={true}
+              />
+            </div>
+            <div className="sm:flex sm:space-x-16 justify-center">
               <div className="form-control w-full md:max-w-xs">
                 <label className="label">
                   <span className="label-text">Date de début</span>
@@ -91,6 +101,7 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
               startAt: dateToInputDate(new Date()) || '',
               endAt: null,
               universityName: '',
+              title: '',
             })
           }}
           type="button"

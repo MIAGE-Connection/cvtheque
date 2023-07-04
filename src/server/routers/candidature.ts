@@ -64,6 +64,7 @@ export const candidatureRouter = router({
               endAt: z.string().nullish(),
               universityName: z.string(),
               description: z.string(),
+              title: z.string(),
             }),
           )
           .optional(),
