@@ -1,7 +1,7 @@
 import { CandidatureKind, CompetenceType } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { RouterInput, RouterOutput, trpc } from 'utils/trpc'
@@ -213,10 +213,6 @@ export const useCandidatureForm = ({
 
     mutate(data)
   }
-
-  useEffect(() => {
-    reset(initialValues)
-  }, [initialValues, reset])
 
   return {
     register,
