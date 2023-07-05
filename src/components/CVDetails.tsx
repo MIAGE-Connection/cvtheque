@@ -71,16 +71,13 @@ export const CVDetails = (props: {
                           {experience.companyName}
                         </div>
                         <div className="flex space-x-4 items-center">
-                          <div className="text-sm">
-                            {new Date(experience.startAt).toLocaleDateString()}
-                          </div>
-                          {experience.endAt && (
-                            <>
-                              <p>-</p>
-                              <div className="text-sm">
-                                {new Date(experience.endAt).toLocaleDateString()}
-                              </div>
-                            </>
+                          {!experience.endAt ? (
+                            <div className="text-sm">En cours</div>
+                          ) : (
+                            <div className="text-sm">
+                              {new Date(experience.startAt).toLocaleDateString()} -{' '}
+                              {new Date(experience.endAt).toLocaleDateString()}
+                            </div>
                           )}
                         </div>
                       </div>
@@ -115,16 +112,13 @@ export const CVDetails = (props: {
                           {school.universityName}
                         </div>
                         <div className="flex space-x-4 items-center">
-                          <div className="text-sm">
-                            {new Date(school.startAt).toLocaleDateString()}
-                          </div>
-                          {school.endAt && (
-                            <>
-                              <p>-</p>
-                              <div className="text-sm">
-                                {new Date(school.endAt).toLocaleDateString()}
-                              </div>
-                            </>
+                          {!school.endAt ? (
+                            <div className="text-sm">En cours</div>
+                          ) : (
+                            <div className="text-sm">
+                              {new Date(school.startAt).toLocaleDateString()} -{' '}
+                              {new Date(school.endAt).toLocaleDateString()}
+                            </div>
                           )}
                         </div>
                       </div>
@@ -144,16 +138,13 @@ export const CVDetails = (props: {
                         <div className="flex justify-between">
                           <div className="font-semibold text-lg">{association.name}</div>
                           <div className="flex space-x-4 items-center">
-                            <div className="text-sm">
-                              {new Date(association.startAt).toLocaleDateString()}
-                            </div>
-                            {association.endAt && (
-                              <>
-                                <p>-</p>
-                                <div className="text-sm">
-                                  {new Date(association.endAt).toLocaleDateString()}
-                                </div>
-                              </>
+                            {!association.endAt ? (
+                              <div className="text-sm">En cours</div>
+                            ) : (
+                              <div className="text-sm">
+                                {new Date(association.startAt).toLocaleDateString()} -{' '}
+                                {new Date(association.endAt).toLocaleDateString()}
+                              </div>
                             )}
                           </div>
                         </div>
