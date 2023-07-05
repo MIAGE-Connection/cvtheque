@@ -155,27 +155,17 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                       setChecked((prev) => !prev)
                     }}
                   >
-                    Prévualiser
+                    {checked ? 'Retour' : 'Prévisualiser'}
                   </button>
-                  {initialValues ? (
-                    <button
-                      onClick={() => setVisible(true)}
-                      className="btn btn-primary"
-                      type="button"
-                      disabled={!isValid}
-                    >
-                      Sauvegarder
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => setVisible(true)}
-                      type="button"
-                      className="btn btn-primary"
-                      disabled={!isValid}
-                    >
-                      Sauvegarder
-                    </button>
-                  )}
+
+                  <button
+                    onClick={() => setVisible(true)}
+                    type="button"
+                    className="btn btn-primary"
+                    disabled={!isValid}
+                  >
+                    Sauvegarder
+                  </button>
                 </div>
               </div>
               <Modal open={visible} style={'lg:!max-w-1/2'}>
