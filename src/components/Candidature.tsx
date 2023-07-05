@@ -173,7 +173,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                       className="btn btn-primary"
                       disabled={!isValid}
                     >
-                      Déposer le CV
+                      Sauvegarder
                     </button>
                   )}
                 </div>
