@@ -2,6 +2,7 @@ import { useFieldArray } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 import { MissionsFields } from './MissionsFields'
 import { dateToInputDate } from 'utils/utils'
+import { Input } from 'components/Input'
 
 export const AssociationFields: React.FC<CommonFormProps> = ({ control, register }) => {
   const {
@@ -35,28 +36,26 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
                 </button>
               </div>
               <div className="sm:flex sm:space-x-16 justify-center">
-                <div className="form-control w-full sm:w-4/6">
-                  <label className="label">
-                    <span className="label-text">Association</span>
-                  </label>
-                  <input
-                    className="input input-bordered w-full"
-                    type="text"
-                    {...register(`experiencesAsso.${index}.name`)}
-                  />
-                </div>
+                <Input
+                  label="Association"
+                  register={register as any}
+                  name={`experiencesAsso.${index}.name`}
+                  type="text"
+                  placeholder="Google, Apple, ..."
+                  key={`experiencesAsso.${index}.name`}
+                  large={true}
+                />
               </div>
               <div className="sm:flex sm:space-x-16 justify-center">
-                <div className="form-control w-full sm:w-4/6">
-                  <label className="label">
-                    <span className="label-text">Intitulé du poste</span>
-                  </label>
-                  <input
-                    className="input input-bordered w-full"
-                    type="text"
-                    {...register(`experiencesAsso.${index}.job`)}
-                  />
-                </div>
+                <Input
+                  label="Intitulé du poste"
+                  register={register as any}
+                  name={`experiencesAsso.${index}.job`}
+                  type="text"
+                  placeholder="Google, Apple, ..."
+                  key={`experiencesAsso.${index}.job`}
+                  large={true}
+                />
               </div>
               <div className="sm:flex sm:space-x-16 justify-center">
                 <div className="form-control w-full md:max-w-xs">

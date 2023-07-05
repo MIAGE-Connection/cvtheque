@@ -35,6 +35,7 @@ export const candidatureRouter = router({
               startAt: z.string(),
               endAt: z.string().nullish(),
               companyName: z.string(),
+              job: z.string(),
               missions: z.array(
                 z.object({
                   mission: z.string(),

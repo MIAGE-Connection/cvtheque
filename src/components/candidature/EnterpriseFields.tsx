@@ -53,6 +53,17 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
                   large={true}
                 />
               </div>
+              <div className="sm:flex justify-center">
+                <Input
+                  label="Intitulé du poste"
+                  register={register as any}
+                  name={`experiences.${index}.job`}
+                  type="text"
+                  placeholder="Développeur web..."
+                  key={`experiences.${index}.job`}
+                  large={true}
+                />
+              </div>
 
               <div className="sm:flex sm:space-x-16 justify-center">
                 <div className="form-control w-full md:max-w-xs">
@@ -88,6 +99,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
             onClick={() => {
               append({
                 companyName: '',
+                job: '',
                 missions: [{ mission: '' }],
                 startAt: dateToInputDate(new Date()) || '',
                 endAt: null,

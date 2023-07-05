@@ -67,8 +67,9 @@ export const CVDetails = (props: {
                   return (
                     <div key={uuidv4()} className="mt-4">
                       <div className="flex justify-between">
-                        <div className="font-semibold text-lg">
-                          {experience.companyName}
+                        <div>
+                          <p className="font-semibold text-lg">{experience.job}</p>
+                          <p className="text-gray-500">{experience.companyName}</p>
                         </div>
                         <div className="flex space-x-4 items-center">
                           {!experience.endAt ? (

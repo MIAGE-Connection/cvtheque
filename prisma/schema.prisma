@@ -118,6 +118,7 @@ model Experience {
   startAt       DateTime?
   endAt         DateTime?
   companyName   String
+  job           String       @default("")
   missions      String[]
   Candidature   Candidature? @relation(fields: [candidatureId], references: [id])
   candidatureId String?
