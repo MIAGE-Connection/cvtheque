@@ -47,6 +47,18 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
                 </div>
               </div>
               <div className="sm:flex sm:space-x-16 justify-center">
+                <div className="form-control w-full sm:w-4/6">
+                  <label className="label">
+                    <span className="label-text">Intitulé du poste</span>
+                  </label>
+                  <input
+                    className="input input-bordered w-full"
+                    type="text"
+                    {...register(`experiencesAsso.${index}.job`)}
+                  />
+                </div>
+              </div>
+              <div className="sm:flex sm:space-x-16 justify-center">
                 <div className="form-control w-full md:max-w-xs">
                   <label className="label">
                     <span className="label-text">Date de début</span>
@@ -80,6 +92,7 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
             onClick={() => {
               append({
                 name: '',
+                job: '',
                 missions: [{ mission: '' }],
                 startAt: dateToInputDate(new Date()) || '',
                 endAt: null,

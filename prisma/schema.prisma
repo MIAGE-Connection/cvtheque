@@ -127,6 +127,7 @@ model ExperienceAsso {
   id            String       @id @default(uuid())
   startAt       DateTime?
   endAt         DateTime?
+  job           String       @default("")
   name          String
   missions      String[]
   Candidature   Candidature? @relation(fields: [candidatureId], references: [id])

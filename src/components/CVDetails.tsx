@@ -109,8 +109,8 @@ export const CVDetails = (props: {
                     <div key={uuidv4()} className="mt-4">
                       <div className="flex justify-between">
                         <div>
-                          <p className="font-semibold text-lg">{school.universityName}</p>
-                          <p className="text-gray-500">{school.title}</p>
+                          <p className="font-semibold text-lg">{school.title}</p>
+                          <p className="text-gray-500">{school.universityName}</p>
                         </div>
                         <div className="flex space-x-4 items-center">
                           {!school.endAt ? (
@@ -137,7 +137,10 @@ export const CVDetails = (props: {
                     return (
                       <div key={uuidv4()} className="mt-4">
                         <div className="flex justify-between">
-                          <div className="font-semibold text-lg">{association.name}</div>
+                          <div>
+                            <p className="font-semibold text-lg">{association.job}</p>
+                            <p className="text-gray-500">{association.name}</p>
+                          </div>
                           <div className="flex space-x-4 items-center">
                             {!association.endAt ? (
                               <div className="text-sm">En cours</div>
