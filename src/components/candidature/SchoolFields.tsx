@@ -13,7 +13,7 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
     control,
   })
   return (
-    <div id="school" className="space-y-4">
+    <div id="school" className="space-y-4 animate-fade-in-down">
       <h1 className="text-xl text-center font-semibold text-mc">Parcours scolaire</h1>
       {schools.map((_school, index) => {
         return (

@@ -23,7 +23,7 @@ export const MissionsFields: React.FC<EnterprisFieldsProps> = ({
     name: `${field}.${index}.missions`,
   })
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center animate-fade-in-down">
       <div className="w-full md:w-4/6">
         <label className="label">
           <span className="label-text font-semibold text-lg">Missions</span>

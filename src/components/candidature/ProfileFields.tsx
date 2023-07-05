@@ -11,7 +11,7 @@ export const ProfileFields: React.FC<ProfileFieldsProps> = ({ register }) => {
   } = useFormContext<AddCandidatureInput>()
 
   return (
-    <div id="profile" className="space-y-4">
+    <div id="profile" className="space-y-4 animate-fade-in-down">
       <h1 className="sm:text-xl text-center font-semibold text-mc">Profil</h1>
       <div className="table mx-auto my-0 w-11/12 lg:w-4/6 border rounded-xl p-4">
         <div className="sm:flex sm:space-x-16 justify-center">

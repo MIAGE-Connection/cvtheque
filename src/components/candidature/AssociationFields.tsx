@@ -16,7 +16,7 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
 
   return (
     <>
-      <div id="associations" className="space-y-4">
+      <div id="associations" className="space-y-4 animate-fade-in-down">
         <h1 className="text-xl text-center font-semibold text-mc">Associations</h1>
         {associations.map((_association, index) => {
           return (

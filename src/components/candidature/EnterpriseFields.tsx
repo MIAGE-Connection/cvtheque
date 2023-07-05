@@ -21,7 +21,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
 
   return (
     <>
-      <div id="experiences" className="space-y-4">
+      <div id="experiences" className="space-y-4 animate-fade-in-down">
         <h1 className="text-xl text-center font-semibold text-mc">Expériences</h1>
         {experiences.map((_experience, index) => {
           return (

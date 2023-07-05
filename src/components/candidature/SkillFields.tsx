@@ -13,7 +13,7 @@ export const SkillFields: React.FC<CommonFormProps> = ({ control, register }) =>
     control,
   })
   return (
-    <div id="skills" className="animate-fade-in-down">
+    <div id="skills" className="space-y-4 animate-fade-in-down">
       <h1 className="text-xl text-center font-semibold text-mc">Compétences</h1>
       {competences.map((_competence, index) => {
         return (
