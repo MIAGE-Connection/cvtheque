@@ -41,7 +41,7 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
                   register={register as any}
                   name={`experiencesAsso.${index}.name`}
                   type="text"
-                  placeholder="Google, Apple, ..."
+                  placeholder="Asso locale, ..."
                   key={`experiencesAsso.${index}.name`}
                   large={true}
                 />
@@ -52,7 +52,7 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
                   register={register as any}
                   name={`experiencesAsso.${index}.job`}
                   type="text"
-                  placeholder="Google, Apple, ..."
+                  placeholder="Responsable communication, ..."
                   key={`experiencesAsso.${index}.job`}
                   large={true}
                 />

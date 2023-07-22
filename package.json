@@ -39,6 +39,7 @@
     "semi": false
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.1.1",
     "@next-auth/prisma-adapter": "1.0.6",
     "@next/swc-darwin-x64": "^13.4.4",
     "@prisma/client": "^4.15.0",

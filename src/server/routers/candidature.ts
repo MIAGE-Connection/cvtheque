@@ -10,162 +10,121 @@ import {
 } from '../trpc'
 import { eventService } from './events/events.service'
 
-export const candidatureRouter = router({
-  add: authedProcedure
-    .input(
+export const MISSION_MAX_LENGTH = 100
+
+const candidatureSchema = z.object({
+  id: z.string().nullish(),
+  firstName: z.string(),
+  lastName: z.string(),
+  city: z.string(),
+  info: z.string().nullish(),
+  title: z.string(),
+  email: z.string(),
+  remote: z.boolean(),
+  mobile: z.string().nullish(),
+  passions: z.string().nullish(),
+  kind: z.enum([CandidatureKind.ALTERNANCE, CandidatureKind.CDI, CandidatureKind.STAGE]),
+  experiences: z
+    .array(
       z.object({
-        id: z.string().nullish(),
-        firstName: z.string(),
-        lastName: z.string(),
-        city: z.string(),
-        info: z.string().nullish(),
-        title: z.string(),
-        email: z.string(),
-        remote: z.boolean(),
-        mobile: z.string().nullish(),
-        passions: z.string().nullish(),
-        kind: z.enum([
-          CandidatureKind.ALTERNANCE,
-          CandidatureKind.CDI,
-          CandidatureKind.STAGE,
-        ]),
-        experiences: z
-          .array(
-            z.object({
-              startAt: z.string(),
-              endAt: z.string().nullish(),
-              companyName: z.string(),
-              job: z.string(),
-              missions: z.array(
-                z.object({
-                  mission: z.string(),
-                }),
-              ),
-            }),
-          )
-          .optional(),
-        experiencesAsso: z
-          .array(
-            z.object({
-              startAt: z.string(),
-              endAt: z.string().nullish(),
-              name: z.string(),
-              job: z.string(),
-              missions: z.array(
-                z.object({
-                  mission: z.string(),
-                }),
-              ),
-            }),
-          )
-          .optional(),
-        schools: z
-          .array(
-            z.object({
-              startAt: z.string(),
-              endAt: z.string().nullish(),
-              universityName: z.string(),
-              description: z.string(),
-              title: z.string(),
-            }),
-          )
-          .optional(),
-        competences: z
-          .array(
-            z.object({
-              description: z.string(),
-              type: z.nativeEnum(CompetenceType),
-            }),
-          )
-          .optional(),
+        startAt: z.string(),
+        endAt: z.string().nullish(),
+        companyName: z.string(),
+        job: z.string(),
+        missions: z.array(
+          z.object({
+            mission: z.string(),
+          }),
+        ),
       }),
     )
-    .mutation(async ({ input, ctx }) => {
-      const {
-        id,
-        firstName,
-        lastName,
-        city,
-        experiences,
-        experiencesAsso,
-        schools,
-        info,
-        kind,
-        title,
-        competences,
-        email,
-        remote,
-        mobile,
-        passions,
-      } = input
+    .optional(),
+  experiencesAsso: z
+    .array(
+      z.object({
+        startAt: z.string(),
+        endAt: z.string().nullish(),
+        name: z.string(),
+        job: z.string(),
+        missions: z.array(
+          z.object({
+            mission: z.string(),
+          }),
+        ),
+      }),
+    )
+    .optional(),
+  schools: z
+    .array(
+      z.object({
+        startAt: z.string(),
+        endAt: z.string().nullish(),
+        universityName: z.string(),
+        description: z.string(),
+        title: z.string(),
+      }),
+    )
+    .optional(),
+  competences: z
+    .array(
+      z.object({
+        description: z.string(),
+        type: z.nativeEnum(CompetenceType),
+      }),
+    )
+    .optional(),
+})
 
-      const { role: role, email: userEmail } = ctx.user
+export const candidatureRouter = router({
+  add: authedProcedure.input(candidatureSchema).mutation(async ({ input, ctx }) => {
+    const {
+      id,
+      firstName,
+      lastName,
+      city,
+      experiences,
+      experiencesAsso,
+      schools,
+      info,
+      kind,
+      title,
+      competences,
+      email,
+      remote,
+      mobile,
+      passions,
+    } = input
 
-      const experiencesFormatted = experiences?.map((e) => {
-        return {
-          ...e,
-          missions: e.missions.map((m) => m.mission),
-          startAt: new Date(e.startAt),
-          ...(e.endAt && { endAt: new Date(e.endAt) }),
-        }
-      })
+    const { role: role, email: userEmail } = ctx.user
 
-      const experiencesAssoFormatted = experiencesAsso?.map((e) => {
-        return {
-          ...e,
-          missions: e.missions.map((m) => m.mission),
-          startAt: new Date(e.startAt),
-          ...(e.endAt && { endAt: new Date(e.endAt) }),
-        }
-      })
-
-      const schoolsFormatted = schools?.map((s) => {
-        return {
-          ...s,
-          startAt: new Date(s.startAt),
-          ...(s.endAt && { endAt: new Date(s.endAt) }),
-        }
-      })
-
-      if (!id) {
-        const candidature = await prisma.candidature.create({
-          data: {
-            firstName,
-            lastName,
-            city,
-            info,
-            kind,
-            title,
-            email,
-            remote,
-            mobile,
-            passions,
-            User: {
-              connect: {
-                email: userEmail,
-              },
-            },
-            schools: { createMany: { data: schoolsFormatted || [] } },
-            experiences: {
-              createMany: {
-                data: experiencesFormatted || [],
-              },
-            },
-            ExperienceAsso: {
-              createMany: {
-                data: experiencesAssoFormatted || [],
-              },
-            },
-            Competences: { createMany: { data: competences || [] } },
-          },
-        })
-        return candidature
+    const experiencesFormatted = experiences?.map((e) => {
+      return {
+        ...e,
+        missions: e.missions.map((m) => m.mission),
+        startAt: new Date(e.startAt),
+        ...(e.endAt && { endAt: new Date(e.endAt) }),
       }
+    })
 
-      const isReviewer = isUserReviewer(role)
+    const experiencesAssoFormatted = experiencesAsso?.map((e) => {
+      return {
+        ...e,
+        missions: e.missions.map((m) => m.mission),
+        startAt: new Date(e.startAt),
+        ...(e.endAt && { endAt: new Date(e.endAt) }),
+      }
+    })
 
-      const candidature = await prisma.candidature.update({
-        where: { id },
+    const schoolsFormatted = schools?.map((s) => {
+      return {
+        ...s,
+        startAt: new Date(s.startAt),
+        ...(s.endAt && { endAt: new Date(s.endAt) }),
+      }
+    })
+
+    if (!id) {
+      const candidature = await prisma.candidature.create({
         data: {
           firstName,
           lastName,
@@ -177,44 +136,81 @@ export const candidatureRouter = router({
           remote,
           mobile,
           passions,
-          Competences: { deleteMany: {}, createMany: { data: competences || [] } },
+          User: {
+            connect: {
+              email: userEmail,
+            },
+          },
+          schools: { createMany: { data: schoolsFormatted || [] } },
           experiences: {
-            deleteMany: {},
             createMany: {
               data: experiencesFormatted || [],
             },
           },
           ExperienceAsso: {
-            deleteMany: {},
             createMany: {
               data: experiencesAssoFormatted || [],
             },
           },
-          schools: { deleteMany: {}, createMany: { data: schoolsFormatted || [] } },
+          Competences: { createMany: { data: competences || [] } },
         },
       })
-
-      // Update ReviewRequest if exists
-
-      const ReviewRequest = await prisma.reviewRequest.findFirst({
-        where: {
-          candidatureId: id,
-        },
-      })
-
-      if (ReviewRequest) {
-        await prisma.reviewRequest.update({
-          where: {
-            id: ReviewRequest.id,
-          },
-          data: {
-            approved: ReviewRequest.approved ? isReviewer : false,
-          },
-        })
-      }
-
       return candidature
-    }),
+    }
+
+    const isReviewer = isUserReviewer(role)
+
+    const candidature = await prisma.candidature.update({
+      where: { id },
+      data: {
+        firstName,
+        lastName,
+        city,
+        info,
+        kind,
+        title,
+        email,
+        remote,
+        mobile,
+        passions,
+        Competences: { deleteMany: {}, createMany: { data: competences || [] } },
+        experiences: {
+          deleteMany: {},
+          createMany: {
+            data: experiencesFormatted || [],
+          },
+        },
+        ExperienceAsso: {
+          deleteMany: {},
+          createMany: {
+            data: experiencesAssoFormatted || [],
+          },
+        },
+        schools: { deleteMany: {}, createMany: { data: schoolsFormatted || [] } },
+      },
+    })
+
+    // Update ReviewRequest if exists
+
+    const ReviewRequest = await prisma.reviewRequest.findFirst({
+      where: {
+        candidatureId: id,
+      },
+    })
+
+    if (ReviewRequest) {
+      await prisma.reviewRequest.update({
+        where: {
+          id: ReviewRequest.id,
+        },
+        data: {
+          approved: ReviewRequest.approved ? isReviewer : false,
+        },
+      })
+    }
+
+    return candidature
+  }),
   list: authedPartnerProcedure.query(async () => {
     const candidatures = await prisma.candidature.findMany({
       include: {
