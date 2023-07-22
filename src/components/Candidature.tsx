@@ -1,5 +1,5 @@
 import { CVDetails } from 'components/CVDetails'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { getCompetencesByType } from 'utils/utils'
 import Modal from './Modal'
@@ -9,6 +9,7 @@ import { ProfileFields } from './candidature/ProfileFields'
 import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
 import { AddCandidatureInput, Props, useCandidatureForm } from './utils'
+import { trpc } from 'utils/trpc'
 
 enum TabType {
   profile = 'profile',
@@ -24,6 +25,14 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   const [visible, setVisible] = useState<boolean>(false)
   const [candidature, setCandidature] = useState<AddCandidatureInput | undefined>()
   const [activeTab, setActiveTab] = useState<TabType>(TabType.profile)
+  const { mutate } = trpc.candidature.uploadFile.useMutation()
+  const [image, setImage] = useState<File | undefined>()
+
+  useEffect(async () => {
+    console.log('#### ~ image:', image)
+    if (!image) return
+    mutate(await image.arrayBuffer())
+  }, [image, mutate])
 
   const {
     register,
@@ -244,6 +253,16 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
             )}
           </div>
         </div>
+      </div>
+      <div>
+        <input
+          type="file"
+          onChange={(e) => {
+            if (!e.target.files?.length) return
+            const file = e.target.files[0]
+            setImage(file)
+          }}
+        />
       </div>
     </>
   )

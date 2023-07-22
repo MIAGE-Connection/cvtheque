@@ -2,6 +2,7 @@ import { CandidatureKind, CompetenceType, Event } from '@prisma/client'
 import { prisma } from 'server/prisma'
 import { getCompetencesByType, isUserReviewer } from 'utils/utils'
 import { z } from 'zod'
+import { supabase } from '../bucket'
 import {
   authedPartnerProcedure,
   authedProcedure,
@@ -229,6 +230,23 @@ export const candidatureRouter = router({
 
     return candidatures
   }),
+  uploadFile: authedProcedure
+    .input(z.custom<File>())
+    .mutation(async ({ input: file, ctx }) => {
+      console.log('#### ~ file:', file)
+      const { email } = ctx.user
+      console.log('#### ~ email:', email)
+      const { data, error } = await supabase.storage
+        .from('candidatures')
+        .upload('file_path', file)
+      if (error) {
+        // Handle error
+      } else {
+        // Handle success
+      }
+
+      return
+    }),
   details: authedProcedure
     .input(z.object({ id: z.string().uuid(), viewed: z.boolean().optional() }))
     .query(async ({ input, ctx }) => {
