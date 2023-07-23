@@ -2,7 +2,12 @@ import { ReviewRequest } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useState } from 'react'
-import { CandidatureCompetencesByType, getSelectValue, isUserReviewer } from 'utils/utils'
+import {
+  CandidatureCompetencesByType,
+  getLangLevelValueByEnum,
+  getSelectValue,
+  isUserReviewer,
+} from 'utils/utils'
 import Modal from './Modal'
 import { AddCandidatureInput, useAskReview } from './utils'
 import { v4 as uuidv4 } from 'uuid'
@@ -209,6 +214,23 @@ export const CVDetails = (props: {
                     </div>
                   )
                 })}
+              </div>
+            </div>
+            <div>
+              <p className="text-2xl text-mc">Langues</p>
+              <div className="md:grid md:grid-cols-2 gap-8">
+                <ul className="list-disc ml-4">
+                  {candidature?.languages?.map((language) => {
+                    return (
+                      <li key={uuidv4()}>
+                        <div className="flex space-x-1">
+                          <p className="font-semibold">{language.language} -</p>
+                          <p>{getLangLevelValueByEnum(language.level)}</p>
+                        </div>
+                      </li>
+                    )
+                  })}
+                </ul>
               </div>
             </div>
             {candidature?.passions?.length ? (
