@@ -1,4 +1,4 @@
-import { CompetenceType, Competences, Role } from '@prisma/client'
+import { CompetenceType, Competences, LangLevel, Role } from '@prisma/client'
 import { Maybe } from '@trpc/server'
 
 export type CandidatureCompetencesByType = {
@@ -112,5 +112,22 @@ export const getSelectValue = (competence: CompetenceType): string => {
       return 'Autre'
     default:
       return 'Autre'
+  }
+}
+
+export const getLangLevelValueByEnum = (level: LangLevel): string => {
+  switch (level) {
+    case 'BEGINNER':
+      return 'Débutant'
+    case 'INTERMEDIATE':
+      return 'Intermédiaire'
+    case 'ADVANCED':
+      return 'Avancé'
+    case 'FLUENT':
+      return 'Courant'
+    case 'NATIVE':
+      return 'Langue maternelle'
+    default:
+      return 'Débutant'
   }
 }

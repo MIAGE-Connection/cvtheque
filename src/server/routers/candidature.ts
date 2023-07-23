@@ -1,4 +1,4 @@
-import { CandidatureKind, CompetenceType, Event } from '@prisma/client'
+import { CandidatureKind, CompetenceType, Event, LangLevel } from '@prisma/client'
 import { prisma } from 'server/prisma'
 import { getCompetencesByType, isUserReviewer } from 'utils/utils'
 import { z } from 'zod'
@@ -23,6 +23,12 @@ const candidatureSchema = z.object({
   remote: z.boolean(),
   mobile: z.string().nullish(),
   passions: z.string().nullish(),
+  languages: z.array(
+    z.object({
+      language: z.string(),
+      level: z.nativeEnum(LangLevel),
+    }),
+  ),
   kind: z.enum([CandidatureKind.ALTERNANCE, CandidatureKind.CDI, CandidatureKind.STAGE]),
   experiences: z
     .array(
@@ -93,6 +99,7 @@ export const candidatureRouter = router({
       remote,
       mobile,
       passions,
+      languages,
     } = input
 
     const { role: role, email: userEmail } = ctx.user
@@ -136,6 +143,7 @@ export const candidatureRouter = router({
           remote,
           mobile,
           passions,
+          languages: { createMany: { data: languages || [] } },
           User: {
             connect: {
               email: userEmail,
@@ -173,6 +181,7 @@ export const candidatureRouter = router({
         remote,
         mobile,
         passions,
+        languages: { deleteMany: {}, createMany: { data: languages || [] } },
         Competences: { deleteMany: {}, createMany: { data: competences || [] } },
         experiences: {
           deleteMany: {},
@@ -243,6 +252,7 @@ export const candidatureRouter = router({
               startAt: 'desc',
             },
           },
+          languages: true,
           schools: true,
           Competences: true,
           ReviewRequest: true,
@@ -301,6 +311,7 @@ export const candidatureRouter = router({
         Competences: true,
         ExperienceAsso: true,
         ReviewRequest: true,
+        languages: true,
       },
     })
 

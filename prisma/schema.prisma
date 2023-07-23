@@ -99,7 +99,7 @@ model Candidature {
   ReviewRequest   ReviewRequest?   @relation(fields: [reviewRequestId], references: [id])
   reviewRequestId String?
   ExperienceAsso  ExperienceAsso[]
-  Langage         Language[]
+  languages       Language[]
 }
 
 enum LangLevel {

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CandidatureKind, CompetenceType } from '@prisma/client'
+import { CandidatureKind, CompetenceType, LangLevel } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useState } from 'react'
@@ -20,6 +20,12 @@ const schema = z.object({
   remote: z.boolean(),
   mobile: z.string().nullish(),
   passions: z.string().nullish(),
+  languages: z.array(
+    z.object({
+      language: z.string().min(1, { message: 'La langue est obligatoire' }),
+      level: z.nativeEnum(LangLevel),
+    }),
+  ),
   kind: z.enum([CandidatureKind.ALTERNANCE, CandidatureKind.CDI, CandidatureKind.STAGE]),
   experiences: z
     .array(
@@ -252,6 +258,7 @@ export const useCandidatureForm = ({
     data.experiences = experiences
     data.schools = schools
     data.experiencesAsso = experiencesAsso
+    data.languages = data.languages?.map((langage) => langage) || []
 
     if (Object.keys(errors).length > 0) {
       return

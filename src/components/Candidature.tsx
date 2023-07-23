@@ -49,7 +49,6 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
               key={type}
               onClick={async () => {
                 const canChange = await checkValidity(activeTab)
-                console.log('#### ~ TAB 2:', canChange)
                 if (canChange) {
                   setActiveTab(type)
                 } else {
@@ -105,7 +104,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
               </div>
               {
                 {
-                  profile: <ProfileFields {...{ register }} />,
+                  profile: <ProfileFields {...{ control, register }} />,
                   experiences: <EntrepriseFields {...{ control, register }} />,
                   schools: <SchoolFields {...{ control, register }} />,
                   skills: <SkillFields {...{ control, register }} />,
