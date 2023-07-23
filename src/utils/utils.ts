@@ -109,8 +109,8 @@ export const getSelectValue = (competence: CompetenceType): string => {
     case 'NETWORK':
       return 'Network'
     case 'OTHER':
-      return 'Other'
+      return 'Autre'
     default:
-      return 'Other'
+      return 'Autre'
   }
 }

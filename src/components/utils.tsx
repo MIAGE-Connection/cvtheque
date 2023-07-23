@@ -1,11 +1,89 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CandidatureKind, CompetenceType } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { Resolver, SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { RouterInput, RouterOutput, trpc } from 'utils/trpc'
 import { dateToInputDate } from 'utils/utils'
+import { z } from 'zod'
+
+const schema = z.object({
+  id: z.string().nullish(),
+  firstName: z.string().min(1, { message: 'Le prénom est obligatoire' }),
+  lastName: z.string(),
+  city: z.string().min(1, { message: 'La ville est obligatoire' }),
+  info: z.string().nullish(),
+  title: z.string().min(1, { message: 'Le titre est obligatoire' }),
+  email: z.string().email({ message: "L'email est invalide" }),
+  remote: z.boolean(),
+  mobile: z.string().nullish(),
+  passions: z.string().nullish(),
+  kind: z.enum([CandidatureKind.ALTERNANCE, CandidatureKind.CDI, CandidatureKind.STAGE]),
+  experiences: z
+    .array(
+      z.object({
+        startAt: z.string(),
+        endAt: z.string().nullish(),
+        companyName: z.string(),
+        job: z.string(),
+        missions: z.array(
+          z.object({
+            mission: z
+              .string()
+              .max(100, { message: 'La mission doit faire moins de 100 caractères' }),
+          }),
+        ),
+      }),
+    )
+    .optional(),
+  experiencesAsso: z
+    .array(
+      z.object({
+        startAt: z.string(),
+        endAt: z.string().nullish(),
+        name: z.string(),
+        job: z.string(),
+        missions: z.array(
+          z.object({
+            mission: z
+              .string()
+              .max(100, { message: 'La mission doit faire moins de 100 caractères' }),
+          }),
+        ),
+      }),
+    )
+    .optional(),
+  schools: z
+    .array(
+      z.object({
+        startAt: z.string(),
+        endAt: z.string().nullish(),
+        universityName: z.string(),
+        description: z.string(),
+        title: z.string(),
+      }),
+    )
+    .optional(),
+  competences: z
+    .array(
+      z.object({
+        description: z.string(),
+        type: z.nativeEnum(CompetenceType),
+      }),
+    )
+    .optional(),
+})
+
+export enum TabType {
+  profile = 'profile',
+  experiences = 'experiences',
+  schools = 'schools',
+  skills = 'skills',
+  associations = 'associations',
+  other = 'other',
+}
 
 export type Props = {
   initialValues?: AddCandidatureInput
@@ -108,65 +186,17 @@ export const useCandidatureForm = ({
   initialValues,
   setVisible,
 }: Props & { setVisible: Dispatch<SetStateAction<boolean>> }) => {
-  const resolver: Resolver<AddCandidatureInput> = async (values) => {
-    return {
-      values: values.firstName ? values : {},
-      errors: {
-        ...(!values.firstName
-          ? {
-              firstName: {
-                type: 'required',
-                message: 'Veuillez renseignez votre prénom',
-              },
-            }
-          : {}),
-        ...(!values.lastName
-          ? {
-              lastName: {
-                type: 'required',
-                message: 'Veuillez renseignez votre nom',
-              },
-            }
-          : {}),
-        ...(!values.city
-          ? {
-              city: {
-                type: 'required',
-                message: 'Veuillez renseignez votre ville',
-              },
-            }
-          : {}),
-        ...(!values.email
-          ? {
-              email: {
-                type: 'required',
-                message: 'Veuillez renseignez votre email',
-              },
-            }
-          : {}),
-        ...(!values.title
-          ? {
-              title: {
-                type: 'required',
-                message: 'Veuillez donner un titre, ex: Développeur fullstack',
-              },
-            }
-          : {}),
-      },
-    }
-  }
-
   const methods = useForm<AddCandidatureInput>({
-    resolver,
+    resolver: zodResolver(schema),
     defaultValues: initialValues,
   })
 
   const {
     register,
-    reset,
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    trigger,
+    formState: { errors },
     getValues,
   } = methods
 
@@ -192,6 +222,22 @@ export const useCandidatureForm = ({
     },
   })
 
+  const checkValidity = async (tab: TabType) => {
+    switch (tab) {
+      case TabType.profile:
+        await trigger(['firstName', 'lastName', 'email', 'city'])
+        return Object.keys(errors).length === 0
+      case TabType.experiences:
+        await trigger('experiences')
+        return Object.keys(errors).length === 0
+      case TabType.schools:
+        await trigger('schools')
+        return Object.keys(errors).length === 0
+      default:
+        return true
+    }
+  }
+
   const onSubmit: SubmitHandler<AddCandidatureInput> = (data: AddCandidatureInput) => {
     const experiences = getAdaptedInput<AddCandidatureInput['experiences']>(
       data.experiences,
@@ -215,11 +261,11 @@ export const useCandidatureForm = ({
   }
 
   return {
+    checkValidity,
     register,
     handleSubmit,
     control,
     errors,
-    isValid,
     getValues,
     methods,
     onSubmit,

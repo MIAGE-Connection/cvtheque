@@ -31,12 +31,23 @@ export const CVDetails = (props: {
 
   return (
     <div className="mt-4">
+      {showEditButtons && candidature?.ReviewRequest?.description && (
+        <div className="flex justify-center mb-8">
+          <div className="border border-error shadow-md rounded-xl p-8 w-full xl:w-4/6">
+            <p className="text-mc font-bold text-xl ">
+              Votre CV nécessite des modifications:
+            </p>
+            <p className="whitespace-pre-wrap">{candidature.ReviewRequest.description}</p>
+          </div>
+        </div>
+      )}
       <div className="flex justify-center overflow-x-scroll">
         <div
           className={`p-4 md:p-8 border rounded-xl ${
             size === 'full' ? 'w-full' : 'w-full xl:w-4/6'
           }`}
         >
+          <div className="text-2xl font-bold text-mc md:hidden">{candidature?.title}</div>
           <div className="flex justify-between items-center">
             <div>
               <div className="flex space-x-2 font-bold text-lg lg:text-2xl text-mc">
@@ -46,13 +57,13 @@ export const CVDetails = (props: {
               <div className="text-xl">{candidature?.email}</div>
               <div className="text-lg text-gray-500">{candidature?.mobile}</div>
             </div>
-            <div className="text-xl lg:text-6xl font-bold text-mc text-right">
+            <div className="hidden md:block text-xl lg:text-4xl font-bold text-mc text-right">
               {candidature?.title}
             </div>
           </div>
           <div className="space-y-12 mt-12">
             <div>
-              <p className="text-2xl font-semibold text-mc">Ville</p>
+              <p className="text-2xl text-mc">Ville</p>
               <p className="text-lg">{candidature?.city}</p>
               {candidature?.remote ? (
                 <p className="text-lg text-gray-500">Ouvert au télétravail</p>
@@ -179,7 +190,7 @@ export const CVDetails = (props: {
 
             <div>
               <p className="text-2xl text-mc">Compétences</p>
-              <div className="md:grid md:grid-cols-2">
+              <div className="md:grid md:grid-cols-2 gap-8">
                 {candidature?.competenceByType?.map((competence) => {
                   return (
                     <div key={uuidv4()} className="mt-4">
@@ -245,16 +256,7 @@ export const CVDetails = (props: {
           </div>
         </div>
       )}
-      {showEditButtons && candidature?.ReviewRequest?.description && (
-        <div className="flex justify-center">
-          <div className="border rounded-xl p-8 w-full xl:w-4/6">
-            <p className="text-mc font-bold text-xl ">
-              Votre CV nécessite des modifications:
-            </p>
-            <p className="whitespace-pre-wrap">{candidature.ReviewRequest.description}</p>
-          </div>
-        </div>
-      )}
+
       <Modal open={visible}>
         <h3 className="font-bold text-lg">Raison du refus</h3>
         <textarea

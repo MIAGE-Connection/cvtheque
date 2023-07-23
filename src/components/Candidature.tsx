@@ -8,16 +8,8 @@ import { EntrepriseFields } from './candidature/EnterpriseFields'
 import { ProfileFields } from './candidature/ProfileFields'
 import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
-import { AddCandidatureInput, Props, useCandidatureForm } from './utils'
-
-enum TabType {
-  profile = 'profile',
-  experiences = 'experiences',
-  schools = 'schools',
-  skills = 'skills',
-  associations = 'associations',
-  other = 'other',
-}
+import { AddCandidatureInput, Props, TabType, useCandidatureForm } from './utils'
+import { toast } from 'react-toastify'
 
 const Candidature: React.FC<Props> = ({ initialValues }) => {
   const [checked, setChecked] = useState<boolean>(false)
@@ -26,11 +18,11 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
   const [activeTab, setActiveTab] = useState<TabType>(TabType.profile)
 
   const {
+    checkValidity,
     register,
     handleSubmit,
     control,
     errors,
-    isValid,
     getValues,
     onSubmit,
     isSubmitLoading,
@@ -53,14 +45,24 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
         {/* Medium screen and plus */}
         <div className="hidden lg:flex space-x-8 justify-center items-baseline">
           {Object.values(TabType).map((type) => (
-            <div key={type} onClick={() => setActiveTab(type)}>
+            <div
+              key={type}
+              onClick={async () => {
+                const canChange = await checkValidity(activeTab)
+                console.log('#### ~ TAB 2:', canChange)
+                if (canChange) {
+                  setActiveTab(type)
+                } else {
+                  toast.error('Veuillez corriger les erreurs')
+                }
+              }}
+            >
               <button
                 className={`${
                   activeTab === type
                     ? 'font-bold text-mc  border-b-2 border-mc text-3xl'
                     : 'border-b-[1px] border-b-gray-700 text-2xl'
-                } ${!isValid ? 'cursor-not-allowed' : ''}`}
-                disabled={!isValid}
+                }`}
               >
                 {
                   {
@@ -83,7 +85,9 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
               <div id="title" className="justify-center flex">
                 <div className="form-control w-4/6 ">
                   <label className="label">
-                    <span className="label-text text-xl font-bold text-mc">Titre</span>
+                    <span className="label-text text-xl font-bold text-mc">
+                      Titre du poste recherché
+                    </span>
                   </label>
                   <input
                     className="input input-bordered w-full "
@@ -134,8 +138,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                         activeTab === type
                           ? 'font-bold text-mc  border-b-2 border-mc text-3xl'
                           : 'border-b-[1px] border-b-gray-700 text-2xl'
-                      } ${!isValid ? 'cursor-not-allowed' : ''}`}
-                      disabled={!isValid}
+                      }`}
                       type="button"
                     >
                       {i + 1}
@@ -159,10 +162,16 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                   </button>
 
                   <button
-                    onClick={() => setVisible(true)}
+                    onClick={async () => {
+                      const canSave = await checkValidity(activeTab)
+                      if (canSave) {
+                        setVisible(true)
+                      } else {
+                        toast.error('Veuillez corriger les erreurs')
+                      }
+                    }}
                     type="button"
                     className="btn btn-primary"
-                    disabled={!isValid}
                   >
                     Sauvegarder
                   </button>

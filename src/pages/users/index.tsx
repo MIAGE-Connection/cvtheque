@@ -63,7 +63,7 @@ const Users: React.FC = () => {
           />
         </div>
         <div className="space-y-2 w-full">
-          <p className="text-mc">Contrat</p>
+          <p className="text-mc">Rôle</p>
 
           <select
             className="select select-bordered w-full"

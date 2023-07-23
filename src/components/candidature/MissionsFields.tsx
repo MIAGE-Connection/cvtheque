@@ -1,5 +1,5 @@
 import { AddCandidatureInput } from 'components/utils'
-import { Control, UseFormRegister, useFieldArray } from 'react-hook-form'
+import { Control, UseFormRegister, useFieldArray, useFormContext } from 'react-hook-form'
 
 type EnterprisFieldsProps = {
   index: number
@@ -22,6 +22,10 @@ export const MissionsFields: React.FC<EnterprisFieldsProps> = ({
     control,
     name: `${field}.${index}.missions`,
   })
+
+  const {
+    formState: { errors },
+  } = useFormContext<AddCandidatureInput>()
   return (
     <div className="flex justify-center animate-fade-in-down">
       <div className="w-full md:w-4/6">
@@ -30,26 +34,35 @@ export const MissionsFields: React.FC<EnterprisFieldsProps> = ({
         </label>
         <div className="space-y-4">
           {missions.map((mission, indexMission) => {
+            const errorMessage =
+              errors[field]?.[index]?.missions?.[indexMission]?.mission?.message
             return (
-              <div
-                key={mission.id}
-                className="flex justify-between items-center space-x-4"
-              >
-                <input
-                  className="input input-bordered w-full"
-                  type="text"
-                  {...register(`${field}.${index}.missions.${indexMission}.mission`)}
-                />
-                <button
-                  className="btn btn-sm btn-circle btn-outline btn-primary"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    removeMission(indexMission)
-                  }}
+              <>
+                <div
+                  key={mission.id}
+                  className="flex justify-between items-center space-x-4"
                 >
-                  X
-                </button>
-              </div>
+                  <input
+                    className="input input-bordered w-full"
+                    type="text"
+                    {...register(`${field}.${index}.missions.${indexMission}.mission`)}
+                  />
+                  <button
+                    className="btn btn-sm btn-circle btn-outline btn-primary"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      removeMission(indexMission)
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+                {errorMessage && (
+                  <label className="label">
+                    <span className="label-text-alt text-mc">{errorMessage}</span>
+                  </label>
+                )}
+              </>
             )
           })}
           <button
