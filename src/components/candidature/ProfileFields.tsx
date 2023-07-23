@@ -53,7 +53,7 @@ export const ProfileFields: React.FC<ProfileFieldsProps> = ({ register }) => {
         <div className="sm:flex sm:space-x-16 justify-center">
           <div className="form-control w-full sm:w-4/6">
             <label className="label">
-              <span className="label-text">Type de contract recherché</span>
+              <span className="label-text">Type de contrat recherché</span>
             </label>
 
             <select

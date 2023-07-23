@@ -99,6 +99,23 @@ model Candidature {
   ReviewRequest   ReviewRequest?   @relation(fields: [reviewRequestId], references: [id])
   reviewRequestId String?
   ExperienceAsso  ExperienceAsso[]
+  Langage         Language[]
+}
+
+enum LangLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  FLUENT
+  NATIVE
+}
+
+model Language {
+  id            String       @id @default(uuid())
+  language      String
+  level         LangLevel
+  Candidature   Candidature? @relation(fields: [candidatureId], references: [id])
+  candidatureId String?
 }
 
 model ReviewRequest {
