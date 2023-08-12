@@ -1,10 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 datasource db {
   provider = "postgres"
   url      = env("DATABASE_URL")
 }
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+//region User
 
 enum Role {
   ADMIN
@@ -27,16 +30,6 @@ model User {
   candidatureId String?
   Candidature   Candidature?    @relation(fields: [candidatureId], references: [id])
   ReviewRequest ReviewRequest[]
-}
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-enum CandidatureKind {
-  STAGE
-  CDI
-  ALTERNANCE
 }
 
 model Account {
@@ -77,6 +70,16 @@ model VerificationRequest {
   @@unique([identifier, token])
 }
 
+//endregion
+
+// region Candidature
+
+enum CandidatureKind {
+  STAGE
+  CDI
+  ALTERNANCE
+}
+
 model Candidature {
   id              String           @id @default(uuid())
   createdAt       DateTime         @default(now())
@@ -102,6 +105,7 @@ model Candidature {
   languages       Language[]
 }
 
+//region Candidature language
 enum LangLevel {
   BEGINNER
   INTERMEDIATE
@@ -117,6 +121,8 @@ model Language {
   Candidature   Candidature? @relation(fields: [candidatureId], references: [id])
   candidatureId String?
 }
+
+//endregion
 
 model ReviewRequest {
   id            String        @id @default(cuid())
@@ -171,6 +177,9 @@ model Competences {
   candidatureId String?
 }
 
+//endregion
+
+// region Event
 enum Event {
   VIEW
   LIKED
@@ -183,6 +192,8 @@ model Events {
   candidatureId String
   createdAt     DateTime @default(now())
 }
+
+//endregion
 
 enum CompetenceType {
   C_SHARP
