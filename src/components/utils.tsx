@@ -9,7 +9,7 @@ import { RouterInput, RouterOutput, trpc } from 'utils/trpc'
 import { dateToInputDate } from 'utils'
 import { z } from 'zod'
 
-const schema = z.object({
+const candaditureSchema = z.object({
   id: z.string().nullish(),
   firstName: z.string().min(1, { message: 'Le prénom est obligatoire' }),
   lastName: z.string(),
@@ -20,13 +20,16 @@ const schema = z.object({
   remote: z.boolean(),
   mobile: z.string().nullish(),
   passions: z.string().nullish(),
+  github: z.string().nullish(),
+  linkedin: z.string().nullish(),
+
   languages: z.array(
     z.object({
       language: z.string().min(1, { message: 'La langue est obligatoire' }),
       level: z.nativeEnum(LangLevel),
     }),
   ),
-  kind: z.enum([CandidatureKind.ALTERNANCE, CandidatureKind.CDI, CandidatureKind.STAGE]),
+  kind: z.nativeEnum(CandidatureKind),
   experiences: z
     .array(
       z.object({
@@ -193,7 +196,7 @@ export const useCandidatureForm = ({
   setVisible,
 }: Props & { setVisible: Dispatch<SetStateAction<boolean>> }) => {
   const methods = useForm<AddCandidatureInput>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(candaditureSchema),
     defaultValues: initialValues,
   })
 
@@ -231,14 +234,18 @@ export const useCandidatureForm = ({
   const checkValidity = async (tab: TabType) => {
     switch (tab) {
       case TabType.profile:
-        await trigger(['firstName', 'lastName', 'email', 'city'])
-        return Object.keys(errors).length === 0
+        return await trigger([
+          'firstName',
+          'lastName',
+          'email',
+          'city',
+          'github',
+          'linkedin',
+        ])
       case TabType.experiences:
-        await trigger('experiences')
-        return Object.keys(errors).length === 0
+        return await trigger('experiences')
       case TabType.schools:
-        await trigger('schools')
-        return Object.keys(errors).length === 0
+        return await trigger('schools')
       default:
         return true
     }

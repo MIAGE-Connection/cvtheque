@@ -4,6 +4,8 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 import { LangLevel } from '@prisma/client'
 import { getLangLevelValueByEnum } from 'utils'
+import { GithubLogo } from 'components/svg/GithubLogo'
+import { LinkedinLogo } from 'components/svg/LinkedinLogo'
 
 export const ProfileFields: React.FC<CommonFormProps> = ({ control, register }) => {
   const {
@@ -114,7 +116,57 @@ export const ProfileFields: React.FC<CommonFormProps> = ({ control, register }) 
             </label>
           </div>
         </div>
+
+        <div className="sm:flex sm:space-x-16 justify-center">
+          <div className="form-control w-full sm:w-4/6">
+            <label className="label">
+              <span className="label-text">Compte git</span>
+            </label>
+            <div className="join">
+              <div className="join-item border rounded-r-full text-black flex items-center p-2">
+                <GithubLogo />
+              </div>
+              <input
+                {...register('github')}
+                className="input input-bordered join-item w-full"
+                placeholder="Lien compte github"
+              />
+            </div>
+            {errors.github?.message && (
+              <label className="label">
+                <span className="label-text-alt text-mc">{errors.github.message}</span>
+              </label>
+            )}
+          </div>
+        </div>
+
+        <div className="sm:flex sm:space-x-16 justify-center">
+          <div className="form-control w-full sm:w-4/6">
+            <label className="label">
+              <span className="label-text">Linkedin</span>
+            </label>
+            <div className="join">
+              <div className="join-item border rounded-r-full text-black flex items-center p-2">
+                <LinkedinLogo />
+              </div>
+              <input
+                {...register('linkedin')}
+                className="input input-bordered join-item w-full"
+                placeholder="Lien compte linkedin"
+              />
+              {errors.linkedin?.message && (
+                <label className="label">
+                  <span className="label-text-alt text-mc">
+                    {errors.linkedin.message}
+                  </span>
+                </label>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Langues */}
       <div className="table mx-auto my-0 w-11/12 lg:w-4/6 border rounded-xl p-4">
         <div className="flex justify-center animate-fade-in-down">
           <div className="w-full md:w-4/6">

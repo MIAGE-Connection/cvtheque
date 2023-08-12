@@ -11,6 +11,8 @@ import Modal from './Modal'
 import { AddCandidatureInput, useAskReview } from './utils'
 import { v4 as uuidv4 } from 'uuid'
 import { getSelectValue } from 'utils'
+import { GithubLogo } from './svg/GithubLogo'
+import { LinkedinLogo } from './svg/LinkedinLogo'
 
 export const CVDetails = (props: {
   candidature?:
@@ -61,6 +63,18 @@ export const CVDetails = (props: {
               </div>
               <div className="text-xl">{candidature?.email}</div>
               <div className="text-lg text-gray-500">{candidature?.mobile}</div>
+              <div className="flex space-x-2 mt-1">
+                {candidature?.github && (
+                  <Link href={candidature.github} target="_blank">
+                    <GithubLogo />
+                  </Link>
+                )}
+                {candidature?.linkedin && (
+                  <Link href={candidature.linkedin} target="_blank">
+                    <LinkedinLogo />
+                  </Link>
+                )}
+              </div>
             </div>
             <div className="hidden md:block text-xl lg:text-4xl font-bold text-mc text-right">
               {candidature?.title}

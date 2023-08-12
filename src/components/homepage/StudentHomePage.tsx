@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { trpc } from 'utils/trpc'
 
 export const StudentHomePage: React.FC = () => {
-  const { data: candidature, isLoading } = trpc.candidature.getByUser.useQuery()
+  const { data: candidature } = trpc.candidature.getByUser.useQuery()
 
   const cvExist = !!candidature?.id
 
@@ -37,18 +37,14 @@ export const StudentHomePage: React.FC = () => {
           </p>
         </div>
       )}
-      {isLoading ? (
+      {!candidature ? (
         <CVDetails size="center" />
       ) : (
-        <div>
-          {candidature && (
-            <CVDetails
-              size="center"
-              candidature={getAdaptedCandidature(candidature)}
-              showButton={true}
-            />
-          )}
-        </div>
+        <CVDetails
+          size="center"
+          candidature={getAdaptedCandidature(candidature)}
+          showButton={true}
+        />
       )}
     </div>
   )

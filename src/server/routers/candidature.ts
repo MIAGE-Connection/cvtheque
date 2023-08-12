@@ -1,4 +1,10 @@
-import { CandidatureKind, CompetenceType, Event, LangLevel } from '@prisma/client'
+import {
+  Candidature,
+  CandidatureKind,
+  CompetenceType,
+  Event,
+  LangLevel,
+} from '@prisma/client'
 import { prisma } from 'server/prisma'
 import { isUserReviewer } from 'utils/utils'
 import { z } from 'zod'
@@ -24,6 +30,8 @@ const candidatureSchema = z.object({
   remote: z.boolean(),
   mobile: z.string().nullish(),
   passions: z.string().nullish(),
+  github: z.string().nullish(),
+  linkedin: z.string().nullish(),
   languages: z.array(
     z.object({
       language: z.string(),
@@ -86,21 +94,23 @@ export const candidatureRouter = router({
   add: authedProcedure.input(candidatureSchema).mutation(async ({ input, ctx }) => {
     const {
       id,
-      firstName,
-      lastName,
       city,
-      experiences,
-      experiencesAsso,
-      schools,
-      info,
-      kind,
-      title,
       competences,
       email,
-      remote,
+      experiences,
+      experiencesAsso,
+      firstName,
+      github,
+      info,
+      kind,
+      linkedin,
+      languages,
+      lastName,
       mobile,
       passions,
-      languages,
+      remote,
+      schools,
+      title,
     } = input
 
     const { role: role, email: userEmail } = ctx.user
@@ -136,9 +146,11 @@ export const candidatureRouter = router({
         data: {
           firstName,
           lastName,
+          github,
           city,
           info,
           kind,
+          linkedin,
           title,
           email,
           remote,
@@ -177,9 +189,11 @@ export const candidatureRouter = router({
         city,
         info,
         kind,
+        github,
         title,
         email,
         remote,
+        linkedin,
         mobile,
         passions,
         languages: { deleteMany: {}, createMany: { data: languages || [] } },
@@ -297,8 +311,7 @@ export const candidatureRouter = router({
     if (!user) {
       throw new Error('No user found')
     }
-
-    const candidatures = await prisma.candidature.findMany({
+    const candidature = await prisma.candidature.findFirst({
       where: {
         User: {
           some: {
@@ -316,9 +329,11 @@ export const candidatureRouter = router({
       },
     })
 
-    const candidature = candidatures[0]
+    if (!candidature) {
+      throw new Error('No candidature found')
+    }
 
-    const competences = candidature?.Competences
+    const competences = candidature.Competences
 
     const competencesByType = competences ? getCompetencesByType(competences) : []
 
@@ -345,7 +360,7 @@ export const candidatureRouter = router({
       throw new Error('No user found')
     }
 
-    const candidatures = await prisma.candidature.findMany({
+    const candidature = await prisma.candidature.findFirst({
       where: {
         User: {
           some: {
@@ -358,9 +373,7 @@ export const candidatureRouter = router({
       },
     })
 
-    const candidatureId = candidatures[0]?.id
-
-    return { candidatureId }
+    return candidature ? { id: candidature.id } : null
   }),
   askReview: authedProcedure
     .input(z.object({ id: z.string().uuid() }))
