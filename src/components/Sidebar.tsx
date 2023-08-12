@@ -2,7 +2,7 @@ import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { ReactElement, useState } from 'react'
 import { trpc } from 'utils/trpc'
-import { isUserPartner, isUserReviewer } from 'utils/utils'
+import { isUserPartner, isUserReviewer } from 'utils'
 
 const Sidebar: React.FC<{ children: ReactElement }> = ({ children }) => {
   const { data } = useSession()

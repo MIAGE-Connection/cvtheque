@@ -1,7 +1,7 @@
 import { useFieldArray } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 import { Input } from 'components/Input'
-import { dateToInputDate } from 'utils/utils'
+import { dateToInputDate } from 'utils'
 
 export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) => {
   const {

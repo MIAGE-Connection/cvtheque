@@ -2,7 +2,7 @@ import { CandidatureKind, CompetenceType } from '@prisma/client'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Candidature, useFilteredCandidatures } from './utils'
-import { getSelectValue, getCompetencesByType } from 'utils/competence.utils'
+import { getSelectValue, getCompetencesByType } from 'utils'
 
 type Props = {
   candidatures: Candidature[]

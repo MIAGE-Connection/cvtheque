@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { RouterInput, RouterOutput, trpc } from 'utils/trpc'
-import { dateToInputDate } from 'utils/utils'
+import { dateToInputDate } from 'utils'
 import { z } from 'zod'
 
 const schema = z.object({

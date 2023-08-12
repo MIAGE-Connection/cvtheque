@@ -6,11 +6,11 @@ import {
   CandidatureCompetencesByType,
   getLangLevelValueByEnum,
   isUserReviewer,
-} from 'utils/utils'
+} from 'utils'
 import Modal from './Modal'
 import { AddCandidatureInput, useAskReview } from './utils'
 import { v4 as uuidv4 } from 'uuid'
-import { getSelectValue } from 'utils/competence.utils'
+import { getSelectValue } from 'utils'
 
 export const CVDetails = (props: {
   candidature?:

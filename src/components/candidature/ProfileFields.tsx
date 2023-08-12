@@ -3,7 +3,7 @@ import { AddCandidatureInput } from 'components/utils'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 import { LangLevel } from '@prisma/client'
-import { getLangLevelValueByEnum } from 'utils/utils'
+import { getLangLevelValueByEnum } from 'utils'
 
 export const ProfileFields: React.FC<CommonFormProps> = ({ control, register }) => {
   const {

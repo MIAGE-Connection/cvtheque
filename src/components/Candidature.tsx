@@ -9,7 +9,7 @@ import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
 import { AddCandidatureInput, Props, TabType, useCandidatureForm } from './utils'
 import { toast } from 'react-toastify'
-import { getCompetencesByType } from 'utils/competence.utils'
+import { getCompetencesByType } from 'utils'
 
 const Candidature: React.FC<Props> = ({ initialValues }) => {
   const [checked, setChecked] = useState<boolean>(false)

@@ -3,7 +3,7 @@ import { AddCandidatureInput } from './utils'
 import Select from 'react-select'
 import { CompetenceType } from '@prisma/client'
 import { useMemo } from 'react'
-import { getSelectValue } from 'utils/competence.utils'
+import { getSelectValue } from 'utils'
 
 interface InputProps {
   control: Control<AddCandidatureInput>

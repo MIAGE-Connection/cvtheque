@@ -1,7 +1,7 @@
 import { useFieldArray } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 import { MissionsFields } from './MissionsFields'
-import { dateToInputDate } from 'utils/utils'
+import { dateToInputDate } from 'utils'
 import { Input } from 'components/Input'
 
 export const AssociationFields: React.FC<CommonFormProps> = ({ control, register }) => {

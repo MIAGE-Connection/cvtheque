@@ -1,7 +1,7 @@
 import { Input } from 'components/Input'
 import { AddCandidatureInput } from 'components/utils'
 import { Control, UseFormRegister, useFieldArray } from 'react-hook-form'
-import { dateToInputDate } from 'utils/utils'
+import { dateToInputDate } from 'utils'
 import { MissionsFields } from './MissionsFields'
 
 export type CommonFormProps = {
