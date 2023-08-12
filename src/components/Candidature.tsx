@@ -1,7 +1,6 @@
 import { CVDetails } from 'components/CVDetails'
 import { useState } from 'react'
 import { FormProvider } from 'react-hook-form'
-import { getCompetencesByType } from 'utils/utils'
 import Modal from './Modal'
 import { AssociationFields } from './candidature/AssociationFields'
 import { EntrepriseFields } from './candidature/EnterpriseFields'
@@ -10,6 +9,7 @@ import { SchoolFields } from './candidature/SchoolFields'
 import { SkillFields } from './candidature/SkillFields'
 import { AddCandidatureInput, Props, TabType, useCandidatureForm } from './utils'
 import { toast } from 'react-toastify'
+import { getCompetencesByType } from 'utils/competence.utils'
 
 const Candidature: React.FC<Props> = ({ initialValues }) => {
   const [checked, setChecked] = useState<boolean>(false)

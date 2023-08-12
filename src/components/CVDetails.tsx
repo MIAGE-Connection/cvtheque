@@ -5,12 +5,12 @@ import { useState } from 'react'
 import {
   CandidatureCompetencesByType,
   getLangLevelValueByEnum,
-  getSelectValue,
   isUserReviewer,
 } from 'utils/utils'
 import Modal from './Modal'
 import { AddCandidatureInput, useAskReview } from './utils'
 import { v4 as uuidv4 } from 'uuid'
+import { getSelectValue } from 'utils/competence.utils'
 
 export const CVDetails = (props: {
   candidature?:

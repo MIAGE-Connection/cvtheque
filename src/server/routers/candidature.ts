@@ -1,6 +1,6 @@
 import { CandidatureKind, CompetenceType, Event, LangLevel } from '@prisma/client'
 import { prisma } from 'server/prisma'
-import { getCompetencesByType, isUserReviewer } from 'utils/utils'
+import { isUserReviewer } from 'utils/utils'
 import { z } from 'zod'
 import {
   authedPartnerProcedure,
@@ -9,6 +9,7 @@ import {
   router,
 } from '../trpc'
 import { eventService } from './events/events.service'
+import { getCompetencesByType } from 'utils/competence.utils'
 
 export const MISSION_MAX_LENGTH = 100
 
@@ -357,7 +358,7 @@ export const candidatureRouter = router({
       },
     })
 
-    const candidatureId = candidatures[0].id
+    const candidatureId = candidatures[0]?.id
 
     return { candidatureId }
   }),

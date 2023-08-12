@@ -1,7 +1,7 @@
-import { useFieldArray } from 'react-hook-form'
-import { CommonFormProps } from './EnterpriseFields'
-import { getSelectValue } from 'utils/utils'
 import { CompetenceType } from '@prisma/client'
+import { SkillSearch } from 'components/SkillSearch'
+import { useController, useFieldArray } from 'react-hook-form'
+import { CommonFormProps } from './EnterpriseFields'
 
 export const SkillFields: React.FC<CommonFormProps> = ({ control, register }) => {
   const {
@@ -12,6 +12,11 @@ export const SkillFields: React.FC<CommonFormProps> = ({ control, register }) =>
     name: 'competences',
     control,
   })
+
+  const {
+    field: { value: langValue, onChange: langOnChange, ...restLangField },
+  } = useController({ name: 'competences', control })
+
   return (
     <div id="skills" className="space-y-4 animate-fade-in-down">
       <h1 className="text-xl text-center font-semibold text-mc">Compétences</h1>
@@ -39,18 +44,7 @@ export const SkillFields: React.FC<CommonFormProps> = ({ control, register }) =>
                 <label className="label">
                   <span className="label-text">Type</span>
                 </label>
-
-                <select
-                  className="select select-bordered w-full"
-                  {...register(`competences.${index}.type`)}
-                  defaultValue={CompetenceType.FRONTEND}
-                >
-                  {Object.values(CompetenceType).map((key) => (
-                    <option key={key} value={key}>
-                      {getSelectValue(key)}
-                    </option>
-                  ))}
-                </select>
+                <SkillSearch control={control} />
               </div>
             </div>
 
@@ -75,7 +69,7 @@ export const SkillFields: React.FC<CommonFormProps> = ({ control, register }) =>
           onClick={() => {
             addCompetence({
               description: '',
-              type: CompetenceType.PROJECT_MANAGEMENT,
+              type: CompetenceType.ADMINISTRATION_SYSTEME,
             })
           }}
           type="button"
