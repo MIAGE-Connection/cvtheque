@@ -7,12 +7,13 @@ import { getSelectValue } from 'utils'
 
 interface InputProps {
   control: Control<AddCandidatureInput>
+  index: number
 }
 
-export const SkillSearch: React.FC<InputProps> = ({ control }) => {
+export const SkillSearch: React.FC<InputProps> = ({ control, index }) => {
   const {
     field: { value: langValue, onChange: langOnChange, ...restLangField },
-  } = useController({ name: `competences.${0}.type`, control })
+  } = useController({ name: `competences.${index}.type`, control })
 
   const competencesList = useMemo(
     () =>

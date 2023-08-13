@@ -44,7 +44,7 @@ export const SkillFields: React.FC<CommonFormProps> = ({ control, register }) =>
                 <label className="label">
                   <span className="label-text">Type</span>
                 </label>
-                <SkillSearch control={control} />
+                <SkillSearch control={control} index={index} />
               </div>
             </div>
 
