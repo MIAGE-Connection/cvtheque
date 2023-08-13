@@ -1,11 +1,6 @@
-import {
-  Candidature,
-  CandidatureKind,
-  CompetenceType,
-  Event,
-  LangLevel,
-} from '@prisma/client'
+import { CandidatureKind, CompetenceType, Event, LangLevel } from '@prisma/client'
 import { prisma } from 'server/prisma'
+import { getCompetencesByType } from 'utils/competence.utils'
 import { isUserReviewer } from 'utils/utils'
 import { z } from 'zod'
 import {
@@ -15,7 +10,6 @@ import {
   router,
 } from '../trpc'
 import { eventService } from './events/events.service'
-import { getCompetencesByType } from 'utils/competence.utils'
 
 export const MISSION_MAX_LENGTH = 100
 
@@ -237,9 +231,22 @@ export const candidatureRouter = router({
   }),
   list: authedPartnerProcedure.query(async () => {
     const candidatures = await prisma.candidature.findMany({
-      include: {
-        Competences: true,
+      select: {
+        id: true,
+        title: true,
+        kind: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        city: true,
+        Competences: {
+          select: {
+            description: true,
+            type: true,
+          },
+        },
       },
+
       where: {
         ReviewRequest: {
           approved: true,

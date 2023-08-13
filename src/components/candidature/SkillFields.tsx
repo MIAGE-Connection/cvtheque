@@ -1,6 +1,6 @@
 import { CompetenceType } from '@prisma/client'
 import { SkillSearch } from 'components/SkillSearch'
-import { useController, useFieldArray } from 'react-hook-form'
+import { useFieldArray } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 
 export const SkillFields: React.FC<CommonFormProps> = ({ control, register }) => {
@@ -12,10 +12,6 @@ export const SkillFields: React.FC<CommonFormProps> = ({ control, register }) =>
     name: 'competences',
     control,
   })
-
-  const {
-    field: { value: langValue, onChange: langOnChange, ...restLangField },
-  } = useController({ name: 'competences', control })
 
   return (
     <div id="skills" className="space-y-4 animate-fade-in-down">

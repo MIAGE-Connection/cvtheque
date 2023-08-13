@@ -21,7 +21,7 @@ export const SkillSearch: React.FC<InputProps> = ({ control, index }) => {
         value: competence,
         label: getSelectValue(competence),
       })),
-    [langValue],
+    [],
   )
 
   return (

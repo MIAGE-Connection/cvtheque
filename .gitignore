@@ -39,3 +39,4 @@ yarn-error.log*
 *.db
 *.db-journal
 .env
+.eslintcache
