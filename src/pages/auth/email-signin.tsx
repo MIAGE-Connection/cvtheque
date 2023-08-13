@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 export default function SignIn() {
   const [email, setMail] = useState('')
+  const [loading, setLoading] = useState(false)
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="border rounded-lg p-4 flex-col">
@@ -26,7 +27,13 @@ export default function SignIn() {
           <button
             className="btn btn-primary"
             type="submit"
-            onClick={() => signIn('email', { email })}
+            disabled={loading}
+            onClick={async (e) => {
+              e.preventDefault()
+              setLoading(true)
+              await signIn('email', { email })
+              setLoading(false)
+            }}
           >
             Se connecter
           </button>

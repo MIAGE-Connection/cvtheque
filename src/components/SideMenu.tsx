@@ -250,7 +250,7 @@ const SideMenu: React.FC = () => {
           } h-fit w-full md:w-72 shadow-xl bg-gray-200 border rounded-2xl z-10 p-4 text-white space-y-3 inset-y-0 my-auto fixed transition-all duration-300 ease-out will-change-transform left-0`}
           ref={divNode}
         >
-          {routesFiltered.map((item) => (
+          {routesFiltered.map((item, index) => (
             <Link
               key={item.route}
               href={item.route}
@@ -260,7 +260,7 @@ const SideMenu: React.FC = () => {
               }}
               className={`transform transition duration-500 hover:scale-110 border rounded-2xl flex bg-mc no-underline font-semibold px-6 py-4 border-solid ${
                 item.style ? item.style : ''
-              }`}
+              } ${index === routesFiltered.length - 1 ? '!mt-12' : ''}`}
             >
               {item.name}
             </Link>
