@@ -187,9 +187,9 @@ const SideMenu: React.FC = () => {
       ? [
           {
             name: 'Se déconnecter',
-            route: '/logout',
+            route: '/',
             roles: ['ADMIN', 'REVIEWER', 'PARNTER', 'USER'] as Role[],
-            style: 'bg-error',
+            style: '!bg-error',
             onClick: () => signOut(),
             icon: (
               <svg
@@ -252,7 +252,7 @@ const SideMenu: React.FC = () => {
         >
           {routesFiltered.map((item, index) => (
             <Link
-              key={item.route}
+              key={item.name}
               href={item.route}
               onClick={() => {
                 item.onClick?.()

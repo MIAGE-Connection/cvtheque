@@ -17,9 +17,9 @@ const Infos: React.FC = () => {
       <h1 className="text-3xl text-mc">Informations</h1>
       <div className="space-y-4">
         <p>
-          <strong className="text-mc">Miage Connection</strong> a pour mission de récolter
-          des CV afin de les distribuer à nos partenaires qui cherchent activement des
-          profils miagistes.
+          Ce site permet à <strong className="text-mc">MIAGE Connection</strong> de
+          récolter des CV afin de les diffuser aux partenaires de la fédération qui
+          recherchent activement des étudiants en MIAGE.
         </p>
         <h2 className="text-xl text-mc ">Confidentialité des données</h2>
         <p>
@@ -30,8 +30,8 @@ const Infos: React.FC = () => {
           potentiels.
         </p>
         <p>
-          En supprimant votre candidature nous ne garderons aucune information autre que
-          l&apos;email. Pour le supprimer, cliquez sur ce lien:{' '}
+          Si vous souhaitez supprimer votre compte ainsi que toutes les données liées,
+          cliquez sur ce lien:{' '}
           <button
             onClick={() => deleteAccount()}
             className="btn btn-link text-red-600 p-0"

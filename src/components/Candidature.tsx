@@ -36,8 +36,8 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
     <>
       <div className="sm:m-4 space-y-2">
         <div>
-          <h1 className="text-xl font-semibold text-mc">
-            Bienvenue sur le site de dépôt de CV de l&apos;association Miage Connection.
+          <h1 className="text-lg font-semibold text-mc">
+            Bienvenue sur le site de dépôt de CV de l&apos;association MIAGE Connection.
             Nous vous invitons à compléter le formulaire ci-dessous afin que le bureau
             puisse éventuellement vous faire un retour avant publication.
           </h1>
@@ -59,8 +59,8 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
               <button
                 className={`${
                   activeTab === type
-                    ? 'font-bold text-mc  border-b-2 border-mc text-3xl'
-                    : 'border-b-[1px] border-b-gray-700 text-2xl'
+                    ? 'font-bold text-mc  border-b-2 border-mc text-xl'
+                    : 'border-b-[1px] border-b-gray-700 text-lg'
                 }`}
               >
                 {
@@ -184,7 +184,7 @@ const Candidature: React.FC<Props> = ({ initialValues }) => {
                     des CV soumis sur notre plateforme. Afin de garantir cela, tous les CV
                     seront soumis à une <strong className="font-bold">validation</strong>{' '}
                     rigoureuse par le bureau national de l&apos;association{' '}
-                    <strong className="text-mc">Miage Connection</strong>.
+                    <strong className="text-mc">MIAGE Connection</strong>.
                   </p>
                   <p>
                     Cette procédure de validation vise à assurer que seuls les CV qui

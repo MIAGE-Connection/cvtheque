@@ -13,11 +13,11 @@ type Props = {
 export const CandidatureList: React.FC<Props> = ({ candidatures }) => {
   const headers: JSX.Element = (
     <>
-      <th className="text-xl bg-mc text-white rounded-tl-xl">Nom</th>
-      <th className="text-xl bg-mc text-white">Poste</th>
-      <th className="text-xl bg-mc text-white">Ville</th>
-      <th className="text-xl bg-mc text-white">Compétences</th>
-      <th className="text-xl bg-mc text-white rounded-tr-xl"></th>
+      <th className="text-lg bg-mc text-white rounded-tl-xl">Nom</th>
+      <th className="text-lg bg-mc text-white">Poste</th>
+      <th className="text-lg bg-mc text-white">Ville</th>
+      <th className="text-lg bg-mc text-white">Compétences</th>
+      <th className="text-lg bg-mc text-white rounded-tr-xl"></th>
     </>
   )
   const ref = useRef<HTMLDivElement>(null)
