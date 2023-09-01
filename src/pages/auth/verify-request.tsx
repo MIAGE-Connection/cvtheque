@@ -9,7 +9,7 @@ export default function VerifyRequest() {
         <h1 className="font-bold text-3xl">Un email vous a été envoyé!</h1>
         <p className="text-center">Merci de votre confiance</p>
         <p className="text-center">
-          L&apos;équipe <strong className="text-mc">Miage connection</strong>
+          L&apos;équipe <strong className="text-mc">MIAGE connection</strong>
         </p>
         <Link href="/" className="btn btn-link btn-xs p-0 mt-2">
           Retour à l&apos;accueil
@@ -19,7 +19,7 @@ export default function VerifyRequest() {
           <Image
             src={mc}
             className={'max-w-xs'}
-            alt="Logo de Miage Connection"
+            alt="Logo de MIAGE Connection"
             loading="eager"
             placeholder="blur"
           />

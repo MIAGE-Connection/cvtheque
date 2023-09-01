@@ -37,7 +37,7 @@ export const CVDetails = (props: {
   const showEditButtons = isOwner || isReviewer
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 animate-fade-in-down">
       {showEditButtons && candidature?.ReviewRequest?.description && (
         <div className="flex justify-center mb-8">
           <div className="border border-error shadow-md rounded-xl p-8 w-full xl:w-4/6">
@@ -48,7 +48,7 @@ export const CVDetails = (props: {
           </div>
         </div>
       )}
-      <div className="flex justify-center overflow-x-scroll">
+      <div className="flex justify-center">
         <div
           className={`p-4 md:p-8 border rounded-xl ${
             size === 'full' ? 'w-full' : 'w-full xl:w-4/6'

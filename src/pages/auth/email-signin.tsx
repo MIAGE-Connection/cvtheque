@@ -42,7 +42,7 @@ export default function SignIn() {
           <Image
             src={mc}
             className={'max-w-xs'}
-            alt="Logo de Miage Connection"
+            alt="Logo de MIAGE Connection"
             loading="eager"
             placeholder="blur"
           />
