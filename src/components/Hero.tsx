@@ -1,5 +1,5 @@
 import { signIn, useSession } from 'next-auth/react'
-import heroImg from '../../public/hero.png'
+import heroImg from '../../public/hero.svg'
 import Image from 'next/image'
 
 export const Hero = () => {
@@ -36,7 +36,6 @@ export const Hero = () => {
               className={'object-cover'}
               alt="Hero Illustration"
               loading="eager"
-              placeholder="blur"
             />
           </div>
         </div>
