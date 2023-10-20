@@ -18,11 +18,17 @@ export const Hero = () => {
             </p>
 
             {!session && (
-              <div className="flex flex-col items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
-                <button className="btn btn-primary px-8 py-4" onClick={() => signIn()}>
+              <div className="flex items-center sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
+                <button
+                  className="btn btn-primary px-8 py-4 hover:scale-105"
+                  onClick={() => signIn()}
+                >
                   Inscrivez-vous
                 </button>
-                <button className="btn btn-link px-8 py-4" onClick={() => signIn()}>
+                <button
+                  className="btn btn-link px-8 py-4 hover:opacity-75"
+                  onClick={() => signIn()}
+                >
                   Se connecter
                 </button>
               </div>

@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { trpc } from 'utils/trpc'
 import '../styles/global.css'
 import SideMenu from 'components/SideMenu'
+import { Footer } from 'components/homepage/Footer'
 
 export type NextPageWithLayout<
   TProps = Record<string, unknown>,
@@ -24,9 +25,18 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps }) =
         <title>CV-Thèque MC</title>
       </Head>
       <SideMenu />
-      <div className="mx-2 md:mx-16">
-        <Component {...pageProps} />
+      <div
+        className="mx-2 md:mx-16 flex flex-col"
+        style={{
+          minHeight: 'calc(100vh - 80px)',
+        }}
+      >
+        <div className="flex-1">
+          <Component {...pageProps} />
+        </div>
+        <Footer />
       </div>
+
       <ToastContainer autoClose={3000} />
     </SessionProvider>
   )
