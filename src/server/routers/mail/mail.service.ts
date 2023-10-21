@@ -1,16 +1,12 @@
 import { render } from '@react-email/render'
 import nodemailer from 'nodemailer'
-import CandidatureToReview from '../../../../emails/CandidatureToReview'
+import { CandidatureToReviewEmail, CandidatureValidatedEmail } from './mail.type'
+import { CandidatureToReview, CandidatureValidated } from '../../../../emails'
 
 type EmailPayload = {
   to: string
   subject: string
   html: string
-}
-
-type CandidatureToReviewEmail = {
-  fullname: string
-  candidatureId: string
 }
 
 const APP_URL = process.env.APP_URL
@@ -47,6 +43,23 @@ export const mailService = {
       subject: `Candidature de ${fullname} à corriger`,
       html: render(
         CandidatureToReview({
+          url: `${APP_URL}/list/${candidatureId}`,
+        }),
+      ),
+    })
+  },
+
+  /**
+   * Envoi d'un mail à la personne dont la candidature a été validée
+   * @param userId L'id de l'utilisateur
+   * @param candidatureId L'id de la candidature pour la redirection
+   */
+  sendCandidatureValidatedEmail({ candidatureId, email }: CandidatureValidatedEmail) {
+    sendEmail({
+      to: email,
+      subject: `Votre candidature a été validée`,
+      html: render(
+        CandidatureValidated({
           url: `${APP_URL}/list/${candidatureId}`,
         }),
       ),

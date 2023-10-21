@@ -98,15 +98,14 @@ model Candidature {
   linkedin  String?
 
   //relations
-  experiences     Experience[]
-  schools         School[]
-  Competences     Competences[]
-  User            User[]
-  userId          String?
-  ReviewRequest   ReviewRequest?   @relation(fields: [reviewRequestId], references: [id])
-  reviewRequestId String?
-  ExperienceAsso  ExperienceAsso[]
-  languages       Language[]
+  experiences    Experience[]
+  schools        School[]
+  Competences    Competences[]
+  User           User[]
+  userId         String?
+  ExperienceAsso ExperienceAsso[]
+  languages      Language[]
+  ReviewRequest  ReviewRequest?
 }
 
 //region Candidature language
@@ -129,15 +128,15 @@ model Language {
 //endregion
 
 model ReviewRequest {
-  id            String        @id @default(cuid())
-  candidatureId String
-  approved      Boolean       @default(false)
-  description   String        @default("")
+  id            String      @id @default(cuid())
+  approved      Boolean     @default(false)
+  description   String      @default("")
   reviewerId    String?
-  reviewer      User?         @relation(fields: [reviewerId], references: [id])
-  Candidature   Candidature[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  reviewer      User?       @relation(fields: [reviewerId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  candidatureId String      @unique
+  candidature   Candidature @relation(fields: [candidatureId], references: [id])
 }
 
 model Experience {
