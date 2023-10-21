@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import mc from '../../../public/mc.png'
 import Link from 'next/link'
 
 export const Footer: React.FC = () => {
@@ -7,8 +9,13 @@ export const Footer: React.FC = () => {
       <div>
         <div className="flex justify-between items-center">
           <button className="btn btn-link normal-case">
-            <Link href="https://www.miage-connection.fr/" target="_blank">
-              MIAGE Connection
+            <Link
+              href="https://www.miage-connection.fr/"
+              target="_blank"
+              className="flex space-x-4 items-center"
+            >
+              <Image src={mc} alt="logo miage connection" className="w-12 md:w-16" />
+              <p>MIAGE Connection</p>
             </Link>
           </button>
           <div className="flex space-x-2">
