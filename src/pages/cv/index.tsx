@@ -1,4 +1,4 @@
-import Candidature from 'components/Candidature'
+import Candidature from 'components/candidature/Candidature'
 
 const CandidatureView: React.FC = () => {
   return <Candidature />
