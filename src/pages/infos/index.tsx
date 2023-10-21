@@ -1,5 +1,7 @@
 import Modal from 'components/Modal'
 import { signOut } from 'next-auth/react'
+import adeo from '../../../public/adeo.png'
+import Image from 'next/image'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { trpc } from 'utils/trpc'
@@ -42,6 +44,10 @@ const Infos: React.FC = () => {
             supprimer mon compte définitivement
           </button>
         </p>
+      </div>
+      <h1 className="text-3xl text-mc">Partenaires</h1>
+      <div>
+        <Image src={adeo} alt="logo ADEO" className="w-28 md:w-48" />
       </div>
       <Modal open={deleteConfirmVisible}>
         <div className="space-y-4">

@@ -7,5 +7,5 @@
  */
 -- AlterTable
 ALTER TABLE "Candidature" DROP COLUMN IF EXISTS "reviewRequestId";
--- CreateIndex
-CREATE UNIQUE INDEX "ReviewRequest_candidatureId_key" ON "ReviewRequest"("candidatureId");
+-- CreateIndex if not exists
+CREATE UNIQUE INDEX IF NOT EXISTS "ReviewRequest_candidatureId_key" ON "ReviewRequest"("candidatureId");
