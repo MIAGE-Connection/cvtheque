@@ -1,8 +1,11 @@
+import Modal from 'components/Modal'
 import { signOut } from 'next-auth/react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { trpc } from 'utils/trpc'
 
 const Infos: React.FC = () => {
+  const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false)
   const { mutate: deleteAccount } = trpc.user.deleteAccount.useMutation({
     onSuccess: () => {
       toast.success('Votre compte a bien été supprimé')
@@ -33,13 +36,29 @@ const Infos: React.FC = () => {
           Si vous souhaitez supprimer votre compte ainsi que toutes les données liées,
           cliquez sur ce lien:{' '}
           <button
-            onClick={() => deleteAccount()}
-            className="btn btn-link text-red-600 p-0"
+            onClick={() => setDeleteConfirmVisible(true)}
+            className="btn btn-link text-red-600 p-0 normal-case"
           >
-            Supprimer mon compte définitivement
+            supprimer mon compte définitivement
           </button>
         </p>
       </div>
+      <Modal open={deleteConfirmVisible}>
+        <div className="space-y-4">
+          <p>Êtes-vous sûr de vouloir supprimer votre compte ?</p>
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={() => setDeleteConfirmVisible(false)}
+              className="btn btn-primary"
+            >
+              Non
+            </button>
+            <button onClick={() => deleteAccount()} className="btn btn-error">
+              Oui
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import Candidature from 'components/Candidature'
+import Candidature from 'components/candidature/Candidature'
 import Spin from 'components/Spin'
 import { getAdaptedCandidature } from 'components/utils'
 import { useSession } from 'next-auth/react'

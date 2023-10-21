@@ -1,8 +1,10 @@
 import { Role } from '@prisma/client'
 import { signOut, useSession } from 'next-auth/react'
+import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState, useEffect, useRef } from 'react'
 import { trpc } from 'utils/trpc'
+import mc from '../../public/mc.png'
 
 const SideMenu: React.FC = () => {
   const [visible, setVisible] = useState<boolean>(false)
@@ -222,9 +224,9 @@ const SideMenu: React.FC = () => {
   return (
     <>
       <header className="h-20 flex justify-center content-center">
-        <div className="flex items-center w-full">
+        <div className="flex items-center w-full justify-between mx-6">
           <span
-            className="flex cursor-pointer ml-6 mr-16  hover:will-change-transform "
+            className="flex cursor-pointer hover:will-change-transform "
             ref={domeNode}
             onClick={() => {
               open(visible)
@@ -243,6 +245,11 @@ const SideMenu: React.FC = () => {
               )}
             </svg>
           </span>
+          <div>
+            <Link href="https://www.miage-connection.fr/" target="_blank">
+              <Image src={mc} className={'w-16'} alt="Logi de Miage Connection" />
+            </Link>
+          </div>
         </div>
         <div
           className={`${
@@ -258,7 +265,7 @@ const SideMenu: React.FC = () => {
                 item.onClick?.()
                 setVisible(false)
               }}
-              className={`transform transition duration-500 hover:scale-110 border rounded-2xl flex bg-mc no-underline font-semibold px-6 py-4 border-solid ${
+              className={`transform transition duration-500 hover:scale-110 border rounded-2xl flex bg-mc no-underline font-semibold px-3 py-3 border-solid ${
                 item.style ? item.style : ''
               } ${index === routesFiltered.length - 1 ? '!mt-12' : ''}`}
             >
