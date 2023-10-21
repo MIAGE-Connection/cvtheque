@@ -1,5 +1,6 @@
 import { signIn, useSession } from 'next-auth/react'
 import heroImg from '../../public/hero.svg'
+import hiringImg from '../../public/hiring.svg'
 import Image from 'next/image'
 
 export const Hero = () => {
@@ -46,6 +47,21 @@ export const Hero = () => {
           </div>
         </div>
       </div>
+      <div className="divider" />
+      <div className="flex-col space-y-4 md:flex md:flex-row md:items-center md:justify-between">
+        <div className="font-bold text-xl mr-4">
+          Déposez votre CV en quelques étapes et après validation, il sera disponible pour
+          nos partenaires!
+        </div>
+        <div className="flex justify-center">
+          <Image
+            src={hiringImg}
+            alt="Illustration de recrutement"
+            className="w-48 md:w-96"
+          />
+        </div>
+      </div>
+      <div className="divider" />
     </>
   )
 }
