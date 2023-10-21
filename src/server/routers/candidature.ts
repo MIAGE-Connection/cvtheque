@@ -391,8 +391,13 @@ export const candidatureRouter = router({
         where: { id },
         data: {
           ReviewRequest: {
-            create: {
-              candidatureId: id,
+            upsert: {
+              update: {
+                approved: false,
+              },
+              create: {
+                approved: false,
+              },
             },
           },
         },

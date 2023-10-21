@@ -12,14 +12,9 @@ export const reviewRouter = router({
       const reviewRequest = await prisma.reviewRequest.create({
         data: {
           candidatureId: id,
-          Candidature: {
-            connect: {
-              id,
-            },
-          },
         },
         include: {
-          Candidature: {
+          candidature: {
             select: {
               id: true,
               firstName: true,
@@ -29,9 +24,23 @@ export const reviewRouter = router({
         },
       })
 
+      const candidature = await prisma.candidature.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      })
+
+      if (!candidature) {
+        throw new Error('Candidature not found')
+      }
+
       mailService.sendCandidatureToReviewEmail({
-        candidatureId: reviewRequest.Candidature[0].id,
-        fullname: `${reviewRequest.Candidature[0].firstName} ${reviewRequest.Candidature[0].lastName}`,
+        candidatureId: reviewRequest.candidatureId,
+        fullname: `${candidature.firstName} ${candidature.lastName}`,
       })
 
       return reviewRequest
@@ -39,7 +48,7 @@ export const reviewRouter = router({
   save: authedReviewerProcedure
     .input(
       z.object({
-        id: z.string().uuid(),
+        id: z.string(),
         approved: z.boolean(),
         description: z.string().nullish(),
       }),
@@ -62,9 +71,9 @@ export const reviewRouter = router({
         throw new Error('User not found')
       }
 
-      await prisma.reviewRequest.updateMany({
+      await prisma.reviewRequest.update({
         where: {
-          candidatureId: id,
+          id,
         },
         data: {
           approved,
@@ -72,6 +81,13 @@ export const reviewRouter = router({
           reviewerId: user.id,
         },
       })
+
+      if (approved) {
+        mailService.sendCandidatureValidatedEmail({
+          candidatureId: id,
+          email: userEmail,
+        })
+      }
 
       return { approved }
     }),
@@ -97,11 +113,10 @@ export const reviewRouter = router({
     })
 
     const toReview = candidatures.filter(
-      (candidature) => candidature.ReviewRequest?.approved === false,
+      (candidature) => !candidature.ReviewRequest?.approved,
     )
-    const old = candidatures.filter(
-      (candidature) => candidature.ReviewRequest?.approved === true,
-    )
+
+    const old = candidatures.filter((candidature) => candidature.ReviewRequest?.approved)
 
     return {
       toReview,

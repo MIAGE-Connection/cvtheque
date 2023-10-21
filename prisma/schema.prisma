@@ -105,7 +105,7 @@ model Candidature {
   userId         String?
   ExperienceAsso ExperienceAsso[]
   languages      Language[]
-  ReviewRequest  ReviewRequest[]
+  ReviewRequest  ReviewRequest?
 }
 
 //region Candidature language
@@ -129,14 +129,14 @@ model Language {
 
 model ReviewRequest {
   id            String      @id @default(cuid())
-  candidatureId String
   approved      Boolean     @default(false)
   description   String      @default("")
   reviewerId    String?
   reviewer      User?       @relation(fields: [reviewerId], references: [id])
-  Candidature   Candidature @relation(fields: [candidatureId], references: [id])
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  candidatureId String      @unique
+  candidature   Candidature @relation(fields: [candidatureId], references: [id])
 }
 
 model Experience {

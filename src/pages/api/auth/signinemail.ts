@@ -50,7 +50,7 @@ function html(params: { url: string; theme: Theme }) {
     <tr>
       <td align="center"
         style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
-        Connectez-vous à la cv-thèque de Miage Connection en cliquant via le bouton ci-dessous!
+        Connectez-vous à la cv-thèque de <a href='https://cv-theque.miage-connection.fr/'>Miage Connection</a> en cliquant via le bouton ci-dessous!
       </td>
     </tr>
     <tr>

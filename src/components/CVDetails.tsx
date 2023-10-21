@@ -270,7 +270,10 @@ export const CVDetails = (props: {
                   <button
                     className={`btn btn-success mt-4`}
                     onClick={() =>
-                      addReview?.({ id: candidature?.id || '', approved: true })
+                      addReview?.({
+                        id: candidature?.ReviewRequest?.id || '',
+                        approved: true,
+                      })
                     }
                   >
                     Valider
@@ -314,7 +317,7 @@ export const CVDetails = (props: {
             className={`btn btn-error`}
             onClick={() =>
               addReview?.({
-                id: candidature?.id || '',
+                id: candidature?.ReviewRequest?.id || '',
                 approved: false,
                 description: review,
               })

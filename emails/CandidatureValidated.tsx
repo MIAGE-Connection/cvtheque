@@ -14,8 +14,8 @@ import {
 } from '@react-email/components'
 import { CommonEmailType } from './email.type'
 
-export const CandidatureToReview = ({ url = 'url not found' }: CommonEmailType) => {
-  const previewText = 'Validateur, une correction vous attend!'
+export const CandidatureValidated = ({ url = 'url not found' }: CommonEmailType) => {
+  const previewText = 'Félication, votre candidature a été validée!'
 
   return (
     <Html>
@@ -27,12 +27,9 @@ export const CandidatureToReview = ({ url = 'url not found' }: CommonEmailType) 
             <Heading className="text-[#2b309b] text-[24px] font-normal text-center p-0 my-[30px] mx-0">
               MIAGE Connection
             </Heading>
+            <Text className="text-black text-[14px] leading-[24px]">Bonjour,</Text>
             <Text className="text-black text-[14px] leading-[24px]">
-              Bonjour validateur,
-            </Text>
-            <Text className="text-black text-[14px] leading-[24px]">
-              Une nouvelle candidature a été déposée. Veuillez la corriger en cliquant sur
-              le bouton ci-dessous.
+              Vous avez déposer une candidatue et celle-ci a été acceptée! Félicitation!.
             </Text>
 
             <Section className="text-center mt-[32px] mb-[32px]">
@@ -42,7 +39,7 @@ export const CandidatureToReview = ({ url = 'url not found' }: CommonEmailType) 
                 className="bg-[#2b309b] rounded text-white text-[12px] font-semibold no-underline text-center"
                 href={url}
               >
-                Corriger
+                Consulter ma candidature
               </Button>
             </Section>
             <Text className="text-black text-[14px] leading-[24px]">
