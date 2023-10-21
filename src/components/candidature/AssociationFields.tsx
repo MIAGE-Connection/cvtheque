@@ -1,4 +1,4 @@
-import { useFieldArray } from 'react-hook-form'
+import { useFieldArray, useWatch } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 import { MissionsFields } from './MissionsFields'
 import { dateToInputDate } from 'utils'
@@ -10,6 +10,11 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
     remove,
     append,
   } = useFieldArray({
+    control,
+    name: `experiencesAsso`,
+  })
+
+  const experiencesAssoValues = useWatch({
     control,
     name: `experiencesAsso`,
   })
@@ -77,6 +82,7 @@ export const AssociationFields: React.FC<CommonFormProps> = ({ control, register
                   <input
                     className="input input-bordered w-full md:max-w-xs"
                     type="date"
+                    min={experiencesAssoValues?.[index]?.startAt}
                     {...register(`experiencesAsso.${index}.endAt`)}
                   />
                 </div>

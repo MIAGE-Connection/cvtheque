@@ -1,6 +1,6 @@
 import { Input } from 'components/Input'
 import { AddCandidatureInput } from 'components/utils'
-import { Control, UseFormRegister, useFieldArray } from 'react-hook-form'
+import { Control, UseFormRegister, useFieldArray, useWatch } from 'react-hook-form'
 import { dateToInputDate } from 'utils'
 import { MissionsFields } from './MissionsFields'
 
@@ -15,6 +15,11 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
     remove,
     append,
   } = useFieldArray({
+    control,
+    name: `experiences`,
+  })
+
+  const experiencesValues = useWatch({
     control,
     name: `experiences`,
   })
@@ -85,6 +90,7 @@ export const EntrepriseFields: React.FC<CommonFormProps> = ({ control, register 
                   <input
                     className="input input-bordered w-full md:max-w-xs"
                     type="date"
+                    min={experiencesValues?.[index]?.startAt}
                     {...register(`experiences.${index}.endAt`)}
                   />
                 </div>

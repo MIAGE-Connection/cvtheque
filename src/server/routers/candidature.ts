@@ -210,13 +210,13 @@ export const candidatureRouter = router({
 
     // Update ReviewRequest if exists
 
-    const ReviewRequest = await prisma.reviewRequest.findFirst({
+    const ReviewRequest = await prisma.reviewRequest.findUnique({
       where: {
         candidatureId: id,
       },
     })
 
-    if (ReviewRequest) {
+    if (ReviewRequest && isReviewer) {
       await prisma.reviewRequest.update({
         where: {
           id: ReviewRequest.id,

@@ -1,4 +1,4 @@
-import { useFieldArray } from 'react-hook-form'
+import { useFieldArray, useWatch } from 'react-hook-form'
 import { CommonFormProps } from './EnterpriseFields'
 import { Input } from 'components/Input'
 import { dateToInputDate } from 'utils'
@@ -12,6 +12,12 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
     name: 'schools',
     control,
   })
+
+  const schoolValues = useWatch({
+    control,
+    name: `schools`,
+  })
+
   return (
     <div id="school" className="space-y-4 animate-fade-in-down">
       <h1 className="text-xl text-center font-semibold text-mc">Parcours scolaire</h1>
@@ -73,6 +79,7 @@ export const SchoolFields: React.FC<CommonFormProps> = ({ control, register }) =
                 <input
                   className="input input-bordered w-full md:max-w-xs"
                   type="date"
+                  min={schoolValues?.[index]?.startAt}
                   {...register(`schools.${index}.endAt`)}
                 />
               </div>
