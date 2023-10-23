@@ -27,7 +27,6 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.47.0
   '@typescript-eslint/parser': ^5.47.0
   autoprefixer: ^10.4.7
-  clsx: ^1.1.1
   cross-env: ^7.0.3
   daisyui: ^3.0.3
   eslint: ^8.30.0
@@ -73,7 +72,6 @@ dependencies:
   '@trpc/next': 10.29.1_t7yyqhel76jgpgsafqynt3vyyq
   '@trpc/react-query': 10.29.1_na4xefa36cieoj5mcl2dhsmtnm
   '@trpc/server': 10.29.1
-  clsx: 1.2.1
   daisyui: 3.0.3_postcss@8.4.24
   global: 4.4.0
   next: 13.4.4_biqbaboplfbrettd7655fr4n2y
