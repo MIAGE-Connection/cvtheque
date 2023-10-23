@@ -25,7 +25,6 @@
     "lint-fix": "pnpm lint --fix",
     "test-dev": "cross-env APP_ENV=test start-server-and-test dev 3000 test",
     "test-start": "cross-env APP_ENV=test WS_URL=ws://localhost:3000 start-server-and-test start 3000 test",
-    "test": "playwright test",
     "mail": "email dev",
     "postinstall": "prisma generate"
   },
@@ -73,7 +72,6 @@
   "devDependencies": {
     "@netlify/esbuild-darwin-64": "^0.14.39",
     "@netlify/plugin-nextjs": "4.36.1",
-    "@playwright/test": "^1.26.1",
     "@tanstack/react-query-devtools": "^4.3.8",
     "@types/node": "^18.7.20",
     "@types/nodemailer": "^6.4.8",
