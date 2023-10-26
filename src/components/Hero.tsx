@@ -49,9 +49,27 @@ export const Hero = () => {
       </div>
       <div className="divider" />
       <div className="flex-col space-y-4 md:flex md:flex-row md:items-center md:justify-between">
-        <div className="font-bold text-xl mr-4">
-          Déposez votre CV en quelques étapes et après validation, il sera disponible pour
-          nos partenaires!
+        <div className="space-y-4">
+          <h2 className="font-bold text-xl text-mc">
+            Trouvez votre opportunité professionnelle idéale:
+          </h2>
+          <p>
+            Déposez votre CV MIAGE dès aujourd'hui et connectez-vous avec les meilleures
+            entreprises.
+          </p>
+          <h2 className="font-bold text-xl text-mc">
+            Participer au réseau MIAGE Connection:
+          </h2>
+          <p>
+            Rejoignez la communauté MIAGE Connection et profitez d&apos;un accès exclusif
+            à des opportunités de carrière, provenant de nos partenaires.
+          </p>
+          <h2 className="font-bold text-xl text-mc">
+            Déposez votre CV en quelques étapes:
+          </h2>
+          <p>
+            Déposez votre CV en quelques étapes et après validation, il sera disponible!
+          </p>
         </div>
         <div className="flex justify-center">
           <Image

@@ -16,7 +16,7 @@ import { LinkedinLogo } from './svg/LinkedinLogo'
 
 export const CVDetails = (props: {
   candidature?:
-    | AddCandidatureInput & {
+    | Partial<AddCandidatureInput> & {
         isOwner?: boolean
         ReviewRequest?: ReviewRequest | null
         competenceByType?: CandidatureCompetencesByType[]
