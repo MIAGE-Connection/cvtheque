@@ -17,17 +17,17 @@ export const StudentHomePage: React.FC = () => {
             <p className="font-bold text-3xl">Mon CV</p>
           </div>
         ) : (
-          <div className="flex justify-between">
+          <div className="space-y-2 md:space-y-0 md:flex md:justify-between md:items-center">
             <p className="font-bold text-3xl link">
               <Link href={`list/${candidature.id}`}>Mon CV</Link>
             </p>
             {candidature.reviewState === 'pending' && (
-              <div className="btn btn-info cursor-default">
+              <div className="btn btn-info cursor-default w-full md:w-fit">
                 En attente de vérification
               </div>
             )}
             {candidature.reviewState === 'approved' && (
-              <div className="btn btn-success cursor-default">Publié</div>
+              <div className="btn btn-success cursor-default w-full md:w-fit">Publié</div>
             )}
           </div>
         )}

@@ -14,18 +14,19 @@ import { getSelectValue } from 'utils'
 import { GithubLogo } from './svg/GithubLogo'
 import { LinkedinLogo } from './svg/LinkedinLogo'
 
-export const CVDetails = (props: {
+type Props = {
   candidature?:
     | Partial<AddCandidatureInput> & {
         isOwner?: boolean
         ReviewRequest?: ReviewRequest | null
         competenceByType?: CandidatureCompetencesByType[]
       }
-  size: 'full' | 'center'
   showButton?: boolean
-}) => {
+  size: 'full' | 'center'
+}
+
+export const CVDetails: React.FC<Props> = ({ candidature, size, showButton }) => {
   const { data: session } = useSession()
-  const { candidature, size, showButton } = props
   const [visible, setVisible] = useState(false)
   const [review, setReview] = useState('')
 
