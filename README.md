@@ -5,6 +5,11 @@
 - Dépôt de CV
 - Consultation de CV avec filtres
 
+## Pré-requis
+
+- [Docker](https://www.docker.com/)
+- [pnpm](https://pnpm.io/fr/installation)
+
 ## Commands
 
 Créer une base de données en local via docker
@@ -32,6 +37,15 @@ pnpm prisma generate
 Lancement d'une migration en local
 ```
 pnpm prisma migrate dev
+```
+
+## Email commands
+
+Pour le développement d'email, la librarie react-email nous permet de tester et visualiser ces derniers facilement.
+
+Une seule commande: ( la première fois est longue le temps de l'installation ).
+```
+pnpm mail
 ```
 
 
