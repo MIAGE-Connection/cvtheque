@@ -2,9 +2,31 @@ import { signIn, useSession } from 'next-auth/react'
 import heroImg from '../../public/hero.svg'
 import hiringImg from '../../public/hiring.svg'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 export const Hero = () => {
   const { data: session } = useSession()
+  const [rotation, setRotation] = useState({ x: 0, y: 0 })
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e
+      const centerX = window.innerWidth / 2
+      const centerY = window.innerHeight / 2
+
+      // Adjust the rotation to the mouse position
+      const offsetX = (clientX - centerX) / 20
+      const offsetY = (clientY - centerY) / 20
+      setRotation({ x: offsetY, y: -offsetX })
+    }
+
+    document.body.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      document.body.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [])
+
   return (
     <>
       <div className="flex flex-wrap ">
@@ -36,12 +58,20 @@ export const Hero = () => {
             )}
           </div>
         </div>
-        <div className="flex items-center justify-center w-full lg:w-1/2">
-          <div>
+        <div
+          className="flex items-center justify-center w-full lg:w-1/2"
+          style={{ perspective: '1000px' }}
+        >
+          <div
+            style={{
+              transformStyle: 'preserve-3d',
+              transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+            }}
+          >
             <Image
               src={heroImg}
-              className={'object-cover'}
               alt="Hero Illustration"
+              className={'object-cover'}
               loading="eager"
             />
           </div>
