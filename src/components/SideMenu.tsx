@@ -254,7 +254,7 @@ const SideMenu: React.FC = () => {
         <div
           className={`${
             visible ? 'left-0 md:ml-8' : 'left-full md:left-[-18rem] md:ml-0'
-          } h-fit w-full md:w-72 shadow-xl bg-gray-200 border rounded-2xl z-10 p-4 text-white space-y-3 inset-y-0 my-auto fixed transition-all duration-300 ease-out will-change-transform left-0`}
+          } h-fit w-full md:w-72 shadow-xl bg-gray-200 border rounded-2xl z-10 p-4 text-white space-y-3 inset-y-0 my-20 md:my-auto fixed transition-all duration-300 ease-out will-change-transform left-0`}
           ref={divNode}
         >
           {routesFiltered.map((item, index) => (
